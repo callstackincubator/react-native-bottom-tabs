@@ -8,7 +8,8 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "rspress": "^1.31.1"
+    "@callstack/rspress-theme": "^0.0.2",
+    "rspress": "^1.39.3"
   },
   "devDependencies": {
     "@types/node": "^16",
