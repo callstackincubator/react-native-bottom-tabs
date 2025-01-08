@@ -45,11 +45,10 @@ extension PlatformImage {
     }
     return newImage
 #else
-    UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-    self.draw(in: CGRect(origin: CGPoint.zero, size: size))
-    let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
-    UIGraphicsEndImageContext()
-    return resizedImage
+    let renderer = UIGraphicsImageRenderer(size: size)
+    return renderer.image { context in
+      self.draw(in: CGRect(origin: .zero, size: size))
+    }
 #endif
   }
 }
