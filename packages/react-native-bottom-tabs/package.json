@@ -125,6 +125,11 @@
     "jsSrcsDir": "./src",
     "android": {
       "javaPackageName": "com.rcttabview"
+    },
+    "ios": {
+      "componentProvider": {
+        "RNCTabView": "RCTTabViewComponentView"
+      }
     }
   }
 }
