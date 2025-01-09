@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -45,7 +45,7 @@ jobs:
       TURBO_CACHE_DIR: .turbo/android
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -54,7 +54,7 @@ jobs:
         run: yarn build
 
       - name: Cache turborepo for Android
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
           key: ${{ runner.os }}-turborepo-android-${{ hashFiles('yarn.lock') }}
@@ -71,7 +71,7 @@ jobs:
 
       - name: Install JDK
         if: env.turbo_cache_hit != 1
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -83,7 +83,7 @@ jobs:
 
       - name: Cache Gradle
         if: env.turbo_cache_hit != 1
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/wrapper
@@ -104,7 +104,7 @@ jobs:
       TURBO_CACHE_DIR: .turbo/android-newarch
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -113,7 +113,7 @@ jobs:
         run: yarn build
 
       - name: Cache turborepo for Android new arch
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
           key: ${{ runner.os }}-turborepo-android-newarch-${{ hashFiles('yarn.lock') }}
@@ -130,7 +130,7 @@ jobs:
 
       - name: Install JDK
         if: env.turbo_cache_hit != 1
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -142,7 +142,7 @@ jobs:
 
       - name: Cache Gradle
         if: env.turbo_cache_hit != 1
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/wrapper
@@ -163,7 +163,7 @@ jobs:
       TURBO_CACHE_DIR: .turbo/ios
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -172,7 +172,7 @@ jobs:
         run: yarn build
 
       - name: Cache turborepo for iOS
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
           key: ${{ runner.os }}-turborepo-ios-${{ hashFiles('yarn.lock') }}
@@ -207,7 +207,7 @@ jobs:
       TURBO_CACHE_DIR: .turbo/ios-newarch
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -216,7 +216,7 @@ jobs:
         run: yarn build
 
       - name: Cache turborepo for iOS
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
           key: ${{ runner.os }}-turborepo-ios-newarch-${{ hashFiles('yarn.lock') }}
@@ -251,7 +251,7 @@ jobs:
       TURBO_CACHE_DIR: .turbo/macos
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -264,7 +264,7 @@ jobs:
           brew install xcbeautify
 
       - name: Cache turborepo for macOS
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
           key: ${{ runner.os }}-turborepo-macos-${{ hashFiles('yarn.lock') }}
