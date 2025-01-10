@@ -288,6 +288,7 @@ const TabView = <Route extends BaseRoute>({
           setTabBarHeight(height);
         }}
         onNativeLayout={({ nativeEvent: { width, height } }) => {
+          console.log('onNativeLayout', width, height);
           setMeasuredDimensions({ width, height });
         }}
         hapticFeedbackEnabled={hapticFeedbackEnabled}
@@ -326,7 +327,7 @@ const TabView = <Route extends BaseRoute>({
               }
               style={
                 Platform.OS === 'android'
-                  ? [StyleSheet.absoluteFill, { zIndex, opacity }]
+                  ? [measuredDimensions, { zIndex, opacity }]
                   : [{ position: 'absolute' }, measuredDimensions]
               }
             >
