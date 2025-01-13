@@ -1,14 +1,14 @@
 package com.rcttabview
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.transition.TransitionManager
 import android.util.Log
+import android.util.Size
 import android.util.TypedValue
 import android.view.Choreographer
 import android.view.Gravity
@@ -18,30 +18,36 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
+import androidx.viewpager2.widget.ViewPager2
 import coil3.ImageLoader
 import coil3.asDrawable
+import coil3.request.ImageRequest
+import coil3.svg.SvgDecoder
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.assets.ReactFontManager
 import com.facebook.react.modules.core.ReactChoreographer
 import com.facebook.react.views.text.ReactTypefaceUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import coil3.request.ImageRequest
-import coil3.svg.SvgDecoder
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_AUTO
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_LABELED
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_UNLABELED
+import com.google.android.material.transition.platform.MaterialFadeThrough
 
-
-class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
+class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
+  private val reactContext: ReactContext = context
   private val bottomNavigation = BottomNavigationView(context)
-  private val layoutHolder = FrameLayout(context)
-  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
-  private var isLayoutEnqueued = false
-  var items: MutableList<TabInfo>? = null
+  private val viewPager = ViewPager2(context)
+  val viewPagerAdapter = ViewPagerAdapter()
+
   var onTabSelectedListener: ((key: String) -> Unit)? = null
   var onTabLongPressedListener: ((key: String) -> Unit)? = null
   var onNativeLayoutListener: ((width: Double, height: Double) -> Unit)? = null
+  var disablePageTransitions = false
+  var items: MutableList<TabInfo>? = null
+
+  private var selectedItem: String? = null
+  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
   private var activeTintColor: Int? = null
   private var inactiveTintColor: Int? = null
   private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
@@ -50,50 +56,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
   private var fontSize: Int? = null
   private var fontFamily: String? = null
   private var fontWeight: Int? = null
-
-  init {
-    val layoutHolderFrameLayout = LayoutParams(
-      LayoutParams.MATCH_PARENT,
-      LayoutParams.MATCH_PARENT
-    )
-    addView(layoutHolder, layoutHolderFrameLayout)
-
-    val bottomNavParams = LayoutParams(
-      LayoutParams.MATCH_PARENT,
-      LayoutParams.WRAP_CONTENT
-    ).apply {
-      gravity = Gravity.BOTTOM
-    }
-
-    addView(bottomNavigation, bottomNavParams)
-
-    post {
-      this.addOnLayoutChangeListener { _, left, top, right, bottom,
-                                  oldLeft, oldTop, oldRight, oldBottom ->
-        val newWidth = right - left
-        val newHeight = bottom - top
-        val oldWidth = oldRight - oldLeft
-        val oldHeight = oldBottom - oldTop
-        if (newWidth != oldWidth || newHeight != oldHeight) {
-          val availableHeight = height - bottomNavigation.height
-          val displayDensity = context.resources.displayMetrics.density
-
-          val dpWidth = (width / displayDensity).toDouble()
-          val dpHeight = (availableHeight / displayDensity).toDouble()
-
-          onNativeLayoutListener?.invoke(dpWidth, dpHeight)
-        }
-      }
-    }
-  }
-
-  override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams?) {
-    if (child === layoutHolder || child === bottomNavigation) {
-      super.addView(child, index, params)
-    } else {
-      layoutHolder.addView(child, params)
-    }
-  }
+  private var lastReportedSize: Size? = null
 
   private val imageLoader = ImageLoader.Builder(context)
     .components {
@@ -101,8 +64,66 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     }
     .build()
 
+  init {
+    viewPager.adapter = viewPagerAdapter
+    viewPager.isUserInputEnabled = false
+
+    viewPager.id = View.generateViewId()
+    addView(
+      viewPager, LayoutParams(
+        LayoutParams.MATCH_PARENT,
+        LayoutParams.MATCH_PARENT
+      )
+    )
+
+    addView(bottomNavigation, LayoutParams(
+      LayoutParams.MATCH_PARENT,
+      LayoutParams.WRAP_CONTENT
+    ).apply {
+      gravity = Gravity.BOTTOM
+    })
+
+    post {
+      addOnLayoutChangeListener { _, left, top, right, bottom,
+                                  _, _, _, _ ->
+        val newWidth = right - left
+        val newHeight = bottom - top
+
+        if (newWidth != lastReportedSize?.width || newHeight != lastReportedSize?.height) {
+          // We subtract bottom navigation height from the screen height
+          // This should be refactored for adaptive navigation
+          val availableHeight = viewPager.height - bottomNavigation.height
+
+          val dpWidth = Utils.convertPixelsToDp(context, viewPager.width)
+          val dpHeight = Utils.convertPixelsToDp(context, availableHeight)
+
+          onNativeLayoutListener?.invoke(dpWidth, dpHeight)
+          lastReportedSize = Size(newWidth, newHeight)
+        }
+      }
+    }
+  }
+
+  fun setSelectedItem(value: String) {
+    selectedItem = value
+    items?.indexOfFirst { it.key == value }?.let {
+      setSelectedIndex(it)
+    }
+  }
+
+  override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams?) {
+    if (child === viewPager || child === bottomNavigation) {
+      super.addView(child, index, params)
+    } else {
+      viewPagerAdapter.addChild(child, index)
+      val itemKey = items?.get(index)?.key
+      if (selectedItem == itemKey) {
+        setSelectedIndex(index)
+      }
+    }
+  }
+
   private val layoutCallback = Choreographer.FrameCallback {
-    isLayoutEnqueued = false
     measure(
       MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
       MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY),
@@ -110,20 +131,11 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     layout(left, top, right, bottom)
   }
 
-  private fun onTabLongPressed(item: MenuItem) {
-    val longPressedItem = items?.firstOrNull { it.title == item.title }
-    longPressedItem?.let {
-      onTabLongPressedListener?.invoke(longPressedItem.key)
-      emitHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-    }
-  }
-
   override fun requestLayout() {
     super.requestLayout()
     @Suppress("SENSELESS_COMPARISON") // layoutCallback can be null here since this method can be called in init
 
-    if (!isLayoutEnqueued && layoutCallback != null) {
-      isLayoutEnqueued = true
+    if (layoutCallback != null) {
       // we use NATIVE_ANIMATED_MODULE choreographer queue because it allows us to catch the current
       // looper loop instead of enqueueing the update in the next loop causing a one frame delay.
       ReactChoreographer
@@ -135,14 +147,28 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     }
   }
 
-  private fun onTabSelected(item: MenuItem) {
-    if (isLayoutEnqueued) {
-      return
+  private fun setSelectedIndex(itemId: Int) {
+    bottomNavigation.selectedItemId = itemId
+    if (!disablePageTransitions) {
+      val fadeThrough = MaterialFadeThrough()
+      TransitionManager.beginDelayedTransition(this, fadeThrough)
     }
+    viewPager.setCurrentItem(itemId, false)
+  }
+
+  private fun onTabSelected(item: MenuItem) {
     val selectedItem = items?.first { it.title == item.title }
     selectedItem?.let {
       onTabSelectedListener?.invoke(selectedItem.key)
       emitHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+    }
+  }
+
+  private fun onTabLongPressed(item: MenuItem) {
+    val longPressedItem = items?.firstOrNull { it.title == item.title }
+    longPressedItem?.let {
+      onTabLongPressedListener?.invoke(longPressedItem.key)
+      emitHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
     }
   }
 
@@ -152,7 +178,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
       val menuItem = getOrCreateItem(index, item.title)
       menuItem.isVisible = !item.hidden
       if (iconSources.containsKey(index)) {
-        getDrawable(iconSources[index]!!)  {
+        getDrawable(iconSources[index]!!) {
           menuItem.icon = it
         }
       }
@@ -165,7 +191,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
         bottomNavigation.removeBadge(index)
       }
       post {
-        val itemView = findViewById<View>(menuItem.itemId)
+        val itemView = bottomNavigation.findViewById<View>(menuItem.itemId)
         itemView?.let { view ->
           view.setOnLongClickListener {
             onTabLongPressed(menuItem)
@@ -177,9 +203,10 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
           }
 
           item.testID?.let { testId ->
-            view.findViewById<View>(com.google.android.material.R.id.navigation_bar_item_content_container)?.apply {
+            view.findViewById<View>(com.google.android.material.R.id.navigation_bar_item_content_container)
+              ?.apply {
                 tag = testId
-            }
+              }
           }
         }
         updateTextAppearance()
@@ -209,7 +236,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
 
       // Update existing item if exists.
       bottomNavigation.menu.findItem(idx)?.let { menuItem ->
-        getDrawable(imageSource)  {
+        getDrawable(imageSource) {
           menuItem.icon = it
         }
       }
@@ -218,15 +245,17 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
 
   fun setLabeled(labeled: Boolean?) {
     bottomNavigation.labelVisibilityMode = when (labeled) {
-        false -> {
-          LABEL_VISIBILITY_UNLABELED
-        }
-        true -> {
-          LABEL_VISIBILITY_LABELED
-        }
-        else -> {
-          LABEL_VISIBILITY_AUTO
-        }
+      false -> {
+        LABEL_VISIBILITY_UNLABELED
+      }
+
+      true -> {
+        LABEL_VISIBILITY_LABELED
+      }
+
+      else -> {
+        LABEL_VISIBILITY_AUTO
+      }
     }
   }
 
@@ -253,13 +282,16 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
 
   fun setBarTintColor(color: Int?) {
     // Set the color, either using the active background color or a default color.
-    val backgroundColor = color ?: getDefaultColorFor(android.R.attr.colorPrimary) ?: return
+    val backgroundColor =
+      color ?: Utils.getDefaultColorFor(context, android.R.attr.colorPrimary) ?: return
 
     // Apply the same color to both active and inactive states
     val colorDrawable = ColorDrawable(backgroundColor)
 
     bottomNavigation.itemBackground = colorDrawable
     backgroundTintList = ColorStateList.valueOf(backgroundColor)
+    // Set navigationBarColor for edge-to-edge.
+    reactContext.currentActivity?.window?.navigationBarColor = backgroundColor
   }
 
   fun setActiveTintColor(color: Int?) {
@@ -274,10 +306,6 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
 
   fun setActiveIndicatorColor(color: ColorStateList) {
     bottomNavigation.itemActiveIndicatorColor = color
-  }
-
-  fun setHapticFeedback(enabled: Boolean) {
-    hapticFeedbackEnabled = enabled
   }
 
   fun setFontSize(size: Int) {
@@ -296,22 +324,13 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     updateTextAppearance()
   }
 
-  private fun getTypefaceStyle(weight: Int?) = when (weight) {
-    700 -> Typeface.BOLD
-    else -> Typeface.NORMAL
-  }
-
-  fun setSelectedItemId(itemId: Int) {
-    bottomNavigation.selectedItemId = itemId
-  }
-
   private fun updateTextAppearance() {
     if (fontSize != null || fontFamily != null || fontWeight != null) {
       val menuView = getChildAt(0) as? ViewGroup ?: return
       val size = fontSize?.toFloat()?.takeIf { it > 0 } ?: 12f
       val typeface = ReactFontManager.getInstance().getTypeface(
         fontFamily ?: "",
-        getTypefaceStyle(fontWeight),
+        Utils.getTypefaceStyle(fontWeight),
         context.assets
       )
 
@@ -343,9 +362,13 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     val currentItemTintColor = items?.find { it.title == item?.title }?.activeTintColor
 
     // getDefaultColor will always return a valid color but to satisfy the compiler we need to check for null
-    val colorPrimary = currentItemTintColor ?: activeTintColor ?: getDefaultColorFor(android.R.attr.colorPrimary) ?: return
+    val colorPrimary = currentItemTintColor ?: activeTintColor ?: Utils.getDefaultColorFor(
+      context,
+      android.R.attr.colorPrimary
+    ) ?: return
     val colorSecondary =
-      inactiveTintColor ?: getDefaultColorFor(android.R.attr.textColorSecondary) ?: return
+      inactiveTintColor ?: Utils.getDefaultColorFor(context, android.R.attr.textColorSecondary)
+      ?: return
     val states = arrayOf(uncheckedStateSet, checkedStateSet)
     val colors = intArrayOf(colorSecondary, colorPrimary)
 
@@ -355,17 +378,8 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     }
   }
 
-  private fun getDefaultColorFor(baseColorThemeAttr: Int): Int? {
-    val value = TypedValue()
-    if (!context.theme.resolveAttribute(baseColorThemeAttr, value, true)) {
-      return null
-    }
-    val baseColor = AppCompatResources.getColorStateList(
-      context, value.resourceId
-    )
-    return baseColor.defaultColor
+  override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    reactContext.currentActivity?.window?.navigationBarColor = Color.TRANSPARENT
   }
 }
-
-
-

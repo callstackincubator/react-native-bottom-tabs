@@ -1,5 +1,7 @@
 package com.rcttabview
 
+import android.view.View
+import android.view.ViewGroup
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
@@ -36,6 +38,36 @@ class RCTTabViewManager(context: ReactApplicationContext) : ViewGroupManager<Rea
       eventDispatcher.dispatchEvent(OnNativeLayoutEvent(viewTag = view.id, width, height))
     }
     return view
+  }
+
+  override fun getChildCount(parent: ReactBottomNavigationView): Int {
+    return parent.viewPagerAdapter.itemCount ?: 0
+  }
+
+  override fun getChildAt(parent: ReactBottomNavigationView, index: Int): View? {
+    return parent.viewPagerAdapter.getChildAt(index)
+  }
+
+  override fun removeView(parent: ReactBottomNavigationView, view: View) {
+    parent.viewPagerAdapter.removeChild(view)
+  }
+
+  override fun removeAllViews(parent: ReactBottomNavigationView) {
+   parent.viewPagerAdapter.removeAll()
+  }
+
+  override fun removeViewAt(parent: ReactBottomNavigationView, index: Int) {
+    val child = parent.viewPagerAdapter.getChildAt(index)
+
+    if (child.parent != null) {
+      (child.parent as? ViewGroup)?.removeView(child)
+    }
+
+    parent.viewPagerAdapter.removeChildAt(index)
+  }
+
+  override fun needsCustomLayoutForChildren(): Boolean {
+    return true
   }
 
   override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any>? {

@@ -5,7 +5,7 @@ import { Albums } from '../Screens/Albums';
 import { Contacts } from '../Screens/Contacts';
 
 export default function ThreeTabs() {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(1);
   const [routes] = useState([
     {
       key: 'article',

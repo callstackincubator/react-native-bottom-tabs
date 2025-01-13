@@ -41,9 +41,10 @@ class RCTTabViewImpl {
   }
 
   fun setSelectedPage(view: ReactBottomNavigationView, key: String) {
-    view.items?.indexOfFirst { it.key == key }?.let {
-      view.setSelectedItemId(it)
-    }
+    view.setSelectedItem(key)
+//    view.items?.indexOfFirst { it.key == key }?.let {
+//      view.setSelectedItemId(it)
+//    }
   }
 
   fun setLabeled(view: ReactBottomNavigationView, flag: Boolean?) {
@@ -81,7 +82,7 @@ class RCTTabViewImpl {
   }
 
   fun setHapticFeedbackEnabled(view: ReactBottomNavigationView, enabled: Boolean) {
-   view.setHapticFeedback(enabled)
+   view.isHapticFeedbackEnabled = enabled
   }
 
   fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any>? {

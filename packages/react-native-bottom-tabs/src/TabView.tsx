@@ -288,7 +288,6 @@ const TabView = <Route extends BaseRoute>({
           setTabBarHeight(height);
         }}
         onNativeLayout={({ nativeEvent: { width, height } }) => {
-          console.log('onNativeLayout', width, height);
           setMeasuredDimensions({ width, height });
         }}
         hapticFeedbackEnabled={hapticFeedbackEnabled}
@@ -300,9 +299,6 @@ const TabView = <Route extends BaseRoute>({
         {trimmedRoutes.map((route) => {
           if (getLazy({ route }) !== false && !loaded.includes(route.key)) {
             // Don't render a screen if we've never navigated to it
-            if (Platform.OS === 'android') {
-              return null;
-            }
             return (
               <View
                 key={route.key}
@@ -313,8 +309,6 @@ const TabView = <Route extends BaseRoute>({
           }
 
           const focused = route.key === focusedKey;
-          const opacity = focused ? 1 : 0;
-          const zIndex = focused ? 0 : -1;
 
           return (
             <View
@@ -327,7 +321,7 @@ const TabView = <Route extends BaseRoute>({
               }
               style={
                 Platform.OS === 'android'
-                  ? [measuredDimensions, { zIndex, opacity }]
+                  ? [measuredDimensions]
                   : [{ position: 'absolute' }, measuredDimensions]
               }
             >
