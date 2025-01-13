@@ -45,8 +45,8 @@ To run the React Native example app on iOS:
 ```sh
 cd apps/example/ios
 pod install
-cd ../../..
-yarn workspace react-native-bottom-tabs-example ios
+cd -
+yarn ios
 ```
 
 To run the Expo example:
@@ -69,8 +69,8 @@ By default, the example is configured to build with the old architecture. To run
    ```sh
    cd apps/example/ios
    RCT_NEW_ARCH_ENABLED=1 pod install
-   cd ../../..
-   yarn workspace react-native-bottom-tabs-example ios
+   cd -
+   yarn example ios
    ```
 
 If you are building for a different architecture than your previous build, make sure to remove the build folders first. You can run the following command to cleanup all build folders:
