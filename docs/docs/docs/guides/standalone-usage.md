@@ -156,12 +156,16 @@ Color for the active tab.
 #### `tabBarInactiveTintColor`
 
 Color for inactive tabs.
+
 - Type: `ColorValue`
 
-#### `barTintColor`
+#### `tabBarStyle`
 
-Background color of the tab bar.
-- Type: `ColorValue`
+Object containing styles for the tab bar.
+
+Supported properties:
+
+- `barTintColor`: Background color of the tab bar.
 
 #### `translucent` <Badge text="iOS" type="info" />
 

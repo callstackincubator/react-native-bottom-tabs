@@ -116,10 +116,13 @@ interface Props<Route extends BaseRoute> {
    */
   getTestID?: (props: { route: Route }) => string | undefined;
 
-  /**
-   * Background color of the tab bar.
-   */
-  barTintColor?: ColorValue;
+  tabBarStyle?: {
+    /**
+     * Background color of the tab bar.
+     */
+    barTintColor?: ColorValue;
+  };
+
   /**
    * A Boolean value that indicates whether the tab bar is translucent. (iOS only)
    */
@@ -166,10 +169,10 @@ const TabView = <Route extends BaseRoute>({
         ? route.focusedIcon
         : route.unfocusedIcon
       : route.focusedIcon,
-  barTintColor,
   getHidden = ({ route }: { route: Route }) => route.hidden,
   getActiveTintColor = ({ route }: { route: Route }) => route.activeTintColor,
   getTestID = ({ route }: { route: Route }) => route.testID,
+  tabBarStyle,
   hapticFeedbackEnabled = false,
   tabLabelStyle,
   ...props
@@ -290,7 +293,7 @@ const TabView = <Route extends BaseRoute>({
         hapticFeedbackEnabled={hapticFeedbackEnabled}
         activeTintColor={activeTintColor}
         inactiveTintColor={inactiveTintColor}
-        barTintColor={barTintColor}
+        barTintColor={tabBarStyle?.barTintColor}
         rippleColor={rippleColor}
       >
         {trimmedRoutes.map((route) => {

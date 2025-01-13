@@ -15,7 +15,9 @@ function NativeBottomTabs() {
       hapticFeedbackEnabled={false}
       tabBarInactiveTintColor="#C57B57"
       tabBarActiveTintColor="#F7DBA7"
-      barTintColor="#1E2D2F"
+      tabBarStyle={{
+        barTintColor: '#1E2D2F',
+      }}
       rippleColor="#F7DBA7"
       tabLabelStyle={{
         fontFamily: 'Avenir',

@@ -71,7 +71,7 @@ export default function FourTabs({
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
-      barTintColor={barTintColor}
+      tabBarStyle={{ barTintColor: barTintColor }}
       translucent={translucent}
       rippleColor={rippleColor}
       activeIndicatorColor={activeIndicatorColor}
