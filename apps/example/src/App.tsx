@@ -27,6 +27,7 @@ import TintColorsExample from './Examples/TintColors';
 import NativeBottomTabsEmbeddedStacks from './Examples/NativeBottomTabsEmbeddedStacks';
 import NativeBottomTabsSVGs from './Examples/NativeBottomTabsSVGs';
 import NativeBottomTabsRemoteIcons from './Examples/NativeBottomTabsRemoteIcons';
+import NativeBottomTabsUnmounting from './Examples/NativeBottomTabsUnmounting';
 
 const FourTabsIgnoreSafeArea = () => {
   return <FourTabs ignoresTopSafeArea />;
@@ -95,7 +96,6 @@ const examples = [
   {
     component: FourTabsNoAnimations,
     name: 'Four Tabs - no animations',
-    platform: 'ios',
   },
   {
     component: FourTabsTransparentScrollEdgeAppearance,
@@ -127,6 +127,10 @@ const examples = [
   {
     component: NativeBottomTabsSVGs,
     name: 'Native Bottom Tabs with SVG Icons',
+  },
+  {
+    component: NativeBottomTabsUnmounting,
+    name: 'Native Bottom Tabs unmounting',
   },
   {
     component: NativeBottomTabsRemoteIcons,

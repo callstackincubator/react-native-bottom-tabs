@@ -44,7 +44,7 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
   var onTabLongPressedListener: ((key: String) -> Unit)? = null
   var onNativeLayoutListener: ((width: Double, height: Double) -> Unit)? = null
   var disablePageTransitions = false
-  var items: MutableList<TabInfo>? = null
+  var items: MutableList<TabInfo> = mutableListOf()
 
   private var selectedItem: String? = null
   private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
@@ -106,9 +106,7 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
 
   fun setSelectedItem(value: String) {
     selectedItem = value
-    items?.indexOfFirst { it.key == value }?.let {
-      setSelectedIndex(it)
-    }
+    setSelectedIndex(items.indexOfFirst { it.key == value })
   }
 
   override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams?) {
@@ -116,7 +114,7 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
       super.addView(child, index, params)
     } else {
       viewPagerAdapter.addChild(child, index)
-      val itemKey = items?.get(index)?.key
+      val itemKey = items[index].key
       if (selectedItem == itemKey) {
         setSelectedIndex(index)
       }
@@ -157,15 +155,15 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
   }
 
   private fun onTabSelected(item: MenuItem) {
-    val selectedItem = items?.first { it.title == item.title }
-    selectedItem?.let {
+    val selectedItem = items.first { it.title == item.title }
+    selectedItem.let {
       onTabSelectedListener?.invoke(selectedItem.key)
       emitHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
     }
   }
 
   private fun onTabLongPressed(item: MenuItem) {
-    val longPressedItem = items?.firstOrNull { it.title == item.title }
+    val longPressedItem = items.firstOrNull { it.title == item.title }
     longPressedItem?.let {
       onTabLongPressedListener?.invoke(longPressedItem.key)
       emitHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
@@ -173,6 +171,10 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
   }
 
   fun updateItems(items: MutableList<TabInfo>) {
+    // If an item got removed, let's re-add all items
+    if (items.size < this.items.size) {
+      bottomNavigation.menu.clear()
+    }
     this.items = items
     items.forEachIndexed { index, item ->
       val menuItem = getOrCreateItem(index, item.title)
@@ -248,11 +250,9 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
       false -> {
         LABEL_VISIBILITY_UNLABELED
       }
-
       true -> {
         LABEL_VISIBILITY_LABELED
       }
-
       else -> {
         LABEL_VISIBILITY_AUTO
       }
@@ -291,7 +291,9 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
     bottomNavigation.itemBackground = colorDrawable
     backgroundTintList = ColorStateList.valueOf(backgroundColor)
     // Set navigationBarColor for edge-to-edge.
-    reactContext.currentActivity?.window?.navigationBarColor = backgroundColor
+    if (Utils.isEdgeToEdge()) {
+      reactContext.currentActivity?.window?.navigationBarColor = backgroundColor
+    }
   }
 
   fun setActiveTintColor(color: Int?) {
@@ -359,7 +361,7 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
 
   private fun updateTintColors(item: MenuItem? = null) {
     // First let's check current item color.
-    val currentItemTintColor = items?.find { it.title == item?.title }?.activeTintColor
+    val currentItemTintColor = items.find { it.title == item?.title }?.activeTintColor
 
     // getDefaultColor will always return a valid color but to satisfy the compiler we need to check for null
     val colorPrimary = currentItemTintColor ?: activeTintColor ?: Utils.getDefaultColorFor(
@@ -380,6 +382,9 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    reactContext.currentActivity?.window?.navigationBarColor = Color.TRANSPARENT
+    if (Utils.isEdgeToEdge()) {
+      reactContext.currentActivity?.window?.navigationBarColor = Color.TRANSPARENT
+    }
+    imageLoader.shutdown()
   }
 }

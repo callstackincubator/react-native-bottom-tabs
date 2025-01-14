@@ -22,13 +22,6 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,cpp,swift}"
   s.static_framework = true
 
-  if new_arch_enabled
-    s.subspec "common" do |ss|
-      ss.source_files         = "common/cpp/**/*.{cpp,h}"
-      ss.pod_target_xcconfig  = { "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/common/cpp\"" }
-    end
-  end
-
   s.dependency "SwiftUIIntrospect", '~> 1.0'
   s.dependency 'SDWebImage', '>= 5.19.1'
   s.dependency 'SDWebImageSVGCoder', '>= 1.7.0'

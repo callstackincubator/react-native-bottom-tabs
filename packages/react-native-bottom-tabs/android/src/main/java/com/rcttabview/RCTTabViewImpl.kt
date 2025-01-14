@@ -24,17 +24,17 @@ class RCTTabViewImpl {
   fun setItems(view: ReactBottomNavigationView, items: ReadableArray) {
     val itemsArray = mutableListOf<TabInfo>()
     for (i in 0 until items.size()) {
-      items.getMap(i).let { item ->
-        itemsArray.add(
-          TabInfo(
-            key = item.getString("key") ?: "",
-            title = item.getString("title") ?: "",
-            badge = item.getString("badge") ?: "",
-            activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
-            hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
-            testID = item.getString("testID")
+      items.getMap(i)?.let { item ->
+          itemsArray.add(
+            TabInfo(
+              key = item.getString("key") ?: "",
+              title = item.getString("title") ?: "",
+              badge = item.getString("badge") ?: "",
+              activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
+              hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
+              testID = item.getString("testID")
+            )
           )
-        )
       }
     }
     view.updateItems(itemsArray)
@@ -42,9 +42,6 @@ class RCTTabViewImpl {
 
   fun setSelectedPage(view: ReactBottomNavigationView, key: String) {
     view.setSelectedItem(key)
-//    view.items?.indexOfFirst { it.key == key }?.let {
-//      view.setSelectedItemId(it)
-//    }
   }
 
   fun setLabeled(view: ReactBottomNavigationView, flag: Boolean?) {

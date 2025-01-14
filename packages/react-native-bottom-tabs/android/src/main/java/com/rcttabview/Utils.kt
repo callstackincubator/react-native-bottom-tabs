@@ -27,5 +27,13 @@ class Utils {
       )
       return baseColor.defaultColor
     }
+
+    // Detect `react-native-edge-to-edge` (https://github.com/zoontek/react-native-edge-to-edge)
+    fun isEdgeToEdge() = try {
+      Class.forName("com.zoontek.rnedgetoedge.EdgeToEdgePackage")
+      true
+    } catch (exception: ClassNotFoundException) {
+      false
+    }
   }
 }

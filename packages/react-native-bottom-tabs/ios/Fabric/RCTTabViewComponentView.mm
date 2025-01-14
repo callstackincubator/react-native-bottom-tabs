@@ -2,7 +2,6 @@
 #import "RCTTabViewComponentView.h"
 
 #import <react/renderer/components/RNCTabView/ComponentDescriptors.h>
-#import <react/renderer/components/RNCTabView/RNCTabViewComponentDescriptor.h>
 #import <react/renderer/components/RNCTabView/EventEmitters.h>
 #import <react/renderer/components/RNCTabView/Props.h>
 #import <react/renderer/components/RNCTabView/RCTComponentViewHelpers.h>

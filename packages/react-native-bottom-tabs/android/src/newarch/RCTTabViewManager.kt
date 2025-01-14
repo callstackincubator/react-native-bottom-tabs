@@ -1,28 +1,26 @@
 package com.rcttabview
 
-import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
-import com.facebook.react.uimanager.PixelUtil.toDIPFromPixel
-import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.UIManagerHelper
+import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNCTabViewManagerDelegate
 import com.facebook.react.viewmanagers.RNCTabViewManagerInterface
-import com.facebook.yoga.YogaMeasureMode
-import com.facebook.yoga.YogaMeasureOutput
+import com.rcttabview.events.OnNativeLayoutEvent
+import com.rcttabview.events.PageSelectedEvent
+import com.rcttabview.events.TabLongPressEvent
 
 
 @ReactModule(name = RCTTabViewImpl.NAME)
 class RCTTabViewManager(context: ReactApplicationContext) :
-  SimpleViewManager<ReactBottomNavigationView>(),
+  ViewGroupManager<ReactBottomNavigationView>(),
   RNCTabViewManagerInterface<ReactBottomNavigationView> {
 
-  private val contextInner: ReactApplicationContext = context
   private val delegate: RNCTabViewManagerDelegate<ReactBottomNavigationView, RCTTabViewManager> =
     RNCTabViewManagerDelegate(this)
   private val tabViewImpl: RCTTabViewImpl = RCTTabViewImpl()
@@ -37,12 +35,46 @@ class RCTTabViewManager(context: ReactApplicationContext) :
     view.onTabLongPressedListener = { key ->
       eventDispatcher?.dispatchEvent(TabLongPressEvent(viewTag = view.id, key))
     }
+
+    view.onNativeLayoutListener = { width, height ->
+      eventDispatcher?.dispatchEvent(OnNativeLayoutEvent(viewTag = view.id, width, height))
+    }
     return view
 
   }
 
   override fun getName(): String {
     return tabViewImpl.getName()
+  }
+
+  override fun getChildCount(parent: ReactBottomNavigationView): Int {
+    return parent.viewPagerAdapter.itemCount ?: 0
+  }
+
+  override fun getChildAt(parent: ReactBottomNavigationView, index: Int): View? {
+    return parent.viewPagerAdapter.getChildAt(index)
+  }
+
+  override fun removeView(parent: ReactBottomNavigationView, view: View) {
+    parent.viewPagerAdapter.removeChild(view)
+  }
+
+  override fun removeAllViews(parent: ReactBottomNavigationView) {
+    parent.viewPagerAdapter.removeAll()
+  }
+
+  override fun removeViewAt(parent: ReactBottomNavigationView, index: Int) {
+    val child = parent.viewPagerAdapter.getChildAt(index)
+
+    if (child.parent != null) {
+      (child.parent as? ViewGroup)?.removeView(child)
+    }
+
+    parent.viewPagerAdapter.removeChildAt(index)
+  }
+
+  override fun needsCustomLayoutForChildren(): Boolean {
+    return true
   }
 
   override fun setItems(view: ReactBottomNavigationView?, value: ReadableArray?) {
@@ -99,30 +131,6 @@ class RCTTabViewManager(context: ReactApplicationContext) :
       tabViewImpl.setHapticFeedbackEnabled(view, value)
   }
 
-  public override fun measure(
-    context: Context?,
-    localData: ReadableMap?,
-    props: ReadableMap?,
-    state: ReadableMap?,
-    width: Float,
-    widthMode: YogaMeasureMode?,
-    height: Float,
-    heightMode: YogaMeasureMode?,
-    attachmentsPositions: FloatArray?
-  ): Long {
-    val view = ReactBottomNavigationView(context ?: contextInner)
-    val measureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-    view.measure(measureSpec, measureSpec)
-
-    val bottomInset = RCTTabViewImpl.getNavigationBarInset(contextInner)
-
-    return YogaMeasureOutput.make(
-      // TabBar should always stretch to the width of the screen.
-      toDIPFromPixel(width),
-      toDIPFromPixel(view.measuredHeight.toFloat() + bottomInset)
-    )
-  }
-
   override fun setFontFamily(view: ReactBottomNavigationView?, value: String?) {
     view?.setFontFamily(value)
   }
@@ -135,15 +143,15 @@ class RCTTabViewManager(context: ReactApplicationContext) :
     view?.setFontSize(value)
   }
 
-  // iOS Methods
+  override fun setDisablePageAnimations(view: ReactBottomNavigationView?, value: Boolean) {
+    view?.disablePageTransitions = value
+  }
 
+  // iOS Methods
   override fun setTranslucent(view: ReactBottomNavigationView?, value: Boolean) {
   }
 
   override fun setIgnoresTopSafeArea(view: ReactBottomNavigationView?, value: Boolean) {
-  }
-
-  override fun setDisablePageAnimations(view: ReactBottomNavigationView?, value: Boolean) {
   }
 
   override fun setSidebarAdaptable(view: ReactBottomNavigationView?, value: Boolean) {
@@ -151,6 +159,4 @@ class RCTTabViewManager(context: ReactApplicationContext) :
 
   override fun setScrollEdgeAppearance(view: ReactBottomNavigationView?, value: String?) {
   }
-
-
 }
