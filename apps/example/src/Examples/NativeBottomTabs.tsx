@@ -16,7 +16,7 @@ function NativeBottomTabs() {
       tabBarInactiveTintColor="#C57B57"
       tabBarActiveTintColor="#F7DBA7"
       tabBarStyle={{
-        barTintColor: '#1E2D2F',
+        backgroundColor: '#1E2D2F',
       }}
       rippleColor="#F7DBA7"
       tabLabelStyle={{

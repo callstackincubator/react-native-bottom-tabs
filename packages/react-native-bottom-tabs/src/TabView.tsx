@@ -120,7 +120,7 @@ interface Props<Route extends BaseRoute> {
     /**
      * Background color of the tab bar.
      */
-    barTintColor?: ColorValue;
+    backgroundColor?: ColorValue;
   };
 
   /**
@@ -293,7 +293,7 @@ const TabView = <Route extends BaseRoute>({
         hapticFeedbackEnabled={hapticFeedbackEnabled}
         activeTintColor={activeTintColor}
         inactiveTintColor={inactiveTintColor}
-        barTintColor={tabBarStyle?.barTintColor}
+        barTintColor={tabBarStyle?.backgroundColor}
         rippleColor={rippleColor}
       >
         {trimmedRoutes.map((route) => {

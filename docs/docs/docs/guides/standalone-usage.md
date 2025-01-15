@@ -165,7 +165,7 @@ Object containing styles for the tab bar.
 
 Supported properties:
 
-- `barTintColor`: Background color of the tab bar.
+- `backgroundColor`: Background color of the tab bar.
 
 #### `translucent` <Badge text="iOS" type="info" />
 
