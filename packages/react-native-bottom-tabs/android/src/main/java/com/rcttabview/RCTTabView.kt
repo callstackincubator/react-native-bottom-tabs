@@ -228,7 +228,7 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
 
     for (idx in 0 until icons.size()) {
       val source = icons.getMap(idx)
-      val uri = source.getString("uri")
+      val uri = source?.getString("uri")
       if (uri.isNullOrEmpty()) {
         continue
       }
