@@ -12,7 +12,7 @@ import { BottomTabBarHeightContext } from './utils/BottomTabBarHeightContext';
 
 //@ts-ignore
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
-import TabViewAdapter from './TabViewAdapter';
+import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
 import type { BaseRoute, NavigationState } from './types';
 
@@ -270,7 +270,7 @@ const TabView = <Route extends BaseRoute>({
 
   return (
     <BottomTabBarHeightContext.Provider value={tabBarHeight}>
-      <TabViewAdapter
+      <NativeTabView
         {...props}
         {...tabLabelStyle}
         style={styles.fullWidth}
@@ -332,7 +332,7 @@ const TabView = <Route extends BaseRoute>({
             </View>
           );
         })}
-      </TabViewAdapter>
+      </NativeTabView>
     </BottomTabBarHeightContext.Provider>
   );
 };
