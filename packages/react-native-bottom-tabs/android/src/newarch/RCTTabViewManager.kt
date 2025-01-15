@@ -48,33 +48,27 @@ class RCTTabViewManager(context: ReactApplicationContext) :
   }
 
   override fun getChildCount(parent: ReactBottomNavigationView): Int {
-    return parent.viewPagerAdapter.itemCount ?: 0
+    return tabViewImpl.getChildCount(parent)
   }
 
   override fun getChildAt(parent: ReactBottomNavigationView, index: Int): View? {
-    return parent.viewPagerAdapter.getChildAt(index)
+    return tabViewImpl.getChildAt(parent, index)
   }
 
   override fun removeView(parent: ReactBottomNavigationView, view: View) {
-    parent.viewPagerAdapter.removeChild(view)
+    tabViewImpl.removeView(parent, view)
   }
 
   override fun removeAllViews(parent: ReactBottomNavigationView) {
-    parent.viewPagerAdapter.removeAll()
+    tabViewImpl.removeAllViews(parent)
   }
 
   override fun removeViewAt(parent: ReactBottomNavigationView, index: Int) {
-    val child = parent.viewPagerAdapter.getChildAt(index)
-
-    if (child.parent != null) {
-      (child.parent as? ViewGroup)?.removeView(child)
-    }
-
-    parent.viewPagerAdapter.removeChildAt(index)
+    tabViewImpl.removeViewAt(parent, index)
   }
 
   override fun needsCustomLayoutForChildren(): Boolean {
-    return true
+    return tabViewImpl.needsCustomLayoutForChildren()
   }
 
   override fun setItems(view: ReactBottomNavigationView?, value: ReadableArray?) {

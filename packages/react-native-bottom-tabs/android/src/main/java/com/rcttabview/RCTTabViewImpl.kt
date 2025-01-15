@@ -1,6 +1,8 @@
 package com.rcttabview
 
 import android.content.res.ColorStateList
+import android.view.View
+import android.view.ViewGroup
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
 import com.rcttabview.events.OnNativeLayoutEvent
@@ -91,6 +93,36 @@ class RCTTabViewImpl {
       OnNativeLayoutEvent.EVENT_NAME,
       MapBuilder.of("registrationName", "onNativeLayout")
     )
+  }
+
+  fun getChildCount(parent: ReactBottomNavigationView): Int {
+    return parent.viewPagerAdapter.itemCount ?: 0
+  }
+
+  fun getChildAt(parent: ReactBottomNavigationView, index: Int): View? {
+    return parent.viewPagerAdapter.getChildAt(index)
+  }
+
+  fun removeView(parent: ReactBottomNavigationView, view: View) {
+    parent.viewPagerAdapter.removeChild(view)
+  }
+
+  fun removeAllViews(parent: ReactBottomNavigationView) {
+    parent.viewPagerAdapter.removeAll()
+  }
+
+  fun removeViewAt(parent: ReactBottomNavigationView, index: Int) {
+    val child = parent.viewPagerAdapter.getChildAt(index)
+
+    if (child.parent != null) {
+      (child.parent as? ViewGroup)?.removeView(child)
+    }
+
+    parent.viewPagerAdapter.removeChildAt(index)
+  }
+
+  fun needsCustomLayoutForChildren(): Boolean {
+    return true
   }
 
   companion object {
