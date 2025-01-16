@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
 import coil3.ImageLoader
@@ -34,7 +35,7 @@ import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_UNLABELED
 import com.google.android.material.transition.platform.MaterialFadeThrough
 
-class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
+class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
   private val reactContext: ReactContext = context
   private val bottomNavigation = BottomNavigationView(context)
   private val viewPager = ViewPager2(context)
@@ -65,23 +66,21 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
     .build()
 
   init {
+    orientation = VERTICAL
     viewPager.adapter = viewPagerAdapter
     viewPager.isUserInputEnabled = false
 
-    viewPager.id = View.generateViewId()
     addView(
       viewPager, LayoutParams(
         LayoutParams.MATCH_PARENT,
-        LayoutParams.MATCH_PARENT
-      )
+        0,
+      ).apply { weight = 1f }
     )
 
     addView(bottomNavigation, LayoutParams(
       LayoutParams.MATCH_PARENT,
       LayoutParams.WRAP_CONTENT
-    ).apply {
-      gravity = Gravity.BOTTOM
-    })
+    ))
 
     post {
       addOnLayoutChangeListener { _, left, top, right, bottom,
@@ -90,12 +89,8 @@ class ReactBottomNavigationView(context: ReactContext) : FrameLayout(context) {
         val newHeight = bottom - top
 
         if (newWidth != lastReportedSize?.width || newHeight != lastReportedSize?.height) {
-          // We subtract bottom navigation height from the screen height
-          // This should be refactored for adaptive navigation
-          val availableHeight = viewPager.height - bottomNavigation.height
-
           val dpWidth = Utils.convertPixelsToDp(context, viewPager.width)
-          val dpHeight = Utils.convertPixelsToDp(context, availableHeight)
+          val dpHeight = Utils.convertPixelsToDp(context, viewPager.height)
 
           onNativeLayoutListener?.invoke(dpWidth, dpHeight)
           lastReportedSize = Size(newWidth, newHeight)
