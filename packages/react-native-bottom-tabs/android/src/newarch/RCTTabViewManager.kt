@@ -138,7 +138,7 @@ class RCTTabViewManager(context: ReactApplicationContext) :
   }
 
   override fun setDisablePageAnimations(view: ReactBottomNavigationView?, value: Boolean) {
-    view?.disablePageTransitions = value
+    view?.disablePageAnimations = value
   }
 
   // iOS Methods

@@ -1,7 +1,6 @@
 package com.rcttabview
 
 import android.view.View
-import android.view.ViewGroup
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
@@ -78,7 +77,6 @@ class RCTTabViewManager(context: ReactApplicationContext) : ViewGroupManager<Rea
     tabViewImpl.setSelectedPage(view, key)
   }
 
-
   @ReactProp(name = "labeled")
   fun setLabeled(view: ReactBottomNavigationView, flag: Boolean?) {
     tabViewImpl.setLabeled(view, flag)
@@ -114,18 +112,18 @@ class RCTTabViewManager(context: ReactApplicationContext) : ViewGroupManager<Rea
     tabViewImpl.setActiveIndicatorColor(view, color)
   }
 
-  // iOS Props
+  @ReactProp(name = "disablePageAnimations")
+  fun setDisablePageAnimations(view: ReactBottomNavigationView, flag: Boolean) {
+    view.disablePageAnimations = flag
+  }
 
+  // iOS Props
   @ReactProp(name = "sidebarAdaptable")
   fun setSidebarAdaptable(view: ReactBottomNavigationView, flag: Boolean) {
   }
 
   @ReactProp(name = "ignoresTopSafeArea")
   fun setIgnoresTopSafeArea(view: ReactBottomNavigationView, flag: Boolean) {
-  }
-
-  @ReactProp(name = "disablePageAnimations")
-  fun setDisablePageAnimations(view: ReactBottomNavigationView, flag: Boolean) {
   }
 
   @ReactProp(name = "hapticFeedbackEnabled")

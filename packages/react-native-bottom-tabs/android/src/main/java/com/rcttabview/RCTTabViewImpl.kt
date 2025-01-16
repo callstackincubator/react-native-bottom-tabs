@@ -96,29 +96,23 @@ class RCTTabViewImpl {
   }
 
   fun getChildCount(parent: ReactBottomNavigationView): Int {
-    return parent.viewPagerAdapter.itemCount ?: 0
+    return parent.layoutHolder.childCount ?: 0
   }
 
   fun getChildAt(parent: ReactBottomNavigationView, index: Int): View? {
-    return parent.viewPagerAdapter.getChildAt(index)
+    return parent.layoutHolder.getChildAt(index)
   }
 
   fun removeView(parent: ReactBottomNavigationView, view: View) {
-    parent.viewPagerAdapter.removeChild(view)
+    parent.layoutHolder.removeView(view)
   }
 
   fun removeAllViews(parent: ReactBottomNavigationView) {
-    parent.viewPagerAdapter.removeAll()
+    parent.layoutHolder.removeAllViews()
   }
 
   fun removeViewAt(parent: ReactBottomNavigationView, index: Int) {
-    val child = parent.viewPagerAdapter.getChildAt(index)
-
-    if (child.parent != null) {
-      (child.parent as? ViewGroup)?.removeView(child)
-    }
-
-    parent.viewPagerAdapter.removeChildAt(index)
+    parent.layoutHolder.removeViewAt(index)
   }
 
   fun needsCustomLayoutForChildren(): Boolean {

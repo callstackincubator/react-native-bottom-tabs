@@ -11,7 +11,6 @@ import android.util.Log
 import android.util.Size
 import android.util.TypedValue
 import android.view.Choreographer
-import android.view.Gravity
 import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
@@ -19,6 +18,10 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.children
+import androidx.core.view.forEachIndexed
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
 import coil3.ImageLoader
 import coil3.asDrawable
@@ -38,15 +41,15 @@ import com.google.android.material.transition.platform.MaterialFadeThrough
 class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
   private val reactContext: ReactContext = context
   private val bottomNavigation = BottomNavigationView(context)
-  private val viewPager = ViewPager2(context)
-  val viewPagerAdapter = ViewPagerAdapter()
+  val layoutHolder = FrameLayout(context)
 
   var onTabSelectedListener: ((key: String) -> Unit)? = null
   var onTabLongPressedListener: ((key: String) -> Unit)? = null
   var onNativeLayoutListener: ((width: Double, height: Double) -> Unit)? = null
-  var disablePageTransitions = false
+  var disablePageAnimations = false
   var items: MutableList<TabInfo> = mutableListOf()
 
+  private var isLayoutEnqueued = false
   private var selectedItem: String? = null
   private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
   private var activeTintColor: Int? = null
@@ -67,15 +70,14 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
 
   init {
     orientation = VERTICAL
-    viewPager.adapter = viewPagerAdapter
-    viewPager.isUserInputEnabled = false
 
     addView(
-      viewPager, LayoutParams(
+      layoutHolder, LayoutParams(
         LayoutParams.MATCH_PARENT,
         0,
       ).apply { weight = 1f }
     )
+    layoutHolder.isSaveEnabled = false
 
     addView(bottomNavigation, LayoutParams(
       LayoutParams.MATCH_PARENT,
@@ -89,8 +91,8 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
         val newHeight = bottom - top
 
         if (newWidth != lastReportedSize?.width || newHeight != lastReportedSize?.height) {
-          val dpWidth = Utils.convertPixelsToDp(context, viewPager.width)
-          val dpHeight = Utils.convertPixelsToDp(context, viewPager.height)
+          val dpWidth = Utils.convertPixelsToDp(context, layoutHolder.width)
+          val dpHeight = Utils.convertPixelsToDp(context, layoutHolder.height)
 
           onNativeLayoutListener?.invoke(dpWidth, dpHeight)
           lastReportedSize = Size(newWidth, newHeight)
@@ -99,24 +101,12 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
     }
   }
 
-  fun setSelectedItem(value: String) {
-    selectedItem = value
-    setSelectedIndex(items.indexOfFirst { it.key == value })
-  }
-
-  override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams?) {
-    if (child === viewPager || child === bottomNavigation) {
-      super.addView(child, index, params)
-    } else {
-      viewPagerAdapter.addChild(child, index)
-      val itemKey = items[index].key
-      if (selectedItem == itemKey) {
-        setSelectedIndex(index)
-      }
-    }
-  }
-
   private val layoutCallback = Choreographer.FrameCallback {
+    isLayoutEnqueued = false
+    refreshLayout()
+  }
+
+  private fun refreshLayout() {
     measure(
       MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
       MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY),
@@ -128,7 +118,8 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
     super.requestLayout()
     @Suppress("SENSELESS_COMPARISON") // layoutCallback can be null here since this method can be called in init
 
-    if (layoutCallback != null) {
+    if (!isLayoutEnqueued && layoutCallback != null) {
+      isLayoutEnqueued = true
       // we use NATIVE_ANIMATED_MODULE choreographer queue because it allows us to catch the current
       // looper loop instead of enqueueing the update in the next loop causing a one frame delay.
       ReactChoreographer
@@ -140,13 +131,69 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
     }
   }
 
+  fun setSelectedItem(value: String) {
+    selectedItem = value
+    setSelectedIndex(items.indexOfFirst { it.key == value })
+  }
+
+  override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams?) {
+    if (child === layoutHolder || child === bottomNavigation) {
+      super.addView(child, index, params)
+      return
+    }
+
+    val container = createContainer()
+    child.isEnabled = false
+    container.addView(child, params)
+    layoutHolder.addView(container, index)
+
+    val itemKey = items[index].key
+    if (selectedItem == itemKey) {
+      setSelectedIndex(index)
+      refreshLayout()
+    }
+  }
+
+  private fun createContainer(): FrameLayout {
+    val container = FrameLayout(context).apply {
+      layoutParams = FrameLayout.LayoutParams(
+        FrameLayout.LayoutParams.MATCH_PARENT,
+        FrameLayout.LayoutParams.MATCH_PARENT
+      )
+      visibility = INVISIBLE
+      isEnabled = false
+    }
+    return container
+  }
+
   private fun setSelectedIndex(itemId: Int) {
     bottomNavigation.selectedItemId = itemId
-    if (!disablePageTransitions) {
+    if (!disablePageAnimations) {
       val fadeThrough = MaterialFadeThrough()
-      TransitionManager.beginDelayedTransition(this, fadeThrough)
+      TransitionManager.beginDelayedTransition(layoutHolder, fadeThrough)
     }
-    viewPager.setCurrentItem(itemId, false)
+
+    layoutHolder.forEachIndexed { index, view ->
+      if (itemId == index) {
+        toggleViewVisibility(view, true)
+      } else {
+        toggleViewVisibility(view, false)
+      }
+    }
+
+    layoutHolder.requestLayout()
+    layoutHolder.invalidate()
+  }
+
+  private fun toggleViewVisibility(view: View, isVisible: Boolean) {
+    check(view is ViewGroup) { "Native component tree is corrupted." }
+
+    view.visibility = if (isVisible) VISIBLE else INVISIBLE
+    view.isEnabled = isVisible
+
+    // Container has only 1 child, wrapped React Native view.
+    val reactNativeView = view.children.first()
+    reactNativeView.isEnabled = isVisible
   }
 
   private fun onTabSelected(item: MenuItem) {
