@@ -1,5 +1,25 @@
 # react-native-bottom-tabs
 
+## 0.8.0
+
+### Minor Changes
+
+- [#239](https://github.com/callstackincubator/react-native-bottom-tabs/pull/239) [`e01445f`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/e01445fefb6eeabf2ca5fd26b694dbf775aee42e) Thanks [@szymonrybczak](https://github.com/szymonrybczak)! - feat!: add tabBarStyle, remove barTintColor prop
+
+- [#236](https://github.com/callstackincubator/react-native-bottom-tabs/pull/236) [`d9e6590`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/d9e6590540837f68667fba5bc38577334e8e333c) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: refactor android, change views on the native side, add page animations
+
+### Patch Changes
+
+- [`cc28fc2`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/cc28fc263be4748b59cdc0d74a9b686a5837859d) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: add component provider field for codegen
+
+- [#245](https://github.com/callstackincubator/react-native-bottom-tabs/pull/245) [`f210909`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/f2109094298d035fbd679b15e9ebd7588675a3fe) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix(android): build issues ResourceDrawableIdHelper.instance
+
+- [#244](https://github.com/callstackincubator/react-native-bottom-tabs/pull/244) [`66cb3f5`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/66cb3f503ad6b9bf5604b040c20fcc766cdceafb) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: introduce material you theme for Expo plugin
+
+- [`cc28fc2`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/cc28fc263be4748b59cdc0d74a9b686a5837859d) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: use UIGraphicsImageRenderer
+
+- [#235](https://github.com/callstackincubator/react-native-bottom-tabs/pull/235) [`640ed84`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/640ed846ddcd6bdc147a00e2de593b5912fa04e4) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix(android): tab bar label blinking on select
+
 ## 0.7.8
 
 ### Patch Changes
