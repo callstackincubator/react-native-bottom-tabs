@@ -42,6 +42,14 @@ yarn workspace react-native-bottom-tabs-example android
 
 To run the React Native example app on iOS:
 
+Make sure to install [`cocoapods-swift-modular-headers`](https://github.com/callstack/cocoapods-swift-modular-headers) gem, otherwise `pod install` will fail.
+
+```sh
+gem install cocoapods-swift-modular-headers
+```
+
+Next you can install cocoapods.
+
 ```sh
 cd apps/example/ios
 pod install
@@ -55,20 +63,20 @@ To run the Expo example:
 yarn workspace example-expo start
 ```
 
-By default, the example is configured to build with the old architecture. To run the example with the new architecture, you can do the following:
+By default, the example is configured to build with the new architecture. To run the example with the old architecture, you can do the following:
 
 1. For Android, run:
 
    ```sh
    cd apps/example
-   ORG_GRADLE_PROJECT_newArchEnabled=true yarn android
+   ORG_GRADLE_PROJECT_newArchEnabled=false yarn android
    ```
 
 2. For iOS, run:
 
    ```sh
    cd apps/example/ios
-   RCT_NEW_ARCH_ENABLED=1 pod install
+   RCT_NEW_ARCH_ENABLED=0 pod install
    cd -
    yarn example ios
    ```
@@ -82,7 +90,7 @@ yarn clean
 To confirm that the app is running with the new architecture, you can check the Metro logs for a message like this:
 
 ```sh
-Running "SwiftuiTabviewExample" with {"fabric":true,"initialProps":{"concurrentRoot":true},"rootTag":1}
+Running "ReactNativeBottomTabsExample" with {"fabric":true,"initialProps":{"concurrentRoot":true},"rootTag":1}
 ```
 
 Note the `"fabric":true` and `"concurrentRoot":true` properties.
@@ -129,25 +137,13 @@ Our pre-commit hooks verify that the linter and tests pass when committing.
 
 ### Publishing to npm
 
-We use [release-it](https://github.com/release-it/release-it) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
+We use [changesets](https://github.com/changesets/changesets) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
 
 To publish new versions, run the following:
 
 ```sh
-yarn release
+yarn publish-packages
 ```
-
-### Scripts
-
-The `package.json` file contains various scripts for common tasks:
-
-- `yarn`: setup project by installing dependencies.
-- `yarn typecheck`: type-check files with TypeScript.
-- `yarn lint`: lint files with ESLint.
-- `yarn test`: run unit tests with Jest.
-- `yarn workspace react-native-bottom-tabs-example start`: start the Metro server for the example app.
-- `yarn workspace react-native-bottom-tabs-example android`: run the example app on Android.
-- `yarn workspace react-native-bottom-tabs-example ios`: run the example app on iOS.
 
 ### Sending a pull request
 

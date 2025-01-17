@@ -6,7 +6,7 @@ In order to enable edge-to-edge follow installation instructions for [react-nati
 
 :::note
 
-When using `react-native-edge-to-edge` config plugin, you don't need `react-native-bottom-tabs` config plugin. Make sure to set `parentTheme` to be either `Material2` or `Material3`.
+When using `react-native-edge-to-edge` config plugin, you don't need `react-native-bottom-tabs` config plugin. Make sure to set `parentTheme` to be one of `Material2` or `Material3` themes.
 
 ```json
 {
