@@ -1,5 +1,11 @@
 # Android Native Styling
 
+React Native Bottom Tabs uses native platform primitives to ensure a consistent look and feel across platforms. This means that the appearance of the tabs is controlled by the native platform styling.
+
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+  <video controls width="350" src="https://github.com/user-attachments/assets/8846e85b-c646-4aab-b668-59d0997ca007" />
+</div>
+
 ## Expo users
 
 Use Expo Config Plugin for Material 3 styling:
@@ -21,6 +27,12 @@ If you want to use Material2 styling, you can pass `theme` option to the plugin:
 }
 ```
 
+Available options:
+
+- `material2` - Material Design 2 styling
+- `material3` - Material Design 3 styling
+- `material3-dynamic` - Material Design 3 styling with dynamic theming (Material You)
+
 ## React Native Community CLI users
 
 Inside of your `android/app/src/main/res/values/styles.xml` file you can customize the appearance of the native bottom tabs.
@@ -30,6 +42,17 @@ Inside of your `android/app/src/main/res/values/styles.xml` file you can customi
 <resources>
 - <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
 + <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- … -->
+  </style>
+</resources>
+```
+
+For Material 3 Dynamic theming (Material You), you can use `Theme.Material3.DynamicColors.DayNight.NoActionBar`:
+
+```diff
+<resources>
+- <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
++ <style name="AppTheme" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
     <!-- … -->
   </style>
 </resources>
