@@ -1,5 +1,25 @@
 # react-native-bottom-tabs
 
+## 0.8.0
+
+### Minor Changes
+
+- [`1497aaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/1497aaab939256ef5c992e015f75168244f37caf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat!: add tabBarStyle, remove barTintColor prop
+
+- [`1497aaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/1497aaab939256ef5c992e015f75168244f37caf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: refactor android, change views on the native side, add page animations
+
+### Patch Changes
+
+- [`1497aaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/1497aaab939256ef5c992e015f75168244f37caf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: add component provider field for codegen
+
+- [`1497aaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/1497aaab939256ef5c992e015f75168244f37caf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix(android): build issues ResourceDrawableIdHelper.instance
+
+- [`1497aaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/1497aaab939256ef5c992e015f75168244f37caf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: introduce material you theme for Expo plugin
+
+- [`1497aaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/1497aaab939256ef5c992e015f75168244f37caf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: use UIGraphicsImageRenderer
+
+- [`1497aaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/1497aaab939256ef5c992e015f75168244f37caf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix(android): tab bar label blinking on select
+
 ## 0.7.8
 
 ### Patch Changes
