@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.8.1
+
+### Patch Changes
+
+- [#250](https://github.com/callstackincubator/react-native-bottom-tabs/pull/250) [`88d8531`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/88d85315357c7a89ee2ec1c27e7c3e3fb8992877) Thanks [@owinter86](https://github.com/owinter86)! - fix crash when change tab bar label during runtime
+
 ## 0.8.0
 
 ### Minor Changes
