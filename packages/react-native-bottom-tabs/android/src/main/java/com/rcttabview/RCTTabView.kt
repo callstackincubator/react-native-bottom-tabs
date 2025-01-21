@@ -84,6 +84,7 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
       LayoutParams.WRAP_CONTENT
     ))
 
+
     post {
       addOnLayoutChangeListener { _, left, top, right, bottom,
                                   _, _, _, _ ->
@@ -197,16 +198,17 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
   }
 
   private fun onTabSelected(item: MenuItem) {
-    val selectedItem = items.first { it.title == item.title }
+    val selectedItem = items[item.itemId]
     selectedItem.let {
       onTabSelectedListener?.invoke(selectedItem.key)
       emitHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
     }
+
   }
 
   private fun onTabLongPressed(item: MenuItem) {
-    val longPressedItem = items.firstOrNull { it.title == item.title }
-    longPressedItem?.let {
+    val longPressedItem = items[item.itemId]
+    longPressedItem.let {
       onTabLongPressedListener?.invoke(longPressedItem.key)
       emitHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
     }
@@ -220,6 +222,10 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
     this.items = items
     items.forEachIndexed { index, item ->
       val menuItem = getOrCreateItem(index, item.title)
+      if (item.title !== menuItem.title) {
+        menuItem.title = item.title
+      }
+
       menuItem.isVisible = !item.hidden
       if (iconSources.containsKey(index)) {
         getDrawable(iconSources[index]!!) {
@@ -370,7 +376,7 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
 
   private fun updateTextAppearance() {
     if (fontSize != null || fontFamily != null || fontWeight != null) {
-      val menuView = getChildAt(0) as? ViewGroup ?: return
+      val menuView = bottomNavigation.getChildAt(0) as? ViewGroup ?: return
       val size = fontSize?.toFloat()?.takeIf { it > 0 } ?: 12f
       val typeface = ReactFontManager.getInstance().getTypeface(
         fontFamily ?: "",
@@ -403,7 +409,9 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
 
   private fun updateTintColors(item: MenuItem? = null) {
     // First let's check current item color.
-    val currentItemTintColor = items.find { it.title == item?.title }?.activeTintColor
+    val currentItemTintColor = item?.itemId?.let { itemId ->
+      items[itemId].activeTintColor
+    }
 
     // getDefaultColor will always return a valid color but to satisfy the compiler we need to check for null
     val colorPrimary = currentItemTintColor ?: activeTintColor ?: Utils.getDefaultColorFor(

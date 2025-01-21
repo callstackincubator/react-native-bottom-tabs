@@ -4,10 +4,12 @@ import { Contacts } from '../Screens/Contacts';
 import { Chat } from '../Screens/Chat';
 import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation';
 import { Platform } from 'react-native';
+import { useState } from 'react';
 
 const Tab = createNativeBottomTabNavigator();
 
 function NativeBottomTabs() {
+  const [label, setLabel] = useState('Article');
   return (
     <Tab.Navigator
       initialRouteName="Chat"
@@ -40,11 +42,13 @@ function NativeBottomTabs() {
             console.log(
               `${Platform.OS}: Long press detected on tab with key ${data.target} at the screen level.`
             );
+            setLabel("CHANGED")
           },
         }}
         options={{
           tabBarButtonTestID: 'articleTestID',
           tabBarBadge: '10',
+          tabBarLabel: label,
           tabBarIcon: ({ focused }) =>
             focused
               ? require('../../assets/icons/person_dark.png')
