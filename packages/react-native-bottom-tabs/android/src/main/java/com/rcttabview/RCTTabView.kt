@@ -370,7 +370,7 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
 
   private fun updateTextAppearance() {
     if (fontSize != null || fontFamily != null || fontWeight != null) {
-      val menuView = getChildAt(0) as? ViewGroup ?: return
+      val menuView = bottomNavigation.getChildAt(0) as? ViewGroup ?: return
       val size = fontSize?.toFloat()?.takeIf { it > 0 } ?: 12f
       val typeface = ReactFontManager.getInstance().getTypeface(
         fontFamily ?: "",
