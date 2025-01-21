@@ -84,7 +84,6 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
       LayoutParams.WRAP_CONTENT
     ))
 
-
     post {
       addOnLayoutChangeListener { _, left, top, right, bottom,
                                   _, _, _, _ ->
@@ -203,7 +202,6 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
       onTabSelectedListener?.invoke(selectedItem.key)
       emitHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
     }
-
   }
 
   private fun onTabLongPressed(item: MenuItem) {
