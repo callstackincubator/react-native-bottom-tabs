@@ -145,9 +145,9 @@ public final class TabInfo: NSObject {
     }
   }
 
-  @objc public var fontWeigth: NSString? {
+  @objc public var fontWeight: NSString? {
     didSet {
-      props.fontWeight = fontWeigth as? String
+      props.fontWeight = fontWeight as? String
     }
   }
 

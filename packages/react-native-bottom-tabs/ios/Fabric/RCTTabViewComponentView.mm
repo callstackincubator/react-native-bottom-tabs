@@ -156,7 +156,7 @@ using namespace facebook::react;
   }
   
   if (oldViewProps.fontWeight != newViewProps.fontWeight) {
-    _tabViewProvider.fontWeigth = RCTNSStringFromStringNilIfEmpty(newViewProps.fontWeight);
+    _tabViewProvider.fontWeight = RCTNSStringFromStringNilIfEmpty(newViewProps.fontWeight);
   }
   
   if (oldViewProps.fontFamily != newViewProps.fontFamily) {
