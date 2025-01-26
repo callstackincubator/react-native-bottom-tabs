@@ -1,5 +1,13 @@
 # react-native-bottom-tabs
 
+## 0.8.2
+
+### Patch Changes
+
+- [`51ccbea`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/51ccbeafca6784a2f1c86a64cb8c71236abb1489) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: properly set background color on Android
+
+- [`51ccbea`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/51ccbeafca6784a2f1c86a64cb8c71236abb1489) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: iOS crash on old architecture when setting font style
+
 ## 0.8.1
 
 ### Patch Changes
