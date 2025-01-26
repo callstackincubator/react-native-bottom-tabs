@@ -1,8 +1,8 @@
 package com.rcttabview
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -20,14 +20,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.forEachIndexed
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
-import androidx.viewpager2.widget.ViewPager2
 import coil3.ImageLoader
 import coil3.asDrawable
 import coil3.request.ImageRequest
 import coil3.svg.SvgDecoder
-import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.assets.ReactFontManager
 import com.facebook.react.modules.core.ReactChoreographer
@@ -38,8 +34,7 @@ import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_UNLABELED
 import com.google.android.material.transition.platform.MaterialFadeThrough
 
-class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
-  private val reactContext: ReactContext = context
+class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   private val bottomNavigation = BottomNavigationView(context)
   val layoutHolder = FrameLayout(context)
 
@@ -335,11 +330,7 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
     val colorDrawable = ColorDrawable(backgroundColor)
 
     bottomNavigation.itemBackground = colorDrawable
-    backgroundTintList = ColorStateList.valueOf(backgroundColor)
-    // Set navigationBarColor for edge-to-edge.
-    if (Utils.isEdgeToEdge()) {
-      reactContext.currentActivity?.window?.navigationBarColor = backgroundColor
-    }
+    bottomNavigation.backgroundTintList = ColorStateList.valueOf(backgroundColor)
   }
 
   fun setActiveTintColor(color: Int?) {
@@ -430,9 +421,6 @@ class ReactBottomNavigationView(context: ReactContext) : LinearLayout(context) {
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    if (Utils.isEdgeToEdge()) {
-      reactContext.currentActivity?.window?.navigationBarColor = Color.TRANSPARENT
-    }
     imageLoader.shutdown()
   }
 }
