@@ -27,7 +27,8 @@ struct TabViewImpl: View {
       }
       .measureView(onLayout: { size in
         onLayout(size)
-      }).ignoresSafeArea(.keyboard, edges: props.ignoresKeyboardSafeArea ? .bottom : [])
+      })
+      .ignoresKeyboardSafeArea(props.ignoresKeyboardSafeArea)
     }
 #if !os(tvOS) && !os(macOS) && !os(visionOS)
     .onTabItemEvent({ index, isLongPress in
@@ -353,6 +354,24 @@ extension View {
     if #available(iOS 15.0, tvOS 15.0, macOS 13.0, *) {
       self
         .environment(\.symbolVariants, .none)
+    } else {
+      self
+    }
+  }
+
+  @ViewBuilder
+  func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+    if condition {
+      transform(self)
+    } else {
+      self
+    }
+  }
+
+  @ViewBuilder
+  func ignoresKeyboardSafeArea(_ flag: Bool) -> some View {
+    if flag {
+      self.ignoresSafeArea(.keyboard, edges: .bottom)
     } else {
       self
     }
