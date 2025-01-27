@@ -27,7 +27,7 @@ struct TabViewImpl: View {
       }
       .measureView(onLayout: { size in
         onLayout(size)
-      })
+      }).ignoresSafeArea(.keyboard, edges: props.ignoresKeyboardSafeArea ? .bottom : [])
     }
 #if !os(tvOS) && !os(macOS) && !os(visionOS)
     .onTabItemEvent({ index, isLongPress in

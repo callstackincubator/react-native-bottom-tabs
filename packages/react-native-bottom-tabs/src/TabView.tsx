@@ -148,6 +148,10 @@ interface Props<Route extends BaseRoute> {
      */
     fontSize?: number;
   };
+  /**
+   * Whether to ignore the bottom safe area when keyboard is shown. (iOS only) Defaults to `false`.
+   */
+  ignoresKeyboardSafeArea?: boolean;
 }
 
 const ANDROID_MAX_TABS = 6;
@@ -175,6 +179,7 @@ const TabView = <Route extends BaseRoute>({
   tabBarStyle,
   hapticFeedbackEnabled = false,
   tabLabelStyle,
+  ignoresKeyboardSafeArea = false,
   ...props
 }: Props<Route>) => {
   // @ts-ignore
@@ -277,6 +282,7 @@ const TabView = <Route extends BaseRoute>({
         items={items}
         icons={resolvedIconAssets}
         selectedPage={focusedKey}
+        ignoresKeyboardSafeArea={ignoresKeyboardSafeArea}
         onTabLongPress={({ nativeEvent: { key } }) => {
           const index = trimmedRoutes.findIndex((route) => route.key === key);
           onTabLongPress?.(index);

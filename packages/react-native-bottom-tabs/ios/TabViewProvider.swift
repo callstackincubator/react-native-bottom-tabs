@@ -156,6 +156,12 @@ public final class TabInfo: NSObject {
       props.fontSize = fontSize as? Int
     }
   }
+    
+  @objc public var ignoresKeyboardSafeArea: Bool = false {
+        didSet {
+            props.hideOnKeyboard = hideOnKeyboard
+        }
+  }
 
   // New arch specific properties
 
