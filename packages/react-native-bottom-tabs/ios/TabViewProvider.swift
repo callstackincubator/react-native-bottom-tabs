@@ -159,7 +159,7 @@ public final class TabInfo: NSObject {
     
   @objc public var ignoresKeyboardSafeArea: Bool = false {
         didSet {
-            props.hideOnKeyboard = hideOnKeyboard
+            props.ignoresKeyboardSafeArea = ignoresKeyboardSafeArea
         }
   }
 
