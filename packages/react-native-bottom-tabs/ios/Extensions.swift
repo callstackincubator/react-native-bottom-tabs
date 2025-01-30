@@ -97,7 +97,7 @@ extension View {
               onLayout(geometry.size)
             }
         }
-          .ignoresSafeArea(.container, edges: .vertical)
+        .ignoresSafeArea(.all, edges: .vertical)
       )
   }
 }
