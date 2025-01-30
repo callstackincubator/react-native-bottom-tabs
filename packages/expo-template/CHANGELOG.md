@@ -1,5 +1,15 @@
 # @bottom-tabs/expo-template
 
+## 0.0.4
+
+### Patch Changes
+
+- [#270](https://github.com/callstackincubator/react-native-bottom-tabs/pull/270) [`7a79a7f`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/7a79a7f4c6f8326ae55d2e2bea8b4f95e6b55d1d) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: provide proper typings for withLayoutContext
+
+- Updated dependencies [[`4fa80c2`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/4fa80c2ed7d838d0a3feaa445939e365b7770b54)]:
+  - react-native-bottom-tabs@0.8.3
+  - @bottom-tabs/react-navigation@0.8.3
+
 ## 0.0.3
 
 ### Patch Changes

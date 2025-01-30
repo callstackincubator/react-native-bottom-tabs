@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.8.3
+
+### Patch Changes
+
+- [#269](https://github.com/callstackincubator/react-native-bottom-tabs/pull/269) [`4fa80c2`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/4fa80c2ed7d838d0a3feaa445939e365b7770b54) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: properly handle measurements by ignoring keyboard
+
 ## 0.8.2
 
 ### Patch Changes
