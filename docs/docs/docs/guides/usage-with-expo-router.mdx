@@ -6,16 +6,28 @@ First install `@bottom-tabs/react-navigation` which provides a native bottom tab
 
 <PackageManagerTabs command="install @bottom-tabs/react-navigation" />
 
-First, create a custom layout adapter for the native bottom tabs:
+Next, create a custom layout adapter for the native bottom tabs using `withLayoutContext` from Expo Router:
 
 ```tsx
-import { withLayoutContext } from "expo-router";
-import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation';
+import { withLayoutContext } from 'expo-router';
+import {
+  createNativeBottomTabNavigator,
+  NativeBottomTabNavigationOptions,
+  NativeBottomTabNavigationEventMap,
+} from '@bottom-tabs/react-navigation';
+import { ParamListBase, TabNavigationState } from '@react-navigation/native';
 
-export const Tabs = withLayoutContext(
-  createNativeBottomTabNavigator().Navigator
-);
+const BottomTabNavigator = createNativeBottomTabNavigator().Navigator;
+
+const Tabs = withLayoutContext<
+  NativeBottomTabNavigationOptions,
+  typeof BottomTabNavigator,
+  TabNavigationState<ParamListBase>,
+  NativeBottomTabNavigationEventMap
+>(BottomTabNavigator);
 ```
+
+> [!NOTE] Make sure to provide the correct types for the `withLayoutContext` function. Without it screen options won't have proper types.
 
 Then, use the `Tabs` navigator in your app:
 
