@@ -15,7 +15,7 @@ data class TabInfo(
   val badge: String,
   val activeTintColor: Int?,
   val hidden: Boolean,
-  val testID: String?,
+  val testID: String?
 )
 
 class RCTTabViewImpl {

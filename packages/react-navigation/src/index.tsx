@@ -16,4 +16,5 @@ export type {
   NativeBottomTabNavigationOptions,
   NativeBottomTabNavigationProp,
   NativeBottomTabScreenProps,
+  BottomTabBarProps,
 } from './types';

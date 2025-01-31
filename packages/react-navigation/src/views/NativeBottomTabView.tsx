@@ -21,6 +21,7 @@ export default function NativeBottomTabView({
   state,
   navigation,
   descriptors,
+  tabBar,
   ...rest
 }: Props) {
   return (
@@ -47,6 +48,9 @@ export default function NativeBottomTabView({
       }}
       getTestID={({ route }) =>
         descriptors[route.key]?.options.tabBarButtonTestID
+      }
+      tabBar={
+        tabBar ? () => tabBar({ state, descriptors, navigation }) : undefined
       }
       getIcon={({ route, focused }) => {
         const options = descriptors[route.key]?.options;

@@ -104,6 +104,15 @@ export type NativeBottomTabDescriptorMap = Record<
   NativeBottomTabDescriptor
 >;
 
+export type BottomTabBarProps = {
+  state: TabNavigationState<ParamListBase>;
+  descriptors: NativeBottomTabDescriptorMap;
+  navigation: NavigationHelpers<
+    ParamListBase,
+    NativeBottomTabNavigationEventMap
+  >;
+};
+
 export type NativeBottomTabNavigationConfig = Partial<
   Omit<
     React.ComponentProps<typeof TabView>,
@@ -117,5 +126,8 @@ export type NativeBottomTabNavigationConfig = Partial<
     | 'onTabLongPress'
     | 'getActiveTintColor'
     | 'getTestID'
+    | 'tabBar'
   >
->;
+> & {
+  tabBar?: (props: BottomTabBarProps) => React.ReactNode;
+};

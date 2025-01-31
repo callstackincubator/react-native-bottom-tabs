@@ -28,6 +28,7 @@ import NativeBottomTabsEmbeddedStacks from './Examples/NativeBottomTabsEmbeddedS
 import NativeBottomTabsSVGs from './Examples/NativeBottomTabsSVGs';
 import NativeBottomTabsRemoteIcons from './Examples/NativeBottomTabsRemoteIcons';
 import NativeBottomTabsUnmounting from './Examples/NativeBottomTabsUnmounting';
+import NativeBottomTabsCustomTabBar from './Examples/NativeBottomTabsCustomTabBar';
 
 const FourTabsIgnoreSafeArea = () => {
   return <FourTabs ignoresTopSafeArea />;
@@ -135,6 +136,10 @@ const examples = [
   {
     component: NativeBottomTabsRemoteIcons,
     name: 'Native Bottom Tabs with SVG Remote Icons',
+  },
+  {
+    component: NativeBottomTabsCustomTabBar,
+    name: 'Native Bottom Tabs with Custom Tab Bar',
   },
   { component: NativeBottomTabs, name: 'Native Bottom Tabs' },
   { component: JSBottomTabs, name: 'JS Bottom Tabs' },

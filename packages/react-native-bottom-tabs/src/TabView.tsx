@@ -116,6 +116,8 @@ interface Props<Route extends BaseRoute> {
    */
   getTestID?: (props: { route: Route }) => string | undefined;
 
+  tabBar?: () => React.ReactNode;
+
   tabBarStyle?: {
     /**
      * Background color of the tab bar.
@@ -172,8 +174,9 @@ const TabView = <Route extends BaseRoute>({
   getHidden = ({ route }: { route: Route }) => route.hidden,
   getActiveTintColor = ({ route }: { route: Route }) => route.activeTintColor,
   getTestID = ({ route }: { route: Route }) => route.testID,
-  tabBarStyle,
   hapticFeedbackEnabled = false,
+  tabBar: renderCustomTabBar,
+  tabBarStyle,
   tabLabelStyle,
   ...props
 }: Props<Route>) => {
@@ -275,8 +278,10 @@ const TabView = <Route extends BaseRoute>({
         {...tabLabelStyle}
         style={styles.fullWidth}
         items={items}
-        icons={resolvedIconAssets}
+        // When rendering a custom tab bar, icons can be React elements, which will not be properly resolved.
+        icons={renderCustomTabBar ? undefined : resolvedIconAssets}
         selectedPage={focusedKey}
+        tabBarHidden={!!renderCustomTabBar}
         onTabLongPress={({ nativeEvent: { key } }) => {
           const index = trimmedRoutes.findIndex((route) => route.key === key);
           onTabLongPress?.(index);
@@ -333,6 +338,7 @@ const TabView = <Route extends BaseRoute>({
           );
         })}
       </NativeTabView>
+      {renderCustomTabBar?.() ?? null}
     </BottomTabBarHeightContext.Provider>
   );
 };
@@ -341,6 +347,7 @@ const styles = StyleSheet.create({
   fullWidth: {
     width: '100%',
     height: '100%',
+    flex: 1,
   },
 });
 

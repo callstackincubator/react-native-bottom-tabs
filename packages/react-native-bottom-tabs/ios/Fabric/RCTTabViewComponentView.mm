@@ -146,22 +146,27 @@ using namespace facebook::react;
   if (oldViewProps.inactiveTintColor != newViewProps.inactiveTintColor) {
     _tabViewProvider.inactiveTintColor = RCTUIColorFromSharedColor(newViewProps.inactiveTintColor);
   }
-  
+
   if (oldViewProps.hapticFeedbackEnabled != newViewProps.hapticFeedbackEnabled) {
     _tabViewProvider.hapticFeedbackEnabled = newViewProps.hapticFeedbackEnabled;
   }
-  
+
   if (oldViewProps.fontSize != newViewProps.fontSize) {
     _tabViewProvider.fontSize = [NSNumber numberWithInt:newViewProps.fontSize];
   }
-  
+
   if (oldViewProps.fontWeight != newViewProps.fontWeight) {
     _tabViewProvider.fontWeight = RCTNSStringFromStringNilIfEmpty(newViewProps.fontWeight);
   }
-  
+
   if (oldViewProps.fontFamily != newViewProps.fontFamily) {
     _tabViewProvider.fontFamily = RCTNSStringFromStringNilIfEmpty(newViewProps.fontFamily);
   }
+  
+  if (oldViewProps.tabBarHidden != newViewProps.tabBarHidden) {
+    _tabViewProvider.tabBarHidden = newViewProps.tabBarHidden;
+  }
+
 
   [super updateProps:props oldProps:oldProps];
 }

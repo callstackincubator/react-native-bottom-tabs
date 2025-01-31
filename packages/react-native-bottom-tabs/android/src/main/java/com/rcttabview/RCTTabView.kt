@@ -80,7 +80,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     ))
 
     post {
-      addOnLayoutChangeListener { _, left, top, right, bottom,
+      layoutHolder.addOnLayoutChangeListener { _, left, top, right, bottom,
                                   _, _, _, _ ->
         val newWidth = right - left
         val newHeight = bottom - top
@@ -204,6 +204,14 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     longPressedItem.let {
       onTabLongPressedListener?.invoke(longPressedItem.key)
       emitHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+    }
+  }
+
+  fun setTabBarHidden(isHidden: Boolean) {
+    if (isHidden) {
+      bottomNavigation.visibility = GONE
+    } else {
+      bottomNavigation.visibility = VISIBLE
     }
   }
 

@@ -117,6 +117,11 @@ class RCTTabViewManager(context: ReactApplicationContext) : ViewGroupManager<Rea
     view.disablePageAnimations = flag
   }
 
+  @ReactProp(name = "tabBarHidden")
+  fun setTabBarHidden(view: ReactBottomNavigationView, flag: Boolean) {
+    view.setTabBarHidden(flag)
+  }
+
   // iOS Props
   @ReactProp(name = "sidebarAdaptable")
   fun setSidebarAdaptable(view: ReactBottomNavigationView, flag: Boolean) {

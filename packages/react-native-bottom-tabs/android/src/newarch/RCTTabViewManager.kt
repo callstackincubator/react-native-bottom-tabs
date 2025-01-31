@@ -141,6 +141,10 @@ class RCTTabViewManager(context: ReactApplicationContext) :
     view?.disablePageAnimations = value
   }
 
+  override fun setTabBarHidden(view: ReactBottomNavigationView?, value: Boolean) {
+    view?.setTabBarHidden(value)
+  }
+
   // iOS Methods
   override fun setTranslucent(view: ReactBottomNavigationView?, value: Boolean) {
   }

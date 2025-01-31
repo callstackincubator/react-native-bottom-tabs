@@ -156,6 +156,12 @@ public final class TabInfo: NSObject {
       props.fontSize = fontSize as? Int
     }
   }
+  
+  @objc public var tabBarHidden: Bool = false {
+    didSet {
+      props.tabBarHidden = tabBarHidden
+    }
+  }
 
   // New arch specific properties
 

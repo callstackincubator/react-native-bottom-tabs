@@ -40,6 +40,7 @@ export interface TabViewProps extends ViewProps {
   onTabBarMeasured?: DirectEventHandler<OnTabBarMeasured>;
   onNativeLayout?: DirectEventHandler<OnNativeLayout>;
   icons?: ReadonlyArray<ImageSource>;
+  tabBarHidden?: boolean;
   labeled?: boolean;
   sidebarAdaptable?: boolean;
   scrollEdgeAppearance?: string;

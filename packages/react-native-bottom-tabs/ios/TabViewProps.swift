@@ -21,6 +21,7 @@ class TabViewProps: ObservableObject {
   @Published var fontSize: Int?
   @Published var fontFamily: String?
   @Published var fontWeight: String?
+  @Published var tabBarHidden: Bool = false
 
   var selectedActiveTintColor: PlatformColor? {
     if let selectedPage = selectedPage,
@@ -30,5 +31,11 @@ class TabViewProps: ObservableObject {
     }
 
     return activeTintColor
+  }
+
+  var filteredItems: [TabInfo] {
+    items.filter({
+      !$0.hidden || $0.key == selectedPage
+    })
   }
 }
