@@ -80,7 +80,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     ))
 
     post {
-      layoutHolder.addOnLayoutChangeListener { _, left, top, right, bottom,
+      addOnLayoutChangeListener { _, left, top, right, bottom,
                                   _, _, _, _ ->
         val newWidth = right - left
         val newHeight = bottom - top
