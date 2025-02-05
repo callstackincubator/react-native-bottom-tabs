@@ -172,6 +172,38 @@ Supported properties:
 - `fontSize`
 - `fontWeight`
 
+#### `tabBar`
+
+Function that returns a React element to display as the tab bar.
+
+The function receives an object containing the following properties as the argument:
+
+- `state` - The state object for the tab navigator.
+- `descriptors` - The descriptors object containing options for the tab navigator.
+- `navigation` - The navigation object for the tab navigator.
+
+The state.routes array contains all the routes defined in the navigator. Each route's options can be accessed using `descriptors[route.key].options`.
+
+Example:
+
+```tsx
+function MyTabBar({ state, descriptors, navigation }) {
+  // Render your tab bar here
+}
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <MyTabBar {...props} />}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
+```
+
+
 ### Options
 
 The following options can be used to configure the screens in the navigator. These can be specified under `screenOptions` prop of `Tab.navigator` or `options` prop of `Tab.Screen`.
