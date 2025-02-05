@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.8.4
+
+### Patch Changes
+
+- [#273](https://github.com/callstackincubator/react-native-bottom-tabs/pull/273) [`196ea22`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/196ea2224f041f195fd10c5b611818aab4d799ca) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: allow for custom JavaScript tab bars
+
 ## 0.8.3
 
 ### Patch Changes
