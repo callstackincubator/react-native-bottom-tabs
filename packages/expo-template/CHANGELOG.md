@@ -1,5 +1,13 @@
 # @bottom-tabs/expo-template
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`ad0ca17`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ad0ca17855a7507d68bf92e651323339ae674695)]:
+  - react-native-bottom-tabs@0.8.5
+  - @bottom-tabs/react-navigation@0.8.5
+
 ## 0.0.5
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.8.5
+
+### Patch Changes
+
+- [#283](https://github.com/callstackincubator/react-native-bottom-tabs/pull/283) [`ad0ca17`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ad0ca17855a7507d68bf92e651323339ae674695) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: first screen is blank
+
 ## 0.8.4
 
 ### Patch Changes
