@@ -8,6 +8,8 @@ import {
   Text,
   TextInput,
   View,
+  Button,
+  Alert,
 } from 'react-native';
 
 const MESSAGES = [
@@ -27,6 +29,7 @@ export function Chat({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
+      <Button onPress={() => Alert.alert('Hey')} title="Press me" />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.inverted}

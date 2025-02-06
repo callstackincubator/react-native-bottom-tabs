@@ -1,12 +1,14 @@
 import { useScrollToTop } from '@react-navigation/native';
 import * as React from 'react';
 import {
+  Alert,
   FlatList,
   type FlatListProps,
   Platform,
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { useBottomTabBarHeight } from 'react-native-bottom-tabs';
@@ -74,7 +76,10 @@ const CONTACTS: Item[] = [
 const ContactItem = React.memo(
   ({ item }: { item: { name: string; number: number } }) => {
     return (
-      <View style={[styles.item, { backgroundColor: '#fff' }]}>
+      <TouchableOpacity
+        style={[styles.item, { backgroundColor: '#fff' }]}
+        onPress={() => Alert.alert(`Pressed: ${item.name}`)}
+      >
         <View style={styles.avatar}>
           <Text style={styles.letter}>
             {item.name.slice(0, 1).toUpperCase()}
@@ -84,7 +89,7 @@ const ContactItem = React.memo(
           <Text style={styles.name}>{item.name}</Text>
           <Text style={[styles.number, { opacity: 0.5 }]}>{item.number}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 );
