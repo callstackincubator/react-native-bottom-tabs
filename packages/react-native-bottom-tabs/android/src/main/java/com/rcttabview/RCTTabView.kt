@@ -18,7 +18,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.children
 import androidx.core.view.forEachIndexed
 import coil3.ImageLoader
 import coil3.asDrawable
@@ -138,7 +137,6 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     }
 
     val container = createContainer()
-    child.isEnabled = false
     container.addView(child, params)
     layoutHolder.addView(container, index)
 
@@ -155,7 +153,8 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
         FrameLayout.LayoutParams.MATCH_PARENT,
         FrameLayout.LayoutParams.MATCH_PARENT
       )
-      visibility = INVISIBLE
+      isSaveEnabled = false
+      visibility = GONE
       isEnabled = false
     }
     return container
@@ -183,12 +182,8 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   private fun toggleViewVisibility(view: View, isVisible: Boolean) {
     check(view is ViewGroup) { "Native component tree is corrupted." }
 
-    view.visibility = if (isVisible) VISIBLE else INVISIBLE
+    view.visibility = if (isVisible) VISIBLE else GONE
     view.isEnabled = isVisible
-
-    // Container has only 1 child, wrapped React Native view.
-    val reactNativeView = view.children.first()
-    reactNativeView.isEnabled = isVisible
   }
 
   private fun onTabSelected(item: MenuItem) {

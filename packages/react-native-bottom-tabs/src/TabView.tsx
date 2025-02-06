@@ -324,11 +324,7 @@ const TabView = <Route extends BaseRoute>({
               importantForAccessibility={
                 focused ? 'auto' : 'no-hide-descendants'
               }
-              style={
-                Platform.OS === 'android'
-                  ? [measuredDimensions]
-                  : [{ position: 'absolute' }, measuredDimensions]
-              }
+              style={[{ position: 'absolute' }, measuredDimensions]}
             >
               {renderScene({
                 route,
