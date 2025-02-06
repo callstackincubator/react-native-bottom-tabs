@@ -1,0 +1,43 @@
+name: Release Canary
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  release:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '!canary') }}
+    permissions:
+      contents: write # to create release (changesets/action)
+      id-token: write # Required for provenance
+      issues: write # To create a comment
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Release
+        run: |
+          yarn changeset version --snapshot canary
+          yarn changeset publish --tag canary --no-git-tag --snapshot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Write a new comment
+        uses: peter-evans/create-or-update-comment@v4
+        continue-on-error: true
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            🎉 A new canary release has been published! 🎉
