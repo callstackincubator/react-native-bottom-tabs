@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.8.6
+
+### Patch Changes
+
+- [#288](https://github.com/callstackincubator/react-native-bottom-tabs/pull/288) [`42cdfaa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/42cdfaac1b7168409fa366526d067add71304030) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: make pressable items work when switching screens on new arch
+
 ## 0.8.5
 
 ### Patch Changes

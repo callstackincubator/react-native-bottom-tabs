@@ -1,7 +1,7 @@
 {
   "name": "@bottom-tabs/expo-template",
   "main": "expo-router/entry",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -18,7 +18,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@bottom-tabs/react-navigation": "0.8.5",
+    "@bottom-tabs/react-navigation": "0.8.6",
     "@expo/vector-icons": "^14.0.2",
     "@react-navigation/native": "^7.0.14",
     "expo": "~52.0.11",
@@ -37,7 +37,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.3",
-    "react-native-bottom-tabs": "0.8.5",
+    "react-native-bottom-tabs": "0.8.6",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "4.12.0",
