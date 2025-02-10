@@ -15,8 +15,6 @@
 
 </div>
 
-https://github.com/user-attachments/assets/fbdd9ce2-f4b9-4d0c-bd91-2e62bb422d69
-
 ## Documentation
 
 The full documentation can be found on our [website](https://okwasniewski.github.io/react-native-bottom-tabs/).
