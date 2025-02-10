@@ -101,6 +101,7 @@ struct TabViewImpl: View {
         }
         .tag(tabData?.key)
         .tabBadge(tabData?.badge)
+        .hideTabBar(props.tabBarHidden)
         .onAppear {
 #if !os(macOS)
           updateTabBarAppearance(props: props, tabBar: tabBar)
@@ -346,6 +347,20 @@ extension View {
         self.tint(color)
       } else {
         self.accentColor(color)
+      }
+    } else {
+      self
+    }
+  }
+  
+  @ViewBuilder
+  func hideTabBar(_ flag: Bool) -> some View {
+    if flag {
+      if #available(iOS 16.0, *) {
+        self.toolbar(.hidden, for: .tabBar)
+      } else {
+        // We fallback to isHidden on UITabBar
+        self
       }
     } else {
       self
