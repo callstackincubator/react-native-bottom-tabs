@@ -113,6 +113,7 @@
     "version": "0.41.2"
   },
   "dependencies": {
+    "react-freeze": "^1.0.0",
     "sf-symbols-typescript": "^2.0.0",
     "use-latest-callback": "^0.2.1"
   },

@@ -105,7 +105,7 @@ Whether to show labels in tabs.
 
 Changes ripple color on tab press.
 
-#### `disablePageAnimations` <Badge text="iOS" type="info" />
+#### `disablePageAnimations`
 
 Whether to disable page animations between tabs.
 
@@ -265,6 +265,12 @@ Due to native limitations on iOS, this option doesn't hide the tab item **when h
 #### `lazy`
 
 Whether this screens should render the first time it's accessed. Defaults to true. Set it to false if you want to render the screen on initial render.
+
+#### `freezeOnBlur`
+Boolean indicating whether to prevent inactive screens from re-rendering. Defaults to false.
+
+It's working separately from `enableFreeze()` in `react-native-screens`. So settings won't be shared between them.
+
 
 #### `tabBarButtonTestID`
 

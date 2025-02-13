@@ -1,5 +1,6 @@
 import React from 'react';
 import type { TabViewItems } from './TabViewNativeComponent';
+import Screen from './Screen';
 import {
   type ColorValue,
   Image,
@@ -116,7 +117,15 @@ interface Props<Route extends BaseRoute> {
    */
   getTestID?: (props: { route: Route }) => string | undefined;
 
+  /**
+   * Custom tab bar to render. Set to `null` to hide the tab bar completely.
+   */
   tabBar?: () => React.ReactNode;
+
+  /**
+   * Get freezeOnBlur for the current screen. Uses false by default.
+   */
+  getFreezeOnBlur?: (props: { route: Route }) => boolean | undefined;
 
   tabBarStyle?: {
     /**
@@ -177,6 +186,7 @@ const TabView = <Route extends BaseRoute>({
   hapticFeedbackEnabled = false,
   // Android's native behavior is to show labels when there are less than 4 tabs. We leave it as undefined to use the platform default behavior.
   labeled = Platform.OS !== 'android' ? true : undefined,
+  getFreezeOnBlur = ({ route }: { route: Route }) => route.freezeOnBlur,
   tabBar: renderCustomTabBar,
   tabBarStyle,
   tabLabelStyle,
@@ -317,23 +327,20 @@ const TabView = <Route extends BaseRoute>({
           }
 
           const focused = route.key === focusedKey;
+          const freeze = !focused ? getFreezeOnBlur({ route }) : false;
 
           return (
-            <View
+            <Screen
               key={route.key}
-              collapsable={false}
-              pointerEvents={focused ? 'auto' : 'none'}
-              accessibilityElementsHidden={!focused}
-              importantForAccessibility={
-                focused ? 'auto' : 'no-hide-descendants'
-              }
-              style={[{ position: 'absolute' }, measuredDimensions]}
+              freeze={!!freeze}
+              focused={focused}
+              style={[styles.screen, measuredDimensions]}
             >
               {renderScene({
                 route,
                 jumpTo,
               })}
-            </View>
+            </Screen>
           );
         })}
       </NativeTabView>
@@ -347,6 +354,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
+  },
+  screen: {
+    position: 'absolute',
   },
 });
 

@@ -8,7 +8,12 @@ const Tab = createNativeBottomTabNavigator();
 
 function NativeBottomTabsSVGs() {
   return (
-    <Tab.Navigator sidebarAdaptable>
+    <Tab.Navigator
+      sidebarAdaptable
+      screenOptions={{
+        freezeOnBlur: true,
+      }}
+    >
       <Tab.Screen
         name="Article"
         component={Article}

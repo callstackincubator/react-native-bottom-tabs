@@ -17105,6 +17105,7 @@ __metadata:
     "@types/jest": "npm:^29.5.5"
     "@types/react": "npm:^18.2.44"
     react: "npm:18.3.1"
+    react-freeze: "npm:^1.0.0"
     react-native: "npm:0.75.4"
     react-native-builder-bob: "npm:^0.32.1"
     sf-symbols-typescript: "npm:^2.0.0"

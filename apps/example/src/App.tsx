@@ -29,6 +29,7 @@ import NativeBottomTabsSVGs from './Examples/NativeBottomTabsSVGs';
 import NativeBottomTabsRemoteIcons from './Examples/NativeBottomTabsRemoteIcons';
 import NativeBottomTabsUnmounting from './Examples/NativeBottomTabsUnmounting';
 import NativeBottomTabsCustomTabBar from './Examples/NativeBottomTabsCustomTabBar';
+import NativeBottomTabsFreezeOnBlur from './Examples/NativeBottomTabsFreezeOnBlur';
 
 const FourTabsIgnoreSafeArea = () => {
   return <FourTabs ignoresTopSafeArea />;
@@ -129,6 +130,10 @@ const examples = [
   {
     component: HiddenTab,
     name: 'Four Tabs - With Hidden Tab',
+  },
+  {
+    component: NativeBottomTabsFreezeOnBlur,
+    name: 'Native Bottom Tabs with freezeOnBlur',
   },
   {
     component: NativeBottomTabsSVGs,

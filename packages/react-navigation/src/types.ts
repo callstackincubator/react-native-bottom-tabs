@@ -91,6 +91,11 @@ export type NativeBottomTabNavigationOptions = {
    * TestID for the tab.
    */
   tabBarButtonTestID?: string;
+
+  /**
+   * Whether inactive screens should be suspended from re-rendering. Defaults to `false`.
+   */
+  freezeOnBlur?: boolean;
 };
 
 export type NativeBottomTabDescriptor = Descriptor<
@@ -127,6 +132,7 @@ export type NativeBottomTabNavigationConfig = Partial<
     | 'getActiveTintColor'
     | 'getTestID'
     | 'tabBar'
+    | 'getFreezeOnBlur'
   >
 > & {
   tabBar?: (props: BottomTabBarProps) => React.ReactNode;

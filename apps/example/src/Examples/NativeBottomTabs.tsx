@@ -42,7 +42,7 @@ function NativeBottomTabs() {
             console.log(
               `${Platform.OS}: Long press detected on tab with key ${data.target} at the screen level.`
             );
-            setLabel('New Article')
+            setLabel('New Article');
           },
         }}
         options={{
