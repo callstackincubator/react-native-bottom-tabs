@@ -3,6 +3,7 @@ package com.rcttabview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -34,7 +35,7 @@ import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY
 import com.google.android.material.transition.platform.MaterialFadeThrough
 
 class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
-  private val bottomNavigation = BottomNavigationView(context)
+  private var bottomNavigation = BottomNavigationView(context)
   val layoutHolder = FrameLayout(context)
 
   var onTabSelectedListener: ((key: String) -> Unit)? = null
@@ -56,6 +57,8 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   private var fontFamily: String? = null
   private var fontWeight: Int? = null
   private var lastReportedSize: Size? = null
+  private var hasCustomAppearance = false
+  private var uiModeConfiguration: Int = Configuration.UI_MODE_NIGHT_UNDEFINED
 
   private val imageLoader = ImageLoader.Builder(context)
     .components {
@@ -78,6 +81,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       LayoutParams.MATCH_PARENT,
       LayoutParams.WRAP_CONTENT
     ))
+    uiModeConfiguration = resources.configuration.uiMode
 
     post {
       addOnLayoutChangeListener { _, left, top, right, bottom,
@@ -306,6 +310,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
   fun setRippleColor(color: ColorStateList) {
     bottomNavigation.itemRippleColor = color
+    hasCustomAppearance = true
   }
 
   @SuppressLint("CheckResult")
@@ -343,20 +348,24 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
     bottomNavigation.itemBackground = colorDrawable
     bottomNavigation.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+    hasCustomAppearance = true
   }
 
   fun setActiveTintColor(color: Int?) {
     activeTintColor = color
     updateTintColors()
+    hasCustomAppearance = true
   }
 
   fun setInactiveTintColor(color: Int?) {
     inactiveTintColor = color
     updateTintColors()
+    hasCustomAppearance = true
   }
 
   fun setActiveIndicatorColor(color: ColorStateList) {
     bottomNavigation.itemActiveIndicatorColor = color
+    hasCustomAppearance = true
   }
 
   fun setFontSize(size: Int) {
@@ -429,6 +438,22 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       this@ReactBottomNavigationView.bottomNavigation.itemTextColor = this
       this@ReactBottomNavigationView.bottomNavigation.itemIconTintList = this
     }
+  }
+
+  override fun onConfigurationChanged(newConfig: Configuration?) {
+    super.onConfigurationChanged(newConfig)
+    if (uiModeConfiguration == newConfig?.uiMode || hasCustomAppearance) {
+      return
+    }
+
+    // If appearance wasn't changed re-create the bottom navigation view when configuration changes.
+    // React Native opts out ouf Activity re-creation when configuration changes, this workarounds that.
+    // We also opt-out of this recreation when custom styles are used.
+    removeView(bottomNavigation)
+    bottomNavigation = BottomNavigationView(context)
+    addView(bottomNavigation)
+    updateItems(items)
+    uiModeConfiguration = newConfig?.uiMode ?: uiModeConfiguration
   }
 
   override fun onDetachedFromWindow() {
