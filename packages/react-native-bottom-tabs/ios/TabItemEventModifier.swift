@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftUIIntrospect
+import UIKit
 
 #if !os(macOS) && !os(visionOS)
 
@@ -7,6 +8,13 @@ private final class TabBarDelegate: NSObject, UITabBarControllerDelegate {
   var onClick: ((_ index: Int) -> Void)? = nil
   
   func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+#if os(iOS)
+    // Handle "More" Tab
+    if tabBarController.moreNavigationController == viewController {
+      return true
+    }
+#endif
+    
     if let index = tabBarController.viewControllers?.firstIndex(of: viewController) {
       onClick?(index)
     }

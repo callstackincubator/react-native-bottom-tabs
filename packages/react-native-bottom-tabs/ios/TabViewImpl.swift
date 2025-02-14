@@ -87,8 +87,7 @@ struct TabViewImpl: View {
 
       RepresentableView(view: child)
         .ignoresTopSafeArea(
-          props.ignoresTopSafeArea,
-          frame: child.frame
+          props.ignoresTopSafeArea
         )
         .tabItem {
           TabItem(
@@ -293,8 +292,7 @@ extension View {
 
   @ViewBuilder
   func ignoresTopSafeArea(
-    _ flag: Bool,
-    frame: CGRect
+    _ flag: Bool
   ) -> some View {
     if flag {
       self
