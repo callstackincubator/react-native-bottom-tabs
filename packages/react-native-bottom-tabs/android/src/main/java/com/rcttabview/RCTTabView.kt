@@ -42,10 +42,11 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   var onNativeLayoutListener: ((width: Double, height: Double) -> Unit)? = null
   var disablePageAnimations = false
   var items: MutableList<TabInfo> = mutableListOf()
+  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
+  private val drawableCache: MutableMap<ImageSource, Drawable> = mutableMapOf()
 
   private var isLayoutEnqueued = false
   private var selectedItem: String? = null
-  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
   private var activeTintColor: Int? = null
   private var inactiveTintColor: Int? = null
   private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
@@ -309,10 +310,18 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
   @SuppressLint("CheckResult")
   private fun getDrawable(imageSource: ImageSource, onDrawableReady: (Drawable?) -> Unit) {
+    drawableCache[imageSource]?.let {
+      onDrawableReady(it)
+      return
+    }
     val request = ImageRequest.Builder(context)
       .data(imageSource.getUri(context))
       .target { drawable ->
-        post { onDrawableReady(drawable.asDrawable(context.resources)) }
+        post {
+          val stateDrawable = drawable.asDrawable(context.resources)
+          drawableCache[imageSource] = stateDrawable
+          onDrawableReady(stateDrawable)
+        }
       }
       .listener(
         onError = { _, result ->
