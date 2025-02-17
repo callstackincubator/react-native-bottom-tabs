@@ -1,6 +1,5 @@
 import React from 'react';
 import type { TabViewItems } from './TabViewNativeComponent';
-import Screen from './Screen';
 import {
   type ColorValue,
   Image,
@@ -16,6 +15,7 @@ import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
 import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
 import type { BaseRoute, NavigationState } from './types';
+import DelayedFreeze from './DelayedFreeze';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
   icon?.sfSymbol;
@@ -330,20 +330,26 @@ const TabView = <Route extends BaseRoute>({
           const freeze = !focused ? getFreezeOnBlur({ route }) : false;
 
           return (
-            <Screen
+            <View
               key={route.key}
-              freeze={!!freeze}
-              focused={focused}
               style={[
                 styles.screen,
                 renderCustomTabBar ? styles.fullWidth : measuredDimensions,
               ]}
+              collapsable={false}
+              pointerEvents={focused ? 'auto' : 'none'}
+              accessibilityElementsHidden={!focused}
+              importantForAccessibility={
+                focused ? 'auto' : 'no-hide-descendants'
+              }
             >
-              {renderScene({
-                route,
-                jumpTo,
-              })}
-            </Screen>
+              <DelayedFreeze freeze={!!freeze}>
+                {renderScene({
+                  route,
+                  jumpTo,
+                })}
+              </DelayedFreeze>
+            </View>
           );
         })}
       </NativeTabView>
