@@ -334,7 +334,10 @@ const TabView = <Route extends BaseRoute>({
               key={route.key}
               freeze={!!freeze}
               focused={focused}
-              style={[styles.screen, measuredDimensions]}
+              style={[
+                styles.screen,
+                renderCustomTabBar ? styles.fullWidth : measuredDimensions,
+              ]}
             >
               {renderScene({
                 route,
