@@ -1,5 +1,23 @@
 # react-native-bottom-tabs
 
+## 0.8.7
+
+### Patch Changes
+
+- [#291](https://github.com/callstackincubator/react-native-bottom-tabs/pull/291) [`f915225`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/f915225fd403e5b045691616b490de6b81bbca5a) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: properly handle labeled={false} on iOS
+
+- [#302](https://github.com/callstackincubator/react-native-bottom-tabs/pull/302) [`b9c9840`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/b9c9840763b0f734aeb59735452b233564faa937) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: implement freezeOnBlur
+
+- [#292](https://github.com/callstackincubator/react-native-bottom-tabs/pull/292) [`0210046`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/0210046a5551748dba113c7450b929e45b98eb7c) Thanks [@johankasperi](https://github.com/johankasperi)! - chore: bump android material components package
+
+- [#306](https://github.com/callstackincubator/react-native-bottom-tabs/pull/306) [`54f25bc`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/54f25bce631c640bae8f98a76ae3934629e305f1) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: skip measurements when using custom tab bar
+
+- [#300](https://github.com/callstackincubator/react-native-bottom-tabs/pull/300) [`024e92e`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/024e92e2708eb076079d9eedddb79eeae4c2af9e) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: prevent header showing on iPad when using a custom one
+
+- [#305](https://github.com/callstackincubator/react-native-bottom-tabs/pull/305) [`69e17fc`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/69e17fcdc4a81bfa9f68d11235602bfb6237a2c9) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: handle automatic darkmode changes on Android
+
+- [#303](https://github.com/callstackincubator/react-native-bottom-tabs/pull/303) [`ac96b23`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ac96b2368c2c0cc0ca971b4f5059b20eaa805c33) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: make more tab pressable on iOS
+
 ## 0.8.6
 
 ### Patch Changes
