@@ -84,6 +84,28 @@ You also need to enable static linking for iOS by adding `"useFrameworks": "stat
 }
 ```
 
+Alternatively, you can avoid enabling static linking (which can cause problems with your existing packages) by adding the following in the `expo-build-properties` plugin.
+
+```diff
+{
+  "expo": {
+    "plugins": [
+       "react-native-bottom-tabs",
++      [
++        "expo-build-properties",
++        {
++          "ios": {
++            "extraPods": [
++              { name: "SDWebImage", modular_headers: true }, // Work around for not enabling static framework, required for react-native-bottom-tabs
++              { name: "SDWebImageSVGCoder", modular_headers: true }
++            ]
++          }
++        }
++      ]
++    ]
+  }
+}
+```
 
 :::warning
 
