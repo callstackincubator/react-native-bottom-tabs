@@ -1,5 +1,15 @@
 # react-native-bottom-tabs
 
+## 0.8.8
+
+### Patch Changes
+
+- [#311](https://github.com/callstackincubator/react-native-bottom-tabs/pull/311) [`3d0ac88`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/3d0ac88582dd59c56782d840587054b099fcb8d1) Thanks [@johankasperi](https://github.com/johankasperi)! - fix: propery destroy image loader on Android
+
+- [#316](https://github.com/callstackincubator/react-native-bottom-tabs/pull/316) [`14ea049`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/14ea049e2e1061bc5a5577155f0010438af46720) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: appearance issues with dark mode switches on Android
+
+- [#312](https://github.com/callstackincubator/react-native-bottom-tabs/pull/312) [`99776e5`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/99776e527a640914aa6a702aeb8d8ebce8af8f32) Thanks [@mtshv](https://github.com/mtshv)! - fix: add tvOS 16.0 availability check for toolbar API
+
 ## 0.8.7
 
 ### Patch Changes
