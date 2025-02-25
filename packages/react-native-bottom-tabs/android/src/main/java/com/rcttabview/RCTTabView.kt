@@ -56,6 +56,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   private var fontSize: Int? = null
   private var fontFamily: String? = null
   private var fontWeight: Int? = null
+  private var labeled: Boolean? = null
   private var lastReportedSize: Size? = null
   private var hasCustomAppearance = false
   private var uiModeConfiguration: Int = Configuration.UI_MODE_NIGHT_UNDEFINED
@@ -250,7 +251,6 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
           }
           view.setOnClickListener {
             onTabSelected(menuItem)
-            updateTintColors(menuItem)
           }
 
           item.testID?.let { testId ->
@@ -260,9 +260,12 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
               }
           }
         }
-        updateTextAppearance()
-        updateTintColors()
       }
+    }
+    // Update tint colors and text appearance after updating all items.
+    post {
+      updateTextAppearance()
+      updateTintColors()
     }
   }
 
@@ -295,6 +298,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   }
 
   fun setLabeled(labeled: Boolean?) {
+    this.labeled = labeled
     bottomNavigation.labelVisibilityMode = when (labeled) {
       false -> {
         LABEL_VISIBILITY_UNLABELED
@@ -310,7 +314,6 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
   fun setRippleColor(color: ColorStateList) {
     bottomNavigation.itemRippleColor = color
-    hasCustomAppearance = true
   }
 
   @SuppressLint("CheckResult")
@@ -354,18 +357,15 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   fun setActiveTintColor(color: Int?) {
     activeTintColor = color
     updateTintColors()
-    hasCustomAppearance = true
   }
 
   fun setInactiveTintColor(color: Int?) {
     inactiveTintColor = color
     updateTintColors()
-    hasCustomAppearance = true
   }
 
   fun setActiveIndicatorColor(color: ColorStateList) {
     bottomNavigation.itemActiveIndicatorColor = color
-    hasCustomAppearance = true
   }
 
   fun setFontSize(size: Int) {
@@ -421,11 +421,9 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     }
   }
 
-  private fun updateTintColors(item: MenuItem? = null) {
+  private fun updateTintColors() {
     // First let's check current item color.
-    val currentItemTintColor = item?.itemId?.let { itemId ->
-      items[itemId].activeTintColor
-    }
+    val currentItemTintColor = items.first { it.key == selectedItem }.activeTintColor
 
     // getDefaultColor will always return a valid color but to satisfy the compiler we need to check for null
     val colorPrimary = currentItemTintColor ?: activeTintColor ?: Utils.getDefaultColorFor(
@@ -457,6 +455,8 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     bottomNavigation = BottomNavigationView(context)
     addView(bottomNavigation)
     updateItems(items)
+    setLabeled(this.labeled)
+    this.selectedItem?.let { setSelectedItem(it) }
     uiModeConfiguration = newConfig?.uiMode ?: uiModeConfiguration
   }
 }
