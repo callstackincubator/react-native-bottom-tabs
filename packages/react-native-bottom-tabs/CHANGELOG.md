@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.8.9
+
+### Patch Changes
+
+- [#318](https://github.com/callstackincubator/react-native-bottom-tabs/pull/318) [`b04abac`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/b04abac17170a6fc55ab8a9adc860a938ab3a1ce) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix(android): don't crash when no elements are found
+
 ## 0.8.8
 
 ### Patch Changes

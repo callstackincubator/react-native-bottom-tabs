@@ -1,6 +1,6 @@
 {
   "name": "@bottom-tabs/react-navigation",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "React Native Bottom Tabs React Navigation integration",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
