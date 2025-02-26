@@ -423,7 +423,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
   private fun updateTintColors() {
     // First let's check current item color.
-    val currentItemTintColor = items.first { it.key == selectedItem }.activeTintColor
+    val currentItemTintColor = items.firstOrNull { it.key == selectedItem }?.activeTintColor
 
     // getDefaultColor will always return a valid color but to satisfy the compiler we need to check for null
     val colorPrimary = currentItemTintColor ?: activeTintColor ?: Utils.getDefaultColorFor(
