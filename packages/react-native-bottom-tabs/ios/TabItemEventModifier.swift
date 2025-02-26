@@ -1,6 +1,8 @@
 import SwiftUI
 import SwiftUIIntrospect
+#if !os(macOS)
 import UIKit
+#endif
 
 #if !os(macOS) && !os(visionOS)
 

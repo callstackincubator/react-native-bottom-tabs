@@ -13,8 +13,7 @@
   "baseBranch": "main",
   "ignore": [
     "react-native-bottom-tabs-docs",
-    "react-native-bottom-tabs-example",
-    "example-expo"
+    "react-native-bottom-tabs-example"
   ],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true,

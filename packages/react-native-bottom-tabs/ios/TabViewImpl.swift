@@ -350,9 +350,10 @@ extension View {
       self
     }
   }
-  
+ 
   @ViewBuilder
   func hideTabBar(_ flag: Bool) -> some View {
+#if !os(macOS)
     if flag {
       if #available(iOS 16.0, tvOS 16.0, *) {
         self.toolbar(.hidden, for: .tabBar)
@@ -363,6 +364,9 @@ extension View {
     } else {
       self
     }
+#else
+    self
+#endif
   }
 
   // Allows TabView to use unfilled SFSymbols.
