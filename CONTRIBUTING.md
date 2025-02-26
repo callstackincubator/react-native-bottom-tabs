@@ -10,7 +10,6 @@ This project is a monorepo managed using [Yarn workspaces](https://yarnpkg.com/f
 
 - The core library package in the `packages` directory
 - React Native example app in `apps/example`
-- Expo example app in `apps/example-expo`
 
 To get started with the project, run `yarn` in the root directory to install the required dependencies for each package:
 
@@ -55,12 +54,6 @@ cd apps/example/ios
 pod install
 cd -
 yarn ios
-```
-
-To run the Expo example:
-
-```sh
-yarn workspace example-expo start
 ```
 
 By default, the example is configured to build with the new architecture. To run the example with the old architecture, you can do the following:

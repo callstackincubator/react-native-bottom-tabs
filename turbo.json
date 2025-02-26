@@ -46,18 +46,6 @@
       ],
       "outputs": []
     },
-    "build:android-expo": {
-      "env": ["JAVA_HOME", "ANDROID_NDK", "ANDROID_SDK", "ANDROID_HOME"],
-      "inputs": [
-        "packages/react-native-bottom-tabs/package.json",
-        "packages/react-native-bottom-tabs/android",
-        "packages/react-native-bottom-tabs/!android/build",
-        "packages/react-native-bottom-tabs/src/*.ts",
-        "packages/react-native-bottom-tabs/src/*.tsx",
-        "apps/example-expo/package.json"
-      ],
-      "outputs": []
-    },
     "build:ios": {
       "env": ["RCT_NEW_ARCH_ENABLED"],
       "inputs": [
@@ -85,18 +73,6 @@
         "apps/example/macos",
         "!apps/example/macos/build",
         "!apps/example/macos/Pods"
-      ],
-      "outputs": []
-    },
-    "build:ios-expo": {
-      "env": ["RCT_NEW_ARCH_ENABLED"],
-      "inputs": [
-        "package.json",
-        "*.podspec",
-        "ios",
-        "src/*.ts",
-        "src/*.tsx",
-        "apps/example-expo/package.json"
       ],
       "outputs": []
     }
