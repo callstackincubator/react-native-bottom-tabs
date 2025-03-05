@@ -64,7 +64,11 @@ Add the library plugin in your `app.json` config file and [create a new build](h
 }
 ```
 
-You also need to enable static linking for iOS by adding `"useFrameworks": "static"` in the `expo-build-properties` plugin.
+Then install `expo-build-properties` to enable static linking for iOS by adding `"useFrameworks": "static"` in the plugin.
+
+```sh
+npx expo install expo-build-properties
+```
 
 ```diff
 {
