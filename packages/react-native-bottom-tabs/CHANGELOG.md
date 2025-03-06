@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.8.10
+
+### Patch Changes
+
+- [#325](https://github.com/callstackincubator/react-native-bottom-tabs/pull/325) [`5cb4721`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/5cb47214b358cd281153b72528569d34cc5f6d36) Thanks [@okwasniewski](https://github.com/okwasniewski)! - chore: drop support for < RN 0.71 (podspec)
+
 ## 0.8.9
 
 ### Patch Changes
