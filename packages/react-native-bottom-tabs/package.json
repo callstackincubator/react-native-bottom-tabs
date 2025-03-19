@@ -24,6 +24,7 @@
   "files": [
     "src",
     "lib",
+    "common",
     "android",
     "ios",
     "cpp",
