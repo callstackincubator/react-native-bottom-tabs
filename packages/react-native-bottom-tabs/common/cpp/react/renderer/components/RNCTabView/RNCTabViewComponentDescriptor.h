@@ -9,36 +9,17 @@ namespace facebook::react {
 
 class RNCTabViewComponentDescriptor final : public ConcreteComponentDescriptor<RNCTabViewShadowNode>
 {
-#ifdef ANDROID
-public:
-  RNCTabViewComponentDescriptor(const ComponentDescriptorParameters &parameters)
-    : ConcreteComponentDescriptor(parameters), measurementsManager_(
-    std::make_shared<RNCTabViewMeasurementsManager>(contextContainer_)) {}
-
-  void adopt(ShadowNode &shadowNode) const override
-  {
-    ConcreteComponentDescriptor::adopt(shadowNode);
-
-    auto &rncTabViewShadowNode =
-      static_cast<RNCTabViewShadowNode &>(shadowNode);
-
-    // `RNCTabViewShadowNode` uses `RNCTabViewMeasurementsManager` to
-    // provide measurements to Yoga.
-    rncTabViewShadowNode.setSliderMeasurementsManager(
-      measurementsManager_);
-
-    // All `RNCTabViewShadowNode`s must have leaf Yoga nodes with properly
-    // setup measure function.
-    rncTabViewShadowNode.enableMeasurement();
-  }
-
-private:
-  const std::shared_ptr<RNCTabViewMeasurementsManager> measurementsManager_;
-#else
 public:
   RNCTabViewComponentDescriptor(const ComponentDescriptorParameters &parameters)
   : ConcreteComponentDescriptor(parameters) {}
-#endif
+  
+  void adopt(ShadowNode &shadowNode) const override {
+    react_native_assert(dynamic_cast<RNCTabViewShadowNode *>(&shadowNode));
+    
+    const auto tabViewShadowNode = dynamic_cast<RNCTabViewShadowNode *>(&shadowNode);
+    tabViewShadowNode->updateStateIfNeeded();
+    ConcreteComponentDescriptor::adopt(shadowNode);
+  }
 
 };
 
