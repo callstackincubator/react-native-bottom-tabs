@@ -1,7 +1,7 @@
 #ifdef __cplusplus
 
 #pragma once
-
+#include <react/renderer/graphics/Size.h>
 #ifdef ANDROID
 #include <folly/dynamic.h>
 #include <react/renderer/mapbuffer/MapBuffer.h>
@@ -14,20 +14,9 @@ class RNCTabViewState
 {
 public:
   RNCTabViewState() = default;
+  RNCTabViewState(Size frameSize): frameSize(frameSize) {};
   
-#ifdef ANDROID
-  RNCTabViewState(RNCTabViewState const &previousState, folly::dynamic data) {};
-  
-  folly::dynamic getDynamic() const
-  {
-    return {};
-  };
-  
-  MapBuffer getMapBuffer() const
-  {
-    return MapBufferBuilder::EMPTY();
-  };
-#endif
+  Size frameSize;
 };
 
 }

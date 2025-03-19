@@ -38,6 +38,7 @@ using namespace facebook::react;
 @implementation RCTTabViewComponentView {
   TabViewProvider *_tabViewProvider;
   NSMutableArray<PlatformView *> *_reactSubviews;
+  RNCTabViewShadowNode::ConcreteState::Shared _state;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -83,6 +84,10 @@ using namespace facebook::react;
   [_reactSubviews removeObjectAtIndex:index];
 
   [childComponentView removeFromSuperview];
+}
+
+- (void)updateState:(const facebook::react::State::Shared &)state oldState:(const facebook::react::State::Shared &)oldState {
+  _state = std::static_pointer_cast<const RNCTabViewShadowNode::ConcreteState>(state);
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
@@ -246,13 +251,7 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
 }
 
 - (void)onLayoutWithSize:(CGSize)size reactTag:(NSNumber *)reactTag {
-  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
-  if (eventEmitter) {
-    eventEmitter->onNativeLayout(RNCTabViewEventEmitter::OnNativeLayout {
-      .height = size.height,
-      .width = size.width
-    });
-  }
+  _state->updateState(RNCTabViewState({size.width, size.height}));
 }
 
 @end

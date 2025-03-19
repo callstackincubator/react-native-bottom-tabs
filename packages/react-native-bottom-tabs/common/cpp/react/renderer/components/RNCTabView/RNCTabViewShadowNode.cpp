@@ -1,28 +1,20 @@
 #include "RNCTabViewShadowNode.h"
-#include "RNCTabViewMeasurementsManager.h"
 
 namespace facebook::react {
 
 extern const char RNCTabViewComponentName[] = "RNCTabView";
 
-#ifdef ANDROID
-void RNCTabViewShadowNode::setSliderMeasurementsManager(
-  const std::shared_ptr<RNCTabViewMeasurementsManager> &
-  measurementsManager)
-{
+void RNCTabViewShadowNode::updateStateIfNeeded() {
   ensureUnsealed();
-  measurementsManager_ = measurementsManager;
-}
-
-#pragma mark - LayoutableShadowNode
-
-Size RNCTabViewShadowNode::measureContent(
-  const LayoutContext & /*layoutContext*/,
-  const LayoutConstraints &layoutConstraints) const
-{
-  return measurementsManager_->measure(getSurfaceId(), layoutConstraints);
-}
-
-#endif
+  const auto &stateData = getStateData();
+  auto frameSize = stateData.frameSize;
+  
+  for (auto &child : getLayoutableChildNodes()) {
+    auto yogaChild = dynamic_cast<YogaLayoutableShadowNode*>(child);
+    if (!yogaChild->getSealed() && yogaChild->getLayoutMetrics().frame.size != frameSize) {
+      yogaChild->setSize(frameSize);
+    }
+  }
+};
 
 }
