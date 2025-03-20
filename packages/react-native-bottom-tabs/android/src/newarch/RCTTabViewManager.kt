@@ -1,7 +1,9 @@
 package com.rcttabview
 
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.core.view.children
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
@@ -11,7 +13,6 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNCTabViewManagerDelegate
 import com.facebook.react.viewmanagers.RNCTabViewManagerInterface
-import com.rcttabview.events.OnNativeLayoutEvent
 import com.rcttabview.events.PageSelectedEvent
 import com.rcttabview.events.TabLongPressEvent
 
@@ -36,9 +37,21 @@ class RCTTabViewManager(context: ReactApplicationContext) :
       eventDispatcher?.dispatchEvent(TabLongPressEvent(viewTag = view.id, key))
     }
 
-    view.onNativeLayoutListener = { width, height ->
-      eventDispatcher?.dispatchEvent(OnNativeLayoutEvent(viewTag = view.id, width, height))
-    }
+//    view.onNativeLayoutListener = { width, height ->
+//      val childCount = tabViewImpl.getChildCount(view)
+//      for (i in 0 until childCount) {  // Use 'until' instead of '..' to exclude childCount
+//        val child = tabViewImpl.getChildAt(view, i)
+//
+//        // Safe cast for FrameLayout
+//        if (child is RCTTabViewScreen) {
+//          child.updateFrame(width, height)
+//
+//          Log.w("TAB_VIEW", "CHILD: ${child}")
+//        }
+//      }
+//
+////      eventDispatcher?.dispatchEvent(OnNativeLayoutEvent(viewTag = view.id, width, height))
+//    }
     return view
 
   }
@@ -72,9 +85,9 @@ class RCTTabViewManager(context: ReactApplicationContext) :
     tabViewImpl.removeViewAt(parent, index)
   }
 
-  override fun needsCustomLayoutForChildren(): Boolean {
-    return tabViewImpl.needsCustomLayoutForChildren()
-  }
+//  override fun needsCustomLayoutForChildren(): Boolean {
+//    return tabViewImpl.needsCustomLayoutForChildren()
+//  }
 
   override fun setItems(view: ReactBottomNavigationView?, value: ReadableArray?) {
     if (view != null && value != null)

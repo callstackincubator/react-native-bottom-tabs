@@ -13,7 +13,7 @@ public:
   RNCTabViewScreenComponentDescriptor(const ComponentDescriptorParameters &parameters)
   : ConcreteComponentDescriptor(parameters) {}
 
-  
+
   /**
    Retrieve shadow node's state and update it's layout size accordingly.
    This is needed because we need to accomodate for bottom bar / sidebar size.
@@ -21,9 +21,9 @@ public:
   void adopt(ShadowNode &shadowNode) const override {
     auto& layoutableShadowNode = static_cast<RNCTabViewScreenShadowNode&>(shadowNode);
     auto& stateData = layoutableShadowNode.getStateData();
-    
+
     layoutableShadowNode.setSize(stateData.frameSize);
-    
+
     ConcreteComponentDescriptor::adopt(shadowNode);
   }
 };

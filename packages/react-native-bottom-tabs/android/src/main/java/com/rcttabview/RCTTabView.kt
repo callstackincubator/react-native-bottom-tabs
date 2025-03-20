@@ -12,6 +12,7 @@ import android.util.Log
 import android.util.Size
 import android.util.TypedValue
 import android.view.Choreographer
+import android.view.Gravity
 import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
@@ -72,16 +73,19 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
     addView(
       layoutHolder, LayoutParams(
-        LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT,
         0,
-      ).apply { weight = 1f }
+      )
+        .apply { weight = 1f }
     )
     layoutHolder.isSaveEnabled = false
 
     addView(bottomNavigation, LayoutParams(
       LayoutParams.MATCH_PARENT,
       LayoutParams.WRAP_CONTENT
-    ))
+    ).apply {
+      gravity = Gravity.BOTTOM
+    })
     uiModeConfiguration = resources.configuration.uiMode
 
     post {
@@ -142,9 +146,11 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       return
     }
 
-    val container = createContainer()
-    container.addView(child, params)
-    layoutHolder.addView(container, index)
+//    val container = createContainer()
+//    container.addView(child, params)
+    child.visibility = GONE
+    child.isEnabled = false
+    layoutHolder.addView(child, index)
 
     val itemKey = items[index].key
     if (selectedItem == itemKey) {
@@ -153,18 +159,18 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     }
   }
 
-  private fun createContainer(): FrameLayout {
-    val container = FrameLayout(context).apply {
-      layoutParams = FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.MATCH_PARENT,
-        FrameLayout.LayoutParams.MATCH_PARENT
-      )
-      isSaveEnabled = false
-      visibility = GONE
-      isEnabled = false
-    }
-    return container
-  }
+//  private fun createContainer(): FrameLayout {
+//    val container = FrameLayout(context).apply {
+//      layoutParams = FrameLayout.LayoutParams(
+//        FrameLayout.LayoutParams.MATCH_PARENT,
+//        FrameLayout.LayoutParams.MATCH_PARENT
+//      )
+//      isSaveEnabled = false
+//      visibility = GONE
+//      isEnabled = false
+//    }
+//    return container
+//  }
 
   private fun setSelectedIndex(itemId: Int) {
     bottomNavigation.selectedItemId = itemId

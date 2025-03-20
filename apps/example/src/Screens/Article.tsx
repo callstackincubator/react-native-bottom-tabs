@@ -53,6 +53,7 @@ export function Article({
   console.log(Platform.OS, ' Rendering Article');
   return (
     <ScrollView
+      onLayout={({ nativeEvent: { layout } }) => console.log(layout)}
       ref={ref}
       style={{ backgroundColor: '#fff' }}
       contentContainerStyle={styles.content}
