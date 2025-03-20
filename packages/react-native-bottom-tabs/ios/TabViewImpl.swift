@@ -134,7 +134,7 @@ struct TabViewImpl: View {
 #if !os(macOS)
 private func updateTabBarAppearance(props: TabViewProps, tabBar: UITabBar?) {
   guard let tabBar else { return }
-  
+
   tabBar.isHidden = props.tabBarHidden
 
   if props.scrollEdgeAppearance == "transparent" {
@@ -296,7 +296,7 @@ extension View {
   ) -> some View {
     if flag {
       self
-        .ignoresSafeArea(.container, edges: .vertical)
+        .ignoresSafeArea(.container, edges: .all)
     } else {
       self
         .ignoresSafeArea(.container, edges: .bottom)
@@ -350,7 +350,7 @@ extension View {
       self
     }
   }
- 
+
   @ViewBuilder
   func hideTabBar(_ flag: Bool) -> some View {
 #if !os(macOS)

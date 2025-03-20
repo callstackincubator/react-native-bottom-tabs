@@ -54,7 +54,7 @@ extension PlatformImage {
 }
 
 extension View {
-  
+
 #if os(macOS)
   @MainActor
   @ViewBuilder
@@ -81,8 +81,8 @@ extension View {
 #endif
   }
 #endif
-  
-  
+
+
   @MainActor
   @ViewBuilder
   func measureView(onLayout: @escaping (_ size: CGSize) -> Void) -> some View {
@@ -97,7 +97,7 @@ extension View {
               onLayout(geometry.size)
             }
         }
-        .ignoresSafeArea(.all, edges: .vertical)
+        .ignoresSafeArea(.all, edges: .all)
       )
   }
 }
