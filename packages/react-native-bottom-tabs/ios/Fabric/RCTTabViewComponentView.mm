@@ -1,8 +1,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RCTTabViewComponentView.h"
+#import "RCTTabViewScreenComponentView.h"
 
 #import <react/renderer/components/RNCTabView/ComponentDescriptors.h>
-#import <react/renderer/components/RNCTabView/RNCTabViewComponentDescriptor.h>
 #import <react/renderer/components/RNCTabView/EventEmitters.h>
 #import <react/renderer/components/RNCTabView/Props.h>
 #import <react/renderer/components/RNCTabView/RCTComponentViewHelpers.h>
@@ -38,7 +38,6 @@ using namespace facebook::react;
 @implementation RCTTabViewComponentView {
   TabViewProvider *_tabViewProvider;
   NSMutableArray<PlatformView *> *_reactSubviews;
-  RNCTabViewShadowNode::ConcreteState::Shared _state;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -84,10 +83,6 @@ using namespace facebook::react;
   [_reactSubviews removeObjectAtIndex:index];
 
   [childComponentView removeFromSuperview];
-}
-
-- (void)updateState:(const facebook::react::State::Shared &)state oldState:(const facebook::react::State::Shared &)oldState {
-  _state = std::static_pointer_cast<const RNCTabViewShadowNode::ConcreteState>(state);
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
@@ -250,8 +245,25 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
   }
 }
 
+- (size_t)getSelectedIndex
+{
+  const auto &props = *std::static_pointer_cast<RNCTabViewProps const>(_props);
+  
+  auto selectedItem = std::find_if(props.items.begin(), props.items.end(),
+                                   [&](const RNCTabViewItemsStruct &item) {
+    return item.key == props.selectedPage;
+  });
+  
+  return std::distance(props.items.begin(), selectedItem);
+}
+
 - (void)onLayoutWithSize:(CGSize)size reactTag:(NSNumber *)reactTag {
-  _state->updateState(RNCTabViewState({size.width, size.height}));
+  size_t selectedIndex = [self getSelectedIndex];
+  
+  RCTTabViewScreenComponentView *child = (RCTTabViewScreenComponentView *)_reactSubviews[selectedIndex];
+  if ([child respondsToSelector:@selector(updateFrameSize:)]) {
+    [child updateFrameSize:size];
+  }
 }
 
 @end

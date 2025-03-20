@@ -3,7 +3,7 @@
 #pragma once
 
 #include <jsi/jsi.h>
-#include <react/renderer/components/RNCTabView/RNCTabViewState.h>
+#include <react/renderer/components/RNCTabView/RNCTabViewScreenState.h>
 #include <react/renderer/components/RNCTabView/Props.h>
 #include <react/renderer/components/RNCTabView/EventEmitters.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -12,26 +12,20 @@
 
 namespace facebook::react {
 
-JSI_EXPORT extern const char RNCTabViewComponentName[];
+JSI_EXPORT extern const char RNCTabViewScreenComponentName[];
 
 /*
-* `ShadowNode` for <RNCTabView> component.
+* `ShadowNode` for <RNCTabViewScreen> component.
 */
-class JSI_EXPORT RNCTabViewShadowNode final
+class JSI_EXPORT RNCTabViewScreenShadowNode final
 : public ConcreteViewShadowNode<
-RNCTabViewComponentName,
-RNCTabViewProps,
-RNCTabViewEventEmitter,
-RNCTabViewState>
+RNCTabViewScreenComponentName,
+RNCTabViewScreenProps,
+RNCTabViewScreenEventEmitter,
+RNCTabViewScreenState>
 {
 public:
   using ConcreteViewShadowNode::ConcreteViewShadowNode;
-  
-  void updateStateIfNeeded();
-  
-#pragma mark - ShadowNode overrides
-  
-  void layout(LayoutContext layoutContext) override;
 };
 }
 
