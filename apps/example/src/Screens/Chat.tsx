@@ -30,12 +30,7 @@ export function Chat({
       style={styles.container}
     >
       <Button onPress={() => Alert.alert('Hey')} title="Press me" />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.inverted}
-        contentContainerStyle={styles.content}
-        {...rest}
-      >
+      <View style={styles.inverted} {...rest}>
         {MESSAGES.map((text, i) => {
           const odd = i % 2;
 
@@ -63,7 +58,7 @@ export function Chat({
             </View>
           );
         })}
-      </ScrollView>
+      </View>
       <TextInput
         style={[styles.input, { backgroundColor: 'white', color: 'black' }]}
         placeholderTextColor={'#B0B0B0'}

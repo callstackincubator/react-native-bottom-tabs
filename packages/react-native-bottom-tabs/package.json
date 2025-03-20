@@ -24,6 +24,7 @@
   "files": [
     "src",
     "lib",
+    "common",
     "android",
     "ios",
     "cpp",
@@ -126,7 +127,8 @@
     },
     "ios": {
       "componentProvider": {
-        "RNCTabView": "RCTTabViewComponentView"
+        "RNCTabView": "RCTTabViewComponentView",
+        "RNCTabViewScreen": "RCTTabViewScreenComponentView"
       }
     }
   }

@@ -16,6 +16,7 @@ import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
 import type { BaseRoute, NavigationState } from './types';
 import DelayedFreeze from './DelayedFreeze';
+import TabViewScreenNativeComponent from './TabViewScreenNativeComponent';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
   icon?.sfSymbol;
@@ -195,9 +196,6 @@ const TabView = <Route extends BaseRoute>({
   // @ts-ignore
   const focusedKey = navigationState.routes[navigationState.index].key;
   const [tabBarHeight, setTabBarHeight] = React.useState<number | undefined>(0);
-  const [measuredDimensions, setMeasuredDimensions] = React.useState<
-    { width: number; height: number } | undefined
-  >();
 
   const trimmedRoutes = React.useMemo(() => {
     if (
@@ -304,9 +302,6 @@ const TabView = <Route extends BaseRoute>({
         onTabBarMeasured={({ nativeEvent: { height } }) => {
           setTabBarHeight(height);
         }}
-        onNativeLayout={({ nativeEvent: { width, height } }) => {
-          setMeasuredDimensions({ width, height });
-        }}
         hapticFeedbackEnabled={hapticFeedbackEnabled}
         activeTintColor={activeTintColor}
         inactiveTintColor={inactiveTintColor}
@@ -330,13 +325,10 @@ const TabView = <Route extends BaseRoute>({
           const freeze = !focused ? getFreezeOnBlur({ route }) : false;
 
           return (
-            <View
+            <TabViewScreenNativeComponent
               key={route.key}
-              style={[
-                styles.screen,
-                renderCustomTabBar ? styles.fullWidth : measuredDimensions,
-              ]}
               collapsable={false}
+              style={[styles.screen, styles.fullWidth]}
               pointerEvents={focused ? 'auto' : 'none'}
               accessibilityElementsHidden={!focused}
               importantForAccessibility={
@@ -349,7 +341,7 @@ const TabView = <Route extends BaseRoute>({
                   jumpTo,
                 })}
               </DelayedFreeze>
-            </View>
+            </TabViewScreenNativeComponent>
           );
         })}
       </NativeTabView>

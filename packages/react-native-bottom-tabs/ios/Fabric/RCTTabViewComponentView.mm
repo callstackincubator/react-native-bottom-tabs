@@ -1,5 +1,6 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RCTTabViewComponentView.h"
+#import "RCTTabViewScreenComponentView.h"
 
 #import <react/renderer/components/RNCTabView/ComponentDescriptors.h>
 #import <react/renderer/components/RNCTabView/EventEmitters.h>
@@ -244,13 +245,24 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
   }
 }
 
+- (size_t)getSelectedIndex
+{
+  const auto &props = *std::static_pointer_cast<RNCTabViewProps const>(_props);
+  
+  auto selectedItem = std::find_if(props.items.begin(), props.items.end(),
+                                   [&](const RNCTabViewItemsStruct &item) {
+    return item.key == props.selectedPage;
+  });
+  
+  return std::distance(props.items.begin(), selectedItem);
+}
+
 - (void)onLayoutWithSize:(CGSize)size reactTag:(NSNumber *)reactTag {
-  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
-  if (eventEmitter) {
-    eventEmitter->onNativeLayout(RNCTabViewEventEmitter::OnNativeLayout {
-      .height = size.height,
-      .width = size.width
-    });
+  size_t selectedIndex = [self getSelectedIndex];
+  
+  RCTTabViewScreenComponentView *child = (RCTTabViewScreenComponentView *)_reactSubviews[selectedIndex];
+  if ([child respondsToSelector:@selector(updateFrameSize:)]) {
+    [child updateFrameSize:size];
   }
 }
 
