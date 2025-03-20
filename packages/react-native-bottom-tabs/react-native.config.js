@@ -3,7 +3,7 @@ module.exports = {
     platforms: {
       android: {
         libraryName: 'RNCTabView',
-        componentDescriptors: ['RNCTabViewComponentDescriptor'],
+        componentDescriptors: ['RNCTabViewScreenComponentDescriptor'],
         cmakeListsPath: 'src/main/jni/CMakeLists.txt',
       },
     },

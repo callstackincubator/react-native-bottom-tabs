@@ -3,7 +3,7 @@
 #include <ReactCommon/JavaTurboModule.h>
 #include <ReactCommon/TurboModule.h>
 #include <jsi/jsi.h>
-#include <react/renderer/components/RNCTabView/RNCTabViewComponentDescriptor.h>
+#include <react/renderer/components/RNCTabView/RNCTabViewScreenComponentDescriptor.h>
 
 namespace facebook::react {
 JSI_EXPORT

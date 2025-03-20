@@ -1,7 +1,9 @@
 package com.rcttabview
 
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.core.view.children
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
@@ -11,7 +13,6 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNCTabViewManagerDelegate
 import com.facebook.react.viewmanagers.RNCTabViewManagerInterface
-import com.rcttabview.events.OnNativeLayoutEvent
 import com.rcttabview.events.PageSelectedEvent
 import com.rcttabview.events.TabLongPressEvent
 
@@ -37,7 +38,27 @@ class RCTTabViewManager(context: ReactApplicationContext) :
     }
 
     view.onNativeLayoutListener = { width, height ->
-      eventDispatcher?.dispatchEvent(OnNativeLayoutEvent(viewTag = view.id, width, height))
+      val childCount = tabViewImpl.getChildCount(view)
+      for (i in 0 until childCount) {  // Use 'until' instead of '..' to exclude childCount
+        val child = tabViewImpl.getChildAt(view, i)
+
+        // Safe cast for FrameLayout
+        if (child is FrameLayout) {
+          val innerChildren = child.children
+          if (innerChildren.any()) {
+            val innerChild = innerChildren.first()
+
+            // Safe cast for RCTTabViewScreen
+            if (innerChild is RCTTabViewScreen) {
+              innerChild.updateFrame(width, height)
+            }
+          }
+
+          Log.w("TAB_VIEW", "CHILD: ${child}")
+        }
+      }
+
+//      eventDispatcher?.dispatchEvent(OnNativeLayoutEvent(viewTag = view.id, width, height))
     }
     return view
 
