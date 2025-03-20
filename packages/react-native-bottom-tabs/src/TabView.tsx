@@ -16,6 +16,7 @@ import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
 import type { BaseRoute, NavigationState } from './types';
 import DelayedFreeze from './DelayedFreeze';
+import TabViewScreenNativeComponent from './TabViewScreenNativeComponent';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
   icon?.sfSymbol;
@@ -324,7 +325,7 @@ const TabView = <Route extends BaseRoute>({
           const freeze = !focused ? getFreezeOnBlur({ route }) : false;
 
           return (
-            <View
+            <TabViewScreenNativeComponent
               key={route.key}
               collapsable={false}
               style={[styles.screen, styles.fullWidth]}
@@ -340,7 +341,7 @@ const TabView = <Route extends BaseRoute>({
                   jumpTo,
                 })}
               </DelayedFreeze>
-            </View>
+            </TabViewScreenNativeComponent>
           );
         })}
       </NativeTabView>

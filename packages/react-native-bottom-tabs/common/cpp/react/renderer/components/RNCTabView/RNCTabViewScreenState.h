@@ -10,12 +10,12 @@
 
 namespace facebook::react {
 
-class RNCTabViewState
+class RNCTabViewScreenState
 {
 public:
-  RNCTabViewState() = default;
-  RNCTabViewState(Size frameSize): frameSize(frameSize) {};
-  
+  RNCTabViewScreenState() = default;
+  RNCTabViewScreenState(Size frameSize): frameSize(frameSize) {};
+
   Size frameSize;
 };
 

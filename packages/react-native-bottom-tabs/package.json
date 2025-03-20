@@ -127,7 +127,8 @@
     },
     "ios": {
       "componentProvider": {
-        "RNCTabView": "RCTTabViewComponentView"
+        "RNCTabView": "RCTTabViewComponentView",
+        "RNCTabViewScreen": "RCTTabViewScreenComponentView"
       }
     }
   }
