@@ -125,7 +125,7 @@ export function Contacts({ query, ...rest }: Props) {
         renderItem={renderItem}
         ItemSeparatorComponent={ItemSeparator}
       />
-      <MusicControl bottomOffset={tabBarHeight} />
+      <MusicControl bottomOffset={Platform.OS === 'ios' ? tabBarHeight : 0} />
     </SafeAreaView>
   );
 }
