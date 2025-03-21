@@ -1,5 +1,10 @@
 import React from 'react';
-import type { TabViewItems } from './TabViewNativeComponent';
+import type {
+  OnNativeLayout,
+  OnPageSelectedEventData,
+  OnTabBarMeasured,
+  TabViewItems,
+} from './TabViewNativeComponent';
 import {
   type ColorValue,
   Image,
@@ -279,6 +284,35 @@ const TabView = <Route extends BaseRoute>({
     onIndexChange(index);
   });
 
+  const handleTabLongPress = React.useCallback(
+    ({ nativeEvent: { key } }: { nativeEvent: OnPageSelectedEventData }) => {
+      const index = trimmedRoutes.findIndex((route) => route.key === key);
+      onTabLongPress?.(index);
+    },
+    [trimmedRoutes, onTabLongPress]
+  );
+
+  const handlePageSelected = React.useCallback(
+    ({ nativeEvent: { key } }: { nativeEvent: OnPageSelectedEventData }) => {
+      jumpTo(key);
+    },
+    [jumpTo]
+  );
+
+  const handleTabBarMeasured = React.useCallback(
+    ({ nativeEvent: { height } }: { nativeEvent: OnTabBarMeasured }) => {
+      setTabBarHeight(height);
+    },
+    [setTabBarHeight]
+  );
+
+  const handleNativeLayout = React.useCallback(
+    ({ nativeEvent: { width, height } }: { nativeEvent: OnNativeLayout }) => {
+      setMeasuredDimensions({ width, height });
+    },
+    [setMeasuredDimensions]
+  );
+
   return (
     <BottomTabBarHeightContext.Provider value={tabBarHeight}>
       <NativeTabView
@@ -290,19 +324,10 @@ const TabView = <Route extends BaseRoute>({
         icons={renderCustomTabBar ? undefined : resolvedIconAssets}
         selectedPage={focusedKey}
         tabBarHidden={!!renderCustomTabBar}
-        onTabLongPress={({ nativeEvent: { key } }) => {
-          const index = trimmedRoutes.findIndex((route) => route.key === key);
-          onTabLongPress?.(index);
-        }}
-        onPageSelected={({ nativeEvent: { key } }) => {
-          jumpTo(key);
-        }}
-        onTabBarMeasured={({ nativeEvent: { height } }) => {
-          setTabBarHeight(height);
-        }}
-        onNativeLayout={({ nativeEvent: { width, height } }) => {
-          setMeasuredDimensions({ width, height });
-        }}
+        onTabLongPress={handleTabLongPress}
+        onPageSelected={handlePageSelected}
+        onTabBarMeasured={handleTabBarMeasured}
+        onNativeLayout={handleNativeLayout}
         hapticFeedbackEnabled={hapticFeedbackEnabled}
         activeTintColor={activeTintColor}
         inactiveTintColor={inactiveTintColor}
