@@ -5,6 +5,13 @@ import { Albums } from '../Screens/Albums';
 import { Contacts } from '../Screens/Contacts';
 import { Chat } from '../Screens/Chat';
 
+const renderScene = SceneMap({
+  article: Article,
+  albums: Albums,
+  contacts: Contacts,
+  chat: Chat,
+});
+
 export default function LabeledTabs({
   showLabels = true,
 }: {
@@ -35,13 +42,6 @@ export default function LabeledTabs({
       title: 'Chat',
     },
   ]);
-
-  const renderScene = SceneMap({
-    article: Article,
-    albums: Albums,
-    contacts: Contacts,
-    chat: Chat,
-  });
 
   return (
     <TabView

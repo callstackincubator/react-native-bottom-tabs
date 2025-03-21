@@ -16,6 +16,13 @@ interface Props {
   activeIndicatorColor?: ColorValue;
 }
 
+const renderScene = SceneMap({
+  article: Article,
+  albums: Albums,
+  contacts: Contacts,
+  chat: Chat,
+});
+
 export default function FourTabs({
   disablePageAnimations = false,
   scrollEdgeAppearance = 'default',
@@ -52,13 +59,6 @@ export default function FourTabs({
       title: 'Chat',
     },
   ]);
-
-  const renderScene = SceneMap({
-    article: Article,
-    albums: Albums,
-    contacts: Contacts,
-    chat: Chat,
-  });
 
   return (
     <TabView

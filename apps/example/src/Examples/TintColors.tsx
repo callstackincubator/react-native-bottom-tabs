@@ -1,10 +1,16 @@
-import * as React from 'react';
 import TabView, { SceneMap } from 'react-native-bottom-tabs';
 import { useState } from 'react';
 import { Article } from '../Screens/Article';
 import { Albums } from '../Screens/Albums';
 import { Contacts } from '../Screens/Contacts';
 import { Chat } from '../Screens/Chat';
+
+const renderScene = SceneMap({
+  article: Article,
+  albums: Albums,
+  contacts: Contacts,
+  chat: Chat,
+});
 
 export default function TintColorsExample() {
   const [index, setIndex] = useState(0);
@@ -37,13 +43,6 @@ export default function TintColorsExample() {
       title: 'Chat',
     },
   ]);
-
-  const renderScene = SceneMap({
-    article: Article,
-    albums: Albums,
-    contacts: Contacts,
-    chat: Chat,
-  });
 
   return (
     <TabView
