@@ -4,6 +4,12 @@ import { Article } from '../Screens/Article';
 import { Albums } from '../Screens/Albums';
 import { Contacts } from '../Screens/Contacts';
 
+const renderScene = SceneMap({
+  article: Article,
+  albums: Albums,
+  contacts: Contacts,
+});
+
 export default function ThreeTabs() {
   const [index, setIndex] = useState(1);
   const [routes] = useState([
@@ -29,12 +35,6 @@ export default function ThreeTabs() {
       testID: 'contactsTestID',
     },
   ]);
-
-  const renderScene = SceneMap({
-    article: Article,
-    albums: Albums,
-    contacts: Contacts,
-  });
 
   return (
     <TabView

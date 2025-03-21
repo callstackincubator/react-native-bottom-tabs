@@ -5,6 +5,12 @@ import { Albums } from '../Screens/Albums';
 import { Contacts } from '../Screens/Contacts';
 import { Platform } from 'react-native';
 
+const renderScene = SceneMap({
+  article: Article,
+  albums: Albums,
+  contacts: Contacts,
+});
+
 const isAndroid = Platform.OS === 'android';
 
 export default function SFSymbols() {
@@ -37,12 +43,6 @@ export default function SFSymbols() {
       title: 'Contacts',
     },
   ]);
-
-  const renderScene = SceneMap({
-    article: Article,
-    albums: Albums,
-    contacts: Contacts,
-  });
 
   return (
     <TabView
