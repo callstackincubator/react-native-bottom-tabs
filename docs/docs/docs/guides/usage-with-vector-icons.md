@@ -21,7 +21,7 @@ const Tabs = createNativeBottomTabNavigator();
 
 function NativeBottomTabs() {
   return (
-    <Tabs.Navigator ignoresTopSafeArea>
+    <Tabs.Navigator>
         <Tabs.Screen
           name="Home"
           component={HomeScreen}

@@ -37,10 +37,6 @@ interface Props<Route extends BaseRoute> {
    */
   sidebarAdaptable?: boolean;
   /**
-   * Whether to ignore the top safe area. (iOS only)
-   */
-  ignoresTopSafeArea?: boolean;
-  /**
    * Whether to disable page animations between tabs. (iOS only) Defaults to `false`.
    */
   disablePageAnimations?: boolean;

@@ -7,7 +7,6 @@ import { Chat } from '../Screens/Chat';
 import type { ColorValue } from 'react-native';
 
 interface Props {
-  ignoresTopSafeArea?: boolean;
   disablePageAnimations?: boolean;
   scrollEdgeAppearance?: 'default' | 'opaque' | 'transparent';
   backgroundColor?: ColorValue;
@@ -18,7 +17,6 @@ interface Props {
 }
 
 export default function FourTabs({
-  ignoresTopSafeArea = false,
   disablePageAnimations = false,
   scrollEdgeAppearance = 'default',
   backgroundColor,
@@ -64,7 +62,6 @@ export default function FourTabs({
 
   return (
     <TabView
-      ignoresTopSafeArea={ignoresTopSafeArea}
       sidebarAdaptable
       disablePageAnimations={disablePageAnimations}
       scrollEdgeAppearance={scrollEdgeAppearance}

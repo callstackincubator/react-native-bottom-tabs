@@ -31,10 +31,6 @@ import NativeBottomTabsUnmounting from './Examples/NativeBottomTabsUnmounting';
 import NativeBottomTabsCustomTabBar from './Examples/NativeBottomTabsCustomTabBar';
 import NativeBottomTabsFreezeOnBlur from './Examples/NativeBottomTabsFreezeOnBlur';
 
-const FourTabsIgnoreSafeArea = () => {
-  return <FourTabs ignoresTopSafeArea />;
-};
-
 const HiddenTab = () => {
   return <FourTabs hideOneTab />;
 };
@@ -87,12 +83,6 @@ const examples = [
   {
     component: NativeBottomTabsEmbeddedStacks,
     name: 'Embedded stacks',
-    screenOptions: { headerShown: false },
-  },
-  {
-    component: FourTabsIgnoreSafeArea,
-    name: 'Four Tabs - No header',
-    platform: 'ios',
     screenOptions: { headerShown: false },
   },
   {

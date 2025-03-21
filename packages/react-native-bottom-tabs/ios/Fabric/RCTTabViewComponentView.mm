@@ -119,10 +119,6 @@ using namespace facebook::react;
     _tabViewProvider.labeled = newViewProps.labeled;
   }
 
-  if (oldViewProps.ignoresTopSafeArea != newViewProps.ignoresTopSafeArea) {
-    _tabViewProvider.ignoresTopSafeArea = newViewProps.ignoresTopSafeArea;
-  }
-
   if (oldViewProps.selectedPage != newViewProps.selectedPage) {
     _tabViewProvider.selectedPage = RCTNSStringFromString(newViewProps.selectedPage);
   }
@@ -162,7 +158,7 @@ using namespace facebook::react;
   if (oldViewProps.fontFamily != newViewProps.fontFamily) {
     _tabViewProvider.fontFamily = RCTNSStringFromStringNilIfEmpty(newViewProps.fontFamily);
   }
-  
+
   if (oldViewProps.tabBarHidden != newViewProps.tabBarHidden) {
     _tabViewProvider.tabBarHidden = newViewProps.tabBarHidden;
   }

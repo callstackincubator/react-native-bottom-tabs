@@ -85,12 +85,6 @@ public final class TabInfo: NSObject {
     }
   }
 
-  @objc public var ignoresTopSafeArea: Bool = true {
-    didSet {
-      props.ignoresTopSafeArea = ignoresTopSafeArea
-    }
-  }
-
   @objc public var selectedPage: NSString? {
     didSet {
       props.selectedPage = selectedPage as? String
@@ -156,7 +150,7 @@ public final class TabInfo: NSObject {
       props.fontSize = fontSize as? Int
     }
   }
-  
+
   @objc public var tabBarHidden: Bool = false {
     didSet {
       props.tabBarHidden = tabBarHidden

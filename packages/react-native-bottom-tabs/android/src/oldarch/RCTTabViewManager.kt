@@ -137,10 +137,6 @@ class RCTTabViewManager(context: ReactApplicationContext) : ViewGroupManager<Rea
   fun setSidebarAdaptable(view: ReactBottomNavigationView, flag: Boolean) {
   }
 
-  @ReactProp(name = "ignoresTopSafeArea")
-  fun setIgnoresTopSafeArea(view: ReactBottomNavigationView, flag: Boolean) {
-  }
-
   @ReactProp(name = "hapticFeedbackEnabled")
   fun setHapticFeedbackEnabled(view: ReactBottomNavigationView, value: Boolean) {
       tabViewImpl.setHapticFeedbackEnabled(view, value)

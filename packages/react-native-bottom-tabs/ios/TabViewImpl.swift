@@ -86,9 +86,7 @@ struct TabViewImpl: View {
       let icon = props.icons[index]
 
       RepresentableView(view: child)
-        .ignoresTopSafeArea(
-          props.ignoresTopSafeArea
-        )
+        .ignoresSafeArea(.container, edges: .all)
         .tabItem {
           TabItem(
             title: tabData?.title,
@@ -287,19 +285,6 @@ extension View {
       }
     } else {
       self
-    }
-  }
-
-  @ViewBuilder
-  func ignoresTopSafeArea(
-    _ flag: Bool
-  ) -> some View {
-    if flag {
-      self
-        .ignoresSafeArea(.container, edges: .all)
-    } else {
-      self
-        .ignoresSafeArea(.container, edges: .bottom)
     }
   }
 

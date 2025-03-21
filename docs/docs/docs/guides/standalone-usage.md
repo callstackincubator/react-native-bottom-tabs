@@ -118,11 +118,6 @@ A tab bar style that adapts to each platform:
 - macOS/tvOS: Sidebar
 - visionOS: Ornament with sidebar for secondary tabs
 
-#### `ignoresTopSafeArea` <Badge text="iOS" type="info" />
-
-Whether to ignore the top safe area.
-- Type: `boolean`
-
 #### `disablePageAnimations` <Badge text="iOS" type="info" />
 
 Whether to disable animations between tabs.
