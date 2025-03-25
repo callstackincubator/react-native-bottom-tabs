@@ -158,9 +158,6 @@ class RCTTabViewManager(context: ReactApplicationContext) :
   override fun setTranslucent(view: ReactBottomNavigationView?, value: Boolean) {
   }
 
-  override fun setIgnoresTopSafeArea(view: ReactBottomNavigationView?, value: Boolean) {
-  }
-
   override fun setSidebarAdaptable(view: ReactBottomNavigationView?, value: Boolean) {
   }
 
