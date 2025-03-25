@@ -1,5 +1,19 @@
 # react-native-bottom-tabs
 
+## 0.9.0
+
+### Minor Changes
+
+- [#332](https://github.com/callstackincubator/react-native-bottom-tabs/pull/332) [`b8cbd28`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/b8cbd28702921036d627a04ad3e766fd0736d27c) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat!: remove ignoresTopSafeArea prop, safe area handling is now automatic
+
+### Patch Changes
+
+- [#325](https://github.com/callstackincubator/react-native-bottom-tabs/pull/325) [`5cb4721`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/5cb47214b358cd281153b72528569d34cc5f6d36) Thanks [@okwasniewski](https://github.com/okwasniewski)! - chore: drop support for < RN 0.71 (podspec)
+
+- [#330](https://github.com/callstackincubator/react-native-bottom-tabs/pull/330) [`08cec90`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/08cec90a4da3c19e4112f3505b6a54789cea53c7) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: report tab bar measurements on Android
+
+- [#334](https://github.com/callstackincubator/react-native-bottom-tabs/pull/334) [`7cbf589`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/7cbf58934fdc40724aba7a3d88e1425c144bedb0) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix(android): remove unnecessary override causing issues
+
 ## 0.8.9
 
 ### Patch Changes
