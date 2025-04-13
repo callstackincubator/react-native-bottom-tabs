@@ -36,7 +36,7 @@ import com.google.android.material.transition.platform.MaterialFadeThrough
 
 class ExtendedBottomNavigationView(context: Context) : BottomNavigationView(context) {
   override fun getMaxItemCount(): Int {
-    return 1_000
+    return 100
   }
 }
 
