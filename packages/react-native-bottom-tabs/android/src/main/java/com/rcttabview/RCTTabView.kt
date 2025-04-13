@@ -34,6 +34,12 @@ import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_UNLABELED
 import com.google.android.material.transition.platform.MaterialFadeThrough
 
+class ExtendedBottomNavigationView(context: Context) : BottomNavigationView(context) {
+  override fun getMaxItemCount(): Int {
+    return 1_000
+  }
+}
+
 class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   private var bottomNavigation = ExtendedBottomNavigationView(context)
   val layoutHolder = FrameLayout(context)
@@ -462,11 +468,5 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     setLabeled(this.labeled)
     this.selectedItem?.let { setSelectedItem(it) }
     uiModeConfiguration = newConfig?.uiMode ?: uiModeConfiguration
-  }
-}
-
-class ExtendedBottomNavigationView(context: Context) : BottomNavigationView(context) {
-  override fun getMaxItemCount(): Int {
-    return 1_000
   }
 }
