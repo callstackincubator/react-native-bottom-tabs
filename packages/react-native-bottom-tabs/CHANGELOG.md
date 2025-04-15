@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.9.1
+
+### Patch Changes
+
+- [#339](https://github.com/callstackincubator/react-native-bottom-tabs/pull/339) [`8882434`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/8882434f87c5fdf71678c770b24b5b7f30704abf) Thanks [@sidorchukandrew](https://github.com/sidorchukandrew)! - feat: support more than 6 screens on Android
+
 ## 0.9.0
 
 ### Minor Changes
