@@ -1,5 +1,7 @@
 # @bottom-tabs/react-navigation
 
+## 0.9.1
+
 ## 0.9.0
 
 ## 0.8.9
