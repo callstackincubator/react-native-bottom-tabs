@@ -458,6 +458,11 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       return
     }
 
+    // User has hidden the bottom navigation bar, don't re-attach it.
+    if (bottomNavigation.visibility == GONE) {
+      return
+    }
+
     // If appearance wasn't changed re-create the bottom navigation view when configuration changes.
     // React Native opts out ouf Activity re-creation when configuration changes, this workarounds that.
     // We also opt-out of this recreation when custom styles are used.
