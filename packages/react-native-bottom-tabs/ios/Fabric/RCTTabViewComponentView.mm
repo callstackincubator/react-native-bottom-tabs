@@ -26,6 +26,26 @@ typedef NSView PlatformView;
 typedef UIView PlatformView;
 #endif
 
+// Overload `==` and `!=` operators for `RNCTabViewItemsStruct`
+
+namespace facebook::react {
+
+bool operator==(const RNCTabViewItemsStruct& lhs, const RNCTabViewItemsStruct& rhs) {
+  return lhs.key == rhs.key &&
+  lhs.title == rhs.title &&
+  lhs.sfSymbol == rhs.sfSymbol &&
+  lhs.badge == rhs.badge &&
+  lhs.activeTintColor == rhs.activeTintColor &&
+  lhs.hidden == rhs.hidden &&
+  lhs.testID == rhs.testID;
+}
+
+bool operator!=(const RNCTabViewItemsStruct& lhs, const RNCTabViewItemsStruct& rhs) {
+  return !(lhs == rhs);
+}
+
+}
+
 
 using namespace facebook::react;
 
@@ -89,7 +109,7 @@ using namespace facebook::react;
   const auto &oldViewProps = *std::static_pointer_cast<RNCTabViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<RNCTabViewProps const>(props);
 
-  if (haveTabItemsChanged(oldViewProps.items, newViewProps.items)) {
+  if (oldViewProps.items != newViewProps.items) {
     _tabViewProvider.itemsData = convertItemsToArray(newViewProps.items);
   }
 
@@ -165,32 +185,6 @@ using namespace facebook::react;
 
 
   [super updateProps:props oldProps:oldProps];
-}
-
-bool areTabItemsEqual(const RNCTabViewItemsStruct& lhs, const RNCTabViewItemsStruct& rhs) {
-  return lhs.key == rhs.key &&
-  lhs.title == rhs.title &&
-  lhs.sfSymbol == rhs.sfSymbol &&
-  lhs.badge == rhs.badge &&
-  lhs.activeTintColor == rhs.activeTintColor &&
-  lhs.hidden == rhs.hidden &&
-  lhs.testID == rhs.testID;
-}
-
-bool haveTabItemsChanged(const std::vector<RNCTabViewItemsStruct>& oldItems,
-                         const std::vector<RNCTabViewItemsStruct>& newItems) {
-
-  if (oldItems.size() != newItems.size()) {
-    return true;
-  }
-
-  for (size_t i = 0; i < oldItems.size(); ++i) {
-    if (!areTabItemsEqual(oldItems[i], newItems[i])) {
-      return true;
-    }
-  }
-
-  return false;
 }
 
 NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
