@@ -198,8 +198,8 @@ const TabView = <Route extends BaseRoute>({
   const customTabBarWrapperRef = useRef<View>(null);
   const [tabBarHeight, setTabBarHeight] = React.useState<number | undefined>(0);
   const [measuredDimensions, setMeasuredDimensions] = React.useState<
-    { width: number; height: number } | undefined
-  >();
+    { width: number | string; height: number | string } | undefined
+  >({ width: '100%', height: '100%' });
 
   const trimmedRoutes = React.useMemo(() => {
     if (
