@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import type {
   OnNativeLayout,
   OnPageSelectedEventData,
@@ -195,6 +195,7 @@ const TabView = <Route extends BaseRoute>({
 }: Props<Route>) => {
   // @ts-ignore
   const focusedKey = navigationState.routes[navigationState.index].key;
+  const customTabBarWrapperRef = useRef<View>(null);
   const [tabBarHeight, setTabBarHeight] = React.useState<number | undefined>(0);
   const [measuredDimensions, setMeasuredDimensions] = React.useState<
     { width: number; height: number } | undefined
@@ -313,6 +314,15 @@ const TabView = <Route extends BaseRoute>({
     [setMeasuredDimensions]
   );
 
+  useLayoutEffect(() => {
+    // If we are rendering a custom tab bar, we need to measure it to set the tab bar height.
+    if (renderCustomTabBar && customTabBarWrapperRef.current) {
+      customTabBarWrapperRef.current.measure((_x, _y, _width, height) => {
+        setTabBarHeight(height);
+      });
+    }
+  }, [renderCustomTabBar]);
+
   return (
     <BottomTabBarHeightContext.Provider value={tabBarHeight}>
       <NativeTabView
@@ -374,7 +384,9 @@ const TabView = <Route extends BaseRoute>({
           );
         })}
       </NativeTabView>
-      {renderCustomTabBar?.() ?? null}
+      {renderCustomTabBar ? (
+        <View ref={customTabBarWrapperRef}>{renderCustomTabBar()}</View>
+      ) : null}
     </BottomTabBarHeightContext.Provider>
   );
 };
