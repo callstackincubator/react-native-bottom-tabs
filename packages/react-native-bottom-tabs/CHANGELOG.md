@@ -1,5 +1,13 @@
 # react-native-bottom-tabs
 
+## 0.9.2
+
+### Patch Changes
+
+- [#355](https://github.com/callstackincubator/react-native-bottom-tabs/pull/355) [`18a8d23`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/18a8d233a00073997b2f714530ed0084a6e27d4e) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: measure custom tab bar for useBottomTabBarHeight
+
+- [#350](https://github.com/callstackincubator/react-native-bottom-tabs/pull/350) [`2df3658`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/2df36583a22f93558b89cfbd38e2ae876b959c59) Thanks [@okwasniewski](https://github.com/okwasniewski)! - Overload `==` and `!=` operators for `RNCTabViewItemsStruct`
+
 ## 0.9.1
 
 ### Patch Changes
