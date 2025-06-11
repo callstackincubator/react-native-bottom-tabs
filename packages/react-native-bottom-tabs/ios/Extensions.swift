@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+@_spi(Advanced) import SwiftUIIntrospect
 
 #if os(macOS)
 import AppKit
@@ -54,7 +55,7 @@ extension PlatformImage {
 }
 
 extension View {
-
+  
 #if os(macOS)
   @MainActor
   @ViewBuilder
@@ -62,7 +63,7 @@ extension View {
     self
       .introspect(
         .tabView,
-        on: .macOS(.v11, .v12, .v13, .v14, .v15),
+        on: .macOS(.v11...),
         customize: closure
       )
   }
@@ -74,15 +75,15 @@ extension View {
 #if !os(visionOS)
       .introspect(
         .tabView,
-        on: .iOS(.v14, .v15, .v16, .v17, .v18),
-        .tvOS(.v14,.v15, .v16, .v17, .v18),
+        on: .iOS(.v14...),
+        .tvOS(.v14...),
         customize: closure
       )
 #endif
   }
 #endif
-
-
+  
+  
   @MainActor
   @ViewBuilder
   func measureView(onLayout: @escaping (_ size: CGSize) -> Void) -> some View {
@@ -97,7 +98,7 @@ extension View {
               onLayout(geometry.size)
             }
         }
-        .ignoresSafeArea(.all, edges: .all)
+          .ignoresSafeArea(.all, edges: .all)
       )
   }
 }
