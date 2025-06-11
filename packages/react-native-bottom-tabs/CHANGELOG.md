@@ -1,5 +1,17 @@
 # react-native-bottom-tabs
 
+## 0.9.2
+
+### Patch Changes
+
+- [#356](https://github.com/callstackincubator/react-native-bottom-tabs/pull/356) [`41f662e`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/41f662e72d4ea73b7859b40fac926caf3c360ad5) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: set initial size to full screen
+
+- [#355](https://github.com/callstackincubator/react-native-bottom-tabs/pull/355) [`18a8d23`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/18a8d233a00073997b2f714530ed0084a6e27d4e) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: measure custom tab bar for useBottomTabBarHeight
+
+- [#350](https://github.com/callstackincubator/react-native-bottom-tabs/pull/350) [`2df3658`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/2df36583a22f93558b89cfbd38e2ae876b959c59) Thanks [@okwasniewski](https://github.com/okwasniewski)! - Overload `==` and `!=` operators for `RNCTabViewItemsStruct`
+
+- [#359](https://github.com/callstackincubator/react-native-bottom-tabs/pull/359) [`35d980d`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/35d980d8eca62e461999894fb145ed634b1a19bb) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: introspect on all future operating systems, makes iOS 26 work
+
 ## 0.9.1
 
 ### Patch Changes
