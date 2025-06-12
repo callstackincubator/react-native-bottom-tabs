@@ -5,22 +5,22 @@ import SwiftUI
  */
 struct RepresentableView: PlatformViewRepresentable {
   var view: PlatformView
-  
+
 #if os(macOS)
-  
+
   func makeNSView(context: Context) -> PlatformView {
-    return view
+    view
   }
-  
+
   func updateNSView(_ nsView: PlatformView, context: Context) {}
-  
+
 #else
-  
+
   func makeUIView(context: Context) -> PlatformView {
-    return view
+    view
   }
-  
+
   func updateUIView(_ uiView: PlatformView, context: Context) {}
-  
+
 #endif
 }

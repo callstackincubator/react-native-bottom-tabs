@@ -6,7 +6,7 @@ public class OnNativeLayoutEvent: NSObject, RCTEvent {
   public var viewTag: NSNumber
 
   public var eventName: String {
-    return "onNativeLayout"
+    "onNativeLayout"
   }
 
   public init(reactTag: NSNumber, size: CGSize) {
@@ -16,15 +16,15 @@ public class OnNativeLayoutEvent: NSObject, RCTEvent {
   }
 
   public class func moduleDotMethod() -> String {
-    return "RCTEventEmitter.receiveEvent"
+    "RCTEventEmitter.receiveEvent"
   }
-  
+
   public func canCoalesce() -> Bool {
-      return false
+      false
   }
 
   public func arguments() -> [Any] {
-    return [
+    [
       viewTag,
       RCTNormalizeInputEventName(eventName) ?? eventName,
       [

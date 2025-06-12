@@ -23,7 +23,7 @@ class TabViewProps: ObservableObject {
   @Published var tabBarHidden: Bool = false
 
   var selectedActiveTintColor: PlatformColor? {
-    if let selectedPage = selectedPage,
+    if let selectedPage,
        let tabData = items.findByKey(selectedPage),
        let activeTintColor = tabData.activeTintColor {
       return activeTintColor
@@ -33,8 +33,8 @@ class TabViewProps: ObservableObject {
   }
 
   var filteredItems: [TabInfo] {
-    items.filter({
+    items.filter {
       !$0.hidden || $0.key == selectedPage
-    })
+    }
   }
 }

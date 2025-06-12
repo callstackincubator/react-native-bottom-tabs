@@ -27,6 +27,16 @@ jobs:
       - name: Typecheck files
         run: yarn typecheck
 
+  swift-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: SwiftLint
+        uses: norio-nomura/action-swiftlint@3.2.1
+        env:
+          WORKING_DIRECTORY: Source
+
   build-library:
     runs-on: ubuntu-latest
     steps:
@@ -94,7 +104,7 @@ jobs:
 
       - name: Build example for Android
         env:
-          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+          JAVA_OPTS: '-XX:MaxHeapSize=6g'
         run: |
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
@@ -153,7 +163,7 @@ jobs:
 
       - name: Build example for Android new arch
         env:
-          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+          JAVA_OPTS: '-XX:MaxHeapSize=6g'
         run: |
           yarn turbo run build:android:fabric --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
@@ -199,7 +209,6 @@ jobs:
       - name: Build example for iOS
         run: |
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
-
 
   build-ios-newarch:
     runs-on: macos-15

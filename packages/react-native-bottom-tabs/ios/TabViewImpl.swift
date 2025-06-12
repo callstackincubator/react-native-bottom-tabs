@@ -1,8 +1,7 @@
 import Foundation
-import SwiftUI
 import React
+import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
-
 
 /**
  SwiftUI implementation of TabView used to render React Native views.
@@ -25,12 +24,12 @@ struct TabViewImpl: View {
       ForEach(props.children.indices, id: \.self) { index in
         renderTabItem(at: index)
       }
-      .measureView(onLayout: { size in
+      .measureView { size in
         onLayout(size)
-      })
+      }
     }
 #if !os(tvOS) && !os(macOS) && !os(visionOS)
-    .onTabItemEvent({ index, isLongPress in
+    .onTabItemEvent { index, isLongPress in
       let item = props.filteredItems[safe: index]
       guard let key = item?.key else { return }
 
@@ -41,20 +40,20 @@ struct TabViewImpl: View {
         onSelect(key)
         emitHapticFeedback()
       }
-    })
+    }
 #endif
-    .introspectTabView(closure: { tabController in
+    .introspectTabView { tabController in
 #if os(macOS)
       tabBar = tabController
 #else
       tabBar = tabController.tabBar
-      if (!props.tabBarHidden) {
+      if !props.tabBarHidden {
         onTabBarMeasured(
           Int(tabController.tabBar.frame.size.height)
         )
       }
 #endif
-    })
+    }
 #if !os(macOS)
     .configureAppearance(props: props, tabBar: tabBar)
 #endif
@@ -62,7 +61,7 @@ struct TabViewImpl: View {
     .getSidebarAdaptable(enabled: props.sidebarAdaptable ?? false)
     .onChange(of: props.selectedPage ?? "") { newValue in
 #if !os(macOS)
-      if (props.disablePageAnimations) {
+      if props.disablePageAnimations {
         UIView.setAnimationsEnabled(false)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
           UIView.setAnimationsEnabled(true)
@@ -152,7 +151,6 @@ private func createFontAttributes(
 ) -> [NSAttributedString.Key: Any] {
   var attributes: [NSAttributedString.Key: Any] = [:]
 
-
   if family != nil || weight != nil {
     attributes[.font] = RCTFont.update(
       nil,
@@ -175,7 +173,6 @@ let tabBarDefaultFontSize: CGFloat = 30.0
 #else
 let tabBarDefaultFontSize: CGFloat = UIFont.smallSystemFontSize
 #endif
-
 
 #if !os(macOS)
 private func configureTransparentAppearance(tabBar: UITabBar, props: TabViewProps) {
@@ -257,7 +254,7 @@ extension View {
   @ViewBuilder
   func getSidebarAdaptable(enabled: Bool) -> some View {
     if #available(iOS 18.0, macOS 15.0, tvOS 18.0, visionOS 2.0, *) {
-      if (enabled) {
+      if enabled {
 #if compiler(>=6.0)
         self.tabViewStyle(.sidebarAdaptable)
 #else
@@ -274,7 +271,7 @@ extension View {
   @ViewBuilder
   func tabBadge(_ data: String?) -> some View {
     if #available(iOS 15.0, macOS 15.0, visionOS 2.0, tvOS 15.0, *) {
-      if let data = data, !data.isEmpty {
+      if let data, !data.isEmpty {
 #if !os(tvOS)
         self.badge(data)
 #else
@@ -292,28 +289,28 @@ extension View {
   @ViewBuilder
   func configureAppearance(props: TabViewProps, tabBar: UITabBar?) -> some View {
     self
-      .onChange(of: props.barTintColor) { newValue in
+      .onChange(of: props.barTintColor) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
-      .onChange(of: props.scrollEdgeAppearance) { newValue in
+      .onChange(of: props.scrollEdgeAppearance) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
-      .onChange(of: props.translucent) { newValue in
+      .onChange(of: props.translucent) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
-      .onChange(of: props.inactiveTintColor) { newValue in
+      .onChange(of: props.inactiveTintColor) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
-      .onChange(of: props.selectedActiveTintColor) { newValue in
+      .onChange(of: props.selectedActiveTintColor) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
-      .onChange(of: props.fontSize) { newValue in
+      .onChange(of: props.fontSize) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
-      .onChange(of: props.fontFamily) { newValue in
+      .onChange(of: props.fontFamily) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
-      .onChange(of: props.fontWeight) { newValue in
+      .onChange(of: props.fontWeight) { _ in
         updateTabBarAppearance(props: props, tabBar: tabBar)
       }
       .onChange(of: props.tabBarHidden) { newValue in

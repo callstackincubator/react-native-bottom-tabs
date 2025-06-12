@@ -11,7 +11,7 @@ import UIKit
 extension Collection {
   // Returns the element at the specified index if it is within bounds, otherwise nil.
   subscript(safe index: Index) -> Element? {
-    return indices.contains(index) ? self[index] : nil
+    indices.contains(index) ? self[index] : nil
   }
 }
 
@@ -19,7 +19,7 @@ extension Collection where Element == TabInfo {
   func findByKey(_ key: String?) -> Element? {
     guard let key else { return nil }
     guard !isEmpty else { return nil }
-    return first(where: { $0.key == key })
+    return first { $0.key == key }
   }
 }
 
@@ -37,17 +37,16 @@ extension PlatformView {
 extension PlatformImage {
   func resizeImageTo(size: CGSize) -> PlatformImage? {
 #if os(macOS)
-    let newImage = NSImage(size: size, flipped: false) { (rect) -> Bool in
+    return NSImage(size: size, flipped: false) { rect -> Bool in
       self.draw(in: rect,
                 from: CGRect(origin: .zero, size: self.size),
                 operation: .copy,
                 fraction: 1.0)
       return true
     }
-    return newImage
 #else
     let renderer = UIGraphicsImageRenderer(size: size)
-    return renderer.image { context in
+    return renderer.image { _ in
       self.draw(in: CGRect(origin: .zero, size: size))
     }
 #endif
@@ -55,7 +54,6 @@ extension PlatformImage {
 }
 
 extension View {
-  
 #if os(macOS)
   @MainActor
   @ViewBuilder
@@ -82,13 +80,12 @@ extension View {
 #endif
   }
 #endif
-  
-  
+
   @MainActor
   @ViewBuilder
   func measureView(onLayout: @escaping (_ size: CGSize) -> Void) -> some View {
     self
-      .background (
+      .background(
         GeometryReader { geometry in
           Color.clear
             .onChange(of: geometry.size) { newValue in

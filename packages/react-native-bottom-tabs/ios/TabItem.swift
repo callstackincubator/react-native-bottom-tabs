@@ -5,7 +5,7 @@ struct TabItem: View {
   var icon: PlatformImage?
   var sfSymbol: String?
   var labeled: Bool?
-  
+
   var body: some View {
     if let icon {
 #if os(macOS)
@@ -17,7 +17,7 @@ struct TabItem: View {
       Image(systemName: sfSymbol)
         .noneSymbolVariant()
     }
-    if (labeled != false) {
+    if labeled != false {
       Text(title ?? "")
     }
   }

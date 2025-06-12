@@ -1,8 +1,8 @@
 import Foundation
-import SwiftUI
 import React
 import SDWebImage
 import SDWebImageSVGCoder
+import SwiftUI
 
 @objcMembers
 public final class TabInfo: NSObject {
@@ -71,7 +71,6 @@ public final class TabInfo: NSObject {
       props.sidebarAdaptable = sidebarAdaptable
     }
   }
-
 
   @objc public var disablePageAnimations: Bool = false {
     didSet {
@@ -171,17 +170,17 @@ public final class TabInfo: NSObject {
     SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
   }
 
-  public override func didUpdateReactSubviews() {
+  override public func didUpdateReactSubviews() {
     props.children = reactSubviews()
   }
 
 #if os(macOS)
-  public override func layout() {
+  override public func layout() {
     super.layout()
     setupView()
   }
 #else
-  public override func layoutSubviews() {
+  override public func layoutSubviews() {
     super.layoutSubviews()
     setupView()
   }
@@ -219,7 +218,7 @@ public final class TabInfo: NSObject {
     guard let imageSources = icons as? [RCTImageSource?] else { return }
 
     for (index, imageSource) in imageSources.enumerated() {
-      guard let imageSource = imageSource,
+      guard let imageSource,
             let url = imageSource.request.url else { continue }
 
       let isSVG = url.pathExtension.lowercased() == "svg"
@@ -243,8 +242,8 @@ public final class TabInfo: NSObject {
         options: options,
         context: context,
         progress: nil
-      ) { [weak self] (image, _, _, _, _, _) in
-        guard let self = self else { return }
+      ) { [weak self] image, _, _, _, _, _ in
+        guard let self else { return }
         DispatchQueue.main.async {
           if let image {
             self.props.icons[index] = image.resizeImageTo(size: self.iconSize)
