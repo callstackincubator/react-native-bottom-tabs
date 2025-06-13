@@ -244,6 +244,39 @@ Function that given `{ focused: boolean }` returns `ImageSource` or `AppleIcon` 
 SF Symbols are only supported on Apple platforms.
 :::
 
+:::warning
+
+Metro transformers that modify the import resolutions of images to something that is *not* React Native's `ImageSource` will break this. A notable community example of such is [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer).
+
+For best results, avoid the use of such transformers altogether.
+
+If however, it is necessary to use such a transformer, you can modify your `metro.config.js` file to resolve the asset to `ImageSource` with another extension.
+
+For example, with `react-native-svg-transformer`, you can resolve the `svg` extension to use `react-native-svg-transformer`, and use an alternative extension like `svgx` to resolve it normally with React Native's default behavior.
+
+To do so, change the extension of your icon SVG file from `.svg` to `.svgx` and modify your `metro.config.js` file like so:
+
+```diff
+config.transformer.babelTransformerPath = require.resolve(
+  "react-native-svg-transformer"
+);
+config.resolver.assetExts = config.resolver.assetExts.filter(
+  (ext) => ext !== "svg"
+);
+
++ config.resolver.assetExts = [...config.resolver.assetExts, "svgx"];
+
+config.resolver.sourceExts = [...config.resolver.sourceExts, "svg"];
+```
+
+Then change your require calls like so:
+```
+tabBarIcon: () => require('person.svgx')
+```
+
+:::
+
+
 #### `tabBarBadge`
 
 Badge to show on the tab icon.
