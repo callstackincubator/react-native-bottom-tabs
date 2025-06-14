@@ -13,21 +13,27 @@ struct TabViewImpl: View {
 #else
   @Weak var tabBar: UITabBar?
 #endif
-
+  
+  @ViewBuilder
+  var tabContent: some View {
+    if #available(iOS 18, macOS 15, visionOS 2, tvOS 18, *) {
+      NewTabView(
+        props: props, tabBar: tabBar, onLayout: onLayout, onSelect: onSelect,
+        updateTabBarAppearance: updateTabBarAppearance)
+    } else {
+      LegacyTabView(
+        props: props, tabBar: tabBar, onLayout: onLayout, onSelect: onSelect,
+        updateTabBarAppearance: updateTabBarAppearance)
+    }
+  }
+  
   var onSelect: (_ key: String) -> Void
   var onLongPress: (_ key: String) -> Void
   var onLayout: (_ size: CGSize) -> Void
   var onTabBarMeasured: (_ height: Int) -> Void
-
+  
   var body: some View {
-    TabView(selection: $props.selectedPage) {
-      ForEach(props.children.indices, id: \.self) { index in
-        renderTabItem(at: index)
-      }
-      .measureView { size in
-        onLayout(size)
-      }
-    }
+    tabContent
 #if !os(tvOS) && !os(macOS) && !os(visionOS)
     .onTabItemEvent { index, isLongPress in
       let item = props.filteredItems[safe: index]
@@ -71,45 +77,6 @@ struct TabViewImpl: View {
 #if os(tvOS) || os(macOS) || os(visionOS)
       onSelect(newValue)
 #endif
-    }
-  }
-
-  @ViewBuilder
-  private func renderTabItem(at index: Int) -> some View {
-    let tabData = props.items[safe: index]
-    let isHidden = tabData?.hidden ?? false
-    let isFocused = props.selectedPage == tabData?.key
-
-    if !isHidden || isFocused {
-      let child = props.children[safe: index] ?? PlatformView()
-      let icon = props.icons[index]
-
-      RepresentableView(view: child)
-        .ignoresSafeArea(.container, edges: .all)
-        .tabItem {
-          TabItem(
-            title: tabData?.title,
-            icon: icon,
-            sfSymbol: tabData?.sfSymbol,
-            labeled: props.labeled
-          )
-          .accessibilityIdentifier(tabData?.testID ?? "")
-        }
-        .tag(tabData?.key)
-        .tabBadge(tabData?.badge)
-        .hideTabBar(props.tabBarHidden)
-        .onAppear {
-#if !os(macOS)
-          updateTabBarAppearance(props: props, tabBar: tabBar)
-#endif
-
-#if os(iOS)
-          guard index >= 4,
-                let key = tabData?.key,
-                props.selectedPage != key else { return }
-          onSelect(key)
-#endif
-        }
     }
   }
 
