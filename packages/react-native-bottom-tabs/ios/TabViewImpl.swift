@@ -28,6 +28,7 @@ struct TabViewImpl: View {
         onLayout(size)
       }
     }
+    .tabBarMinimizeBehavior(props.minimizeBehavior)
 #if !os(tvOS) && !os(macOS) && !os(visionOS)
     .onTabItemEvent { index, isLongPress in
       let item = props.filteredItems[safe: index]
@@ -327,6 +328,19 @@ extension View {
         self.tint(color)
       } else {
         self.accentColor(color)
+      }
+    } else {
+      self
+    }
+  }
+
+  @ViewBuilder
+  func tabBarMinimizeBehavior(_ behavior: MinimizeBehavior?) -> some View {
+    if #available(iOS 26.0, *) {
+      if let behavior {
+        self.tabBarMinimizeBehavior(behavior.convert())
+      } else {
+        self
       }
     } else {
       self

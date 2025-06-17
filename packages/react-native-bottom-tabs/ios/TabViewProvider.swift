@@ -102,6 +102,12 @@ public final class TabInfo: NSObject {
     }
   }
 
+  @objc public var minimizeBehavior: NSString? {
+    didSet {
+      props.minimizeBehavior = MinimizeBehavior(rawValue: minimizeBehavior as? String ?? "")
+    }
+  }
+
   @objc public var translucent: Bool = true {
     didSet {
       props.translucent = translucent

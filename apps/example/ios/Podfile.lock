@@ -1180,7 +1180,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-bottom-tabs (0.9.1):
+  - react-native-bottom-tabs (0.9.2):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1931,7 +1931,7 @@ SPEC CHECKSUMS:
   React-logger: 1935d6e6461e9c8be4c87af56c56a4876021171e
   React-Mapbuffer: 212171f037e3b22e6c2df839aa826806da480b85
   React-microtasksnativemodule: a0ffd165c39251512d8cf51e9e8f5719dabc38b6
-  react-native-bottom-tabs: 7c7ee94435e518759b414e89068956096a1adec7
+  react-native-bottom-tabs: 6ee03990297f7e37f5c1dd6f5259cee851733d4f
   react-native-safe-area-context: e54b360402f089600c2fb0d825d1d3d918b99e15
   React-nativeconfig: cb207ebba7cafce30657c7ad9f1587a8f32e4564
   React-NativeModulesApple: 76a5d35322908fbc88871e6dd20433bea2b8b2db
