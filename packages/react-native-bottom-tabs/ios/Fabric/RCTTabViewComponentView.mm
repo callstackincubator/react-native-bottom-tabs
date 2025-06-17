@@ -130,6 +130,10 @@ using namespace facebook::react;
   if (oldViewProps.sidebarAdaptable != newViewProps.sidebarAdaptable) {
     _tabViewProvider.sidebarAdaptable = newViewProps.sidebarAdaptable;
   }
+  
+  if (oldViewProps.minimizeBehavior != newViewProps.minimizeBehavior) {
+    _tabViewProvider.minimizeBehavior = RCTNSStringFromString(newViewProps.minimizeBehavior);
+  }
 
   if (oldViewProps.disablePageAnimations != newViewProps.disablePageAnimations) {
     _tabViewProvider.disablePageAnimations = newViewProps.disablePageAnimations;

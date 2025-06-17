@@ -47,6 +47,7 @@ export default function SFSymbols() {
   return (
     <TabView
       sidebarAdaptable
+      minimizeBehavior="onScrollDown"
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}

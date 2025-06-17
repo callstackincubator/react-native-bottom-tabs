@@ -1,5 +1,26 @@
 import SwiftUI
 
+internal enum MinimizeBehavior: String {
+  case automatic
+  case never
+  case onScrollUp
+  case onScrollDown
+
+  @available(iOS 26.0, *)
+  func convert() -> TabBarMinimizeBehavior {
+    switch self {
+    case .automatic:
+      return .automatic
+    case .never:
+      return .never
+    case .onScrollUp:
+      return .onScrollUp
+    case .onScrollDown:
+      return .onScrollDown
+    }
+  }
+}
+
 /**
  Props that component accepts. SwiftUI view gets re-rendered when ObservableObject changes.
  */
@@ -10,6 +31,7 @@ class TabViewProps: ObservableObject {
   @Published var icons: [Int: PlatformImage] = [:]
   @Published var sidebarAdaptable: Bool?
   @Published var labeled: Bool = false
+  @Published var minimizeBehavior: MinimizeBehavior?
   @Published var scrollEdgeAppearance: String?
   @Published var barTintColor: PlatformColor?
   @Published var activeTintColor: PlatformColor?

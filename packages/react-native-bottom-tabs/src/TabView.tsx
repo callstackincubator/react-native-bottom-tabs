@@ -54,6 +54,11 @@ interface Props<Route extends BaseRoute> {
    * Describes the appearance attributes for the tabBar to use when an observable scroll view is scrolled to the bottom. (iOS only)
    */
   scrollEdgeAppearance?: 'default' | 'opaque' | 'transparent';
+
+  /**
+   * Behavior for minimizing the tab bar. (iOS 26+)
+   */
+  minimizeBehavior?: 'automatic' | 'onScrollDown' | 'onScrollUp' | 'never';
   /**
    * Active tab color.
    */
