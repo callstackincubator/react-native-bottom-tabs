@@ -13,9 +13,9 @@ struct LegacyTabView: AnyTabView {
       ForEach(props.children.indices, id: \.self) { index in
         renderTabItem(at: index)
       }
-      .measureView { size in
-        onLayout(size)
-      }
+    }
+    .measureView { size in
+      onLayout(size)
     }
     .hideTabBar(props.tabBarHidden)
   }
