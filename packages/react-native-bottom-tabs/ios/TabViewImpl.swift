@@ -169,12 +169,6 @@ private func createFontAttributes(
   return attributes
 }
 
-#if os(tvOS)
-let tabBarDefaultFontSize: CGFloat = 30.0
-#else
-let tabBarDefaultFontSize: CGFloat = UIFont.smallSystemFontSize
-#endif
-
 #if !os(macOS)
 private func configureTransparentAppearance(tabBar: UITabBar, props: TabViewProps) {
   tabBar.barTintColor = props.barTintColor
@@ -185,7 +179,7 @@ private func configureTransparentAppearance(tabBar: UITabBar, props: TabViewProp
 
   guard let items = tabBar.items else { return }
 
-  let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : tabBarDefaultFontSize
+  let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : TabBarFontSize.defaultSize
   let attributes = createFontAttributes(
     size: fontSize,
     family: props.fontFamily,
