@@ -52,6 +52,7 @@ export default function FourTabs({
       key: 'contacts',
       focusedIcon: require('../../assets/icons/person_dark.png'),
       title: 'Contacts',
+      badge: ' ',
     },
     {
       key: 'chat',

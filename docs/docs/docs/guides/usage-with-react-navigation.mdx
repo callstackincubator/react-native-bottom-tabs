@@ -168,7 +168,7 @@ Controls how the tab bar behaves when content is scrolled.
 Options:
 - `automatic`: Platform determines the behavior
 - `onScrollDown`: Tab bar minimizes when scrolling down
-- `onScrollUp`: Tab bar minimizes when scrolling up  
+- `onScrollUp`: Tab bar minimizes when scrolling up
 - `never`: Tab bar never minimizes
 
 :::note
@@ -297,6 +297,10 @@ tabBarIcon: () => require('person.svgx')
 #### `tabBarBadge`
 
 Badge to show on the tab icon.
+
+:::warning
+To display a badge without text (just a dot), you need to pass a string with a space character (`" "`).
+:::
 
 #### `tabBarItemHidden`
 

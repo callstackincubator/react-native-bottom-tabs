@@ -8,7 +8,7 @@ import SwiftUI
 public final class TabInfo: NSObject {
   public let key: String
   public let title: String
-  public let badge: String
+  public let badge: String?
   public let sfSymbol: String
   public let activeTintColor: PlatformColor?
   public let hidden: Bool
@@ -17,7 +17,7 @@ public final class TabInfo: NSObject {
   public init(
     key: String,
     title: String,
-    badge: String,
+    badge: String?,
     sfSymbol: String,
     activeTintColor: PlatformColor?,
     hidden: Bool,
@@ -269,7 +269,7 @@ public final class TabInfo: NSObject {
           TabInfo(
             key: itemDict["key"] as? String ?? "",
             title: itemDict["title"] as? String ?? "",
-            badge: itemDict["badge"] as? String ?? "",
+            badge: itemDict["badge"] as? String,
             sfSymbol: itemDict["sfSymbol"] as? String ?? "",
             activeTintColor: RCTConvert.uiColor(itemDict["activeTintColor"] as? NSNumber),
             hidden: itemDict["hidden"] as? Bool ?? false,

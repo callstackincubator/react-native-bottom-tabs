@@ -245,7 +245,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
         }
       }
 
-      if (item.badge.isNotEmpty()) {
+      if (item.badge?.isNotEmpty() == true) {
         val badge = bottomNavigation.getOrCreateBadge(index)
         badge.isVisible = true
         badge.text = item.badge

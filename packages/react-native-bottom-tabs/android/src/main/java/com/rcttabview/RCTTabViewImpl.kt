@@ -13,7 +13,7 @@ import com.rcttabview.events.TabLongPressEvent
 data class TabInfo(
   val key: String,
   val title: String,
-  val badge: String,
+  val badge: String?,
   val activeTintColor: Int?,
   val hidden: Boolean,
   val testID: String?
@@ -32,7 +32,7 @@ class RCTTabViewImpl {
             TabInfo(
               key = item.getString("key") ?: "",
               title = item.getString("title") ?: "",
-              badge = item.getString("badge") ?: "",
+              badge = if (item.hasKey("badge")) item.getString("badge") else null,
               activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
               hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
               testID = item.getString("testID")

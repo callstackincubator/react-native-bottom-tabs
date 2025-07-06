@@ -175,10 +175,10 @@ const TabView = <Route extends BaseRoute>({
   renderScene,
   onIndexChange,
   onTabLongPress,
-  getBadge,
   rippleColor,
   tabBarActiveTintColor: activeTintColor,
   tabBarInactiveTintColor: inactiveTintColor,
+  getBadge = ({ route }: { route: Route }) => route.badge,
   getLazy = ({ route }: { route: Route }) => route.lazy,
   getLabelText = ({ route }: { route: Route }) => route.title,
   getIcon = ({ route, focused }: { route: Route; focused: boolean }) =>

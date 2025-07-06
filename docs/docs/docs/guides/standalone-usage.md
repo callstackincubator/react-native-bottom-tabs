@@ -32,12 +32,12 @@ export default function TabViewExample() {
     {
       key: 'home',
       title: 'Home',
-      focusedIcon: { sfSymbol: 'house' }
+      focusedIcon: { sfSymbol: 'house' },
     },
     {
       key: 'settings',
       title: 'Settings',
-      focusedIcon: { sfSymbol: 'gear' }
+      focusedIcon: { sfSymbol: 'gear' },
     },
   ]);
 
@@ -91,6 +91,7 @@ const renderScene = SceneMap({
 #### `navigationState`
 
 State for the tab view. The state should contain:
+
 - `routes`: Array of route objects containing `key` and `title` props
 - `index`: Current selected tab index
 
@@ -107,6 +108,7 @@ Callback that is called when the tab index changes.
 #### `labeled`
 
 Whether to show labels in tabs. When `false`, only icons will be displayed.
+
 - Type: `boolean`
 - Default <Badge text="iOS" type="info" />: `true`
 - Default <Badge text="Android" type="info" />: `false`
@@ -114,6 +116,7 @@ Whether to show labels in tabs. When `false`, only icons will be displayed.
 #### `sidebarAdaptable` <Badge text="iOS" type="info" />
 
 A tab bar style that adapts to each platform:
+
 - iPadOS: Top tab bar that can adapt into a sidebar
 - iOS: Bottom tab bar
 - macOS/tvOS: Sidebar
@@ -122,19 +125,21 @@ A tab bar style that adapts to each platform:
 #### `disablePageAnimations` <Badge text="iOS" type="info" />
 
 Whether to disable animations between tabs.
+
 - Type: `boolean`
 
 #### `hapticFeedbackEnabled`
 
 Whether to enable haptic feedback on tab press.
+
 - Type: `boolean`
 - Default: `false`
-
 
 #### `tabLabelStyle`
 
 Object containing styles for the tab label.
 Supported properties:
+
 - `fontFamily`
 - `fontSize`
 - `fontWeight`
@@ -142,18 +147,21 @@ Supported properties:
 #### `scrollEdgeAppearance` <Badge text="iOS" type="info" />
 
 Appearance attributes for the tab bar when a scroll view is at the bottom.
+
 - Type: `'default' | 'opaque' | 'transparent'`
 
 #### `minimizeBehavior` <Badge text="iOS 26+" type="info" />
 
 Controls how the tab bar behaves when content is scrolled.
+
 - Type: `'automatic' | 'onScrollDown' | 'onScrollUp' | 'never'`
 - Default: `undefined` (uses system default)
 
 Options:
+
 - `automatic`: Platform determines the behavior
 - `onScrollDown`: Tab bar minimizes when scrolling down
-- `onScrollUp`: Tab bar minimizes when scrolling up  
+- `onScrollUp`: Tab bar minimizes when scrolling up
 - `never`: Tab bar never minimizes
 
 :::note
@@ -163,6 +171,7 @@ This feature requires iOS 26.0 or later and is only available on iOS. On older v
 #### `tabBarActiveTintColor`
 
 Color for the active tab.
+
 - Type: `ColorValue`
 
 #### `tabBarInactiveTintColor`
@@ -182,11 +191,13 @@ Supported properties:
 #### `translucent` <Badge text="iOS" type="info" />
 
 Whether the tab bar is translucent.
+
 - Type: `boolean`
 
 #### `activeIndicatorColor` <Badge text="Android" type="info" />
 
 Color of tab indicator.
+
 - Type: `ColorValue`
 
 ### Route Configuration
@@ -207,21 +218,29 @@ Each route in the `routes` array can have the following properties:
 #### `getLazy`
 
 Function to determine if a screen should be lazy loaded.
+
 - Default: Uses `route.lazy`
 
 #### `getLabelText`
 
 Function to get the label text for a tab.
+
 - Default: Uses `route.title`
 
 #### `getBadge`
 
 Function to get the badge text for a tab.
+
 - Default: Uses `route.badge`
+
+:::warning
+To display a badge without text (just a dot), you need to pass a string with a space character (`" "`).
+:::
 
 #### `getActiveTintColor`
 
 Function to get the active tint color for a tab.
+
 - Default: Uses `route.activeTintColor`
 
 #### `getIcon`
@@ -229,7 +248,6 @@ Function to get the active tint color for a tab.
 Function to get the icon for a tab.
 
 - Default: Uses `route.focusedIcon` and `route.unfocusedIcon`
-
 
 #### `getHidden`
 
@@ -240,4 +258,5 @@ Function to determine if a tab should be hidden.
 #### `getTestID`
 
 Function to get the test ID for a tab item.
+
 - Default: Uses `route.testID`
