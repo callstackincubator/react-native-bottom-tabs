@@ -35,3 +35,9 @@ typealias PlatformViewRepresentable = NSViewRepresentable
 #else
 typealias PlatformViewRepresentable = UIViewRepresentable
 #endif
+
+#if os(macOS)
+typealias PlatformFont = NSFont
+#else
+typealias PlatformFont = UIFont
+#endif

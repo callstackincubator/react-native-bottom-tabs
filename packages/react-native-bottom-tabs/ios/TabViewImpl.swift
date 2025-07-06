@@ -117,36 +117,6 @@ struct TabViewImpl: View {
   }
 #endif
 
-private func createFontAttributes(
-  size: CGFloat,
-  family: String?,
-  weight: String?,
-  inactiveTintColor: PlatformColor?
-) -> [NSAttributedString.Key: Any] {
-  var attributes: [NSAttributedString.Key: Any] = [:]
-
-  if family != nil || weight != nil {
-    attributes[.font] = RCTFont.update(
-      nil,
-      withFamily: family,
-      size: NSNumber(value: size),
-      weight: weight,
-      style: nil,
-      variant: nil,
-      scaleMultiplier: 1.0
-    )
-  } else {
-    attributes[.font] = UIFont.boldSystemFont(ofSize: size)
-  }
-
-  return attributes
-}
-
-#if os(tvOS)
-  let tabBarDefaultFontSize: CGFloat = 30.0
-#else
-  let tabBarDefaultFontSize: CGFloat = UIFont.smallSystemFontSize
-#endif
 
 #if !os(macOS)
   private func configureTransparentAppearance(tabBar: UITabBar, props: TabViewProps) {
@@ -158,12 +128,11 @@ private func createFontAttributes(
 
     guard let items = tabBar.items else { return }
 
-    let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : tabBarDefaultFontSize
-    let attributes = createFontAttributes(
-      size: fontSize,
-      family: props.fontFamily,
-      weight: props.fontWeight,
-      inactiveTintColor: nil
+    let attributes = TabBarFontSize.createNormalStateAttributes(
+      fontSize: props.fontSize,
+      fontFamily: props.fontFamily,
+      fontWeight: props.fontWeight,
+      inactiveColor: nil
     )
 
     items.forEach { item in
@@ -192,18 +161,13 @@ private func createFontAttributes(
 
     // Configure item appearance
     let itemAppearance = UITabBarItemAppearance()
-    let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : tabBarDefaultFontSize
 
-    var attributes = createFontAttributes(
-      size: fontSize,
-      family: props.fontFamily,
-      weight: props.fontWeight,
-      inactiveTintColor: props.inactiveTintColor
+    let attributes = TabBarFontSize.createNormalStateAttributes(
+      fontSize: props.fontSize,
+      fontFamily: props.fontFamily,
+      fontWeight: props.fontWeight,
+      inactiveColor: props.inactiveTintColor
     )
-
-    if let inactiveTintColor = props.inactiveTintColor {
-      attributes[.foregroundColor] = inactiveTintColor
-    }
 
     if let inactiveTintColor = props.inactiveTintColor {
       itemAppearance.normal.iconColor = inactiveTintColor
