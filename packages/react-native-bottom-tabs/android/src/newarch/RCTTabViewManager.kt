@@ -163,4 +163,7 @@ class RCTTabViewManager(context: ReactApplicationContext) :
 
   override fun setScrollEdgeAppearance(view: ReactBottomNavigationView?, value: String?) {
   }
+
+  override fun setMinimizeBehavior(view: ReactBottomNavigationView?, value: String?) {
+  }
 }

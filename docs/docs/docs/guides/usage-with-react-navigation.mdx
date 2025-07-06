@@ -158,6 +158,23 @@ Tab views using the sidebar adaptable style have an appearance
 
 Whether to enable haptic feedback on tab press. Defaults to false.
 
+#### `minimizeBehavior` <Badge text="iOS 26+" type="info" />
+
+Controls how the tab bar behaves when content is scrolled.
+
+- Type: `'automatic' | 'onScrollDown' | 'onScrollUp' | 'never'`
+- Default: `undefined` (uses system default)
+
+Options:
+- `automatic`: Platform determines the behavior
+- `onScrollDown`: Tab bar minimizes when scrolling down
+- `onScrollUp`: Tab bar minimizes when scrolling up  
+- `never`: Tab bar never minimizes
+
+:::note
+This feature requires iOS 26.0 or later and is only available on iOS. On older versions, this prop is ignored.
+:::
+
 #### `tabLabelStyle`
 
 Object containing styles for the tab label.

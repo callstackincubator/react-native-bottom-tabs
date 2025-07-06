@@ -47,6 +47,7 @@ export default function TabViewExample() {
       renderScene={renderScene}
       onIndexChange={setIndex}
       labeled
+      minimizeBehavior="onScrollDown" // iOS 26+: Hide tab bar when scrolling down
     />
   );
 }
@@ -142,6 +143,22 @@ Supported properties:
 
 Appearance attributes for the tab bar when a scroll view is at the bottom.
 - Type: `'default' | 'opaque' | 'transparent'`
+
+#### `minimizeBehavior` <Badge text="iOS 26+" type="info" />
+
+Controls how the tab bar behaves when content is scrolled.
+- Type: `'automatic' | 'onScrollDown' | 'onScrollUp' | 'never'`
+- Default: `undefined` (uses system default)
+
+Options:
+- `automatic`: Platform determines the behavior
+- `onScrollDown`: Tab bar minimizes when scrolling down
+- `onScrollUp`: Tab bar minimizes when scrolling up  
+- `never`: Tab bar never minimizes
+
+:::note
+This feature requires iOS 26.0 or later and is only available on iOS. On older versions, this prop is ignored.
+:::
 
 #### `tabBarActiveTintColor`
 

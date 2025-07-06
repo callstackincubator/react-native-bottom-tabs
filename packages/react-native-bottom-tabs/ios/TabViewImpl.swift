@@ -336,6 +336,7 @@ extension View {
 
   @ViewBuilder
   func tabBarMinimizeBehavior(_ behavior: MinimizeBehavior?) -> some View {
+#if compiler(>=6.2)
     if #available(iOS 26.0, *) {
       if let behavior {
         self.tabBarMinimizeBehavior(behavior.convert())
@@ -345,6 +346,9 @@ extension View {
     } else {
       self
     }
+#else
+    self
+#endif
   }
 
   @ViewBuilder
