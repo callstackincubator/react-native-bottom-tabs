@@ -9,7 +9,7 @@ import type {
 } from '@react-navigation/native';
 import type { ImageSourcePropType } from 'react-native';
 import type TabView from 'react-native-bottom-tabs';
-import type { AppleIcon } from 'react-native-bottom-tabs';
+import type { AppleIcon, TabRole } from 'react-native-bottom-tabs';
 
 export type NativeBottomTabNavigationEventMap = {
   /**
@@ -93,6 +93,11 @@ export type NativeBottomTabNavigationOptions = {
   tabBarButtonTestID?: string;
 
   /**
+   * role for the tab. (iOS only)
+   */
+  tabBarRole?: TabRole;
+
+  /**
    * Whether inactive screens should be suspended from re-rendering. Defaults to `false`.
    */
   freezeOnBlur?: boolean;
@@ -131,6 +136,7 @@ export type NativeBottomTabNavigationConfig = Partial<
     | 'onTabLongPress'
     | 'getActiveTintColor'
     | 'getTestID'
+    | 'getRole'
     | 'tabBar'
     | 'getFreezeOnBlur'
   >

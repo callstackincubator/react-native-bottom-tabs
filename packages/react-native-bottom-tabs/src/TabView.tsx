@@ -20,7 +20,7 @@ import { BottomTabBarHeightContext } from './utils/BottomTabBarHeightContext';
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
 import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
-import type { BaseRoute, NavigationState } from './types';
+import type { BaseRoute, NavigationState, TabRole } from './types';
 import DelayedFreeze from './DelayedFreeze';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
@@ -125,6 +125,11 @@ interface Props<Route extends BaseRoute> {
   getTestID?: (props: { route: Route }) => string | undefined;
 
   /**
+   * Get role for the tab, uses `route.role` by default. (iOS only)
+   */
+  getRole?: (props: { route: Route }) => TabRole | undefined;
+
+  /**
    * Custom tab bar to render. Set to `null` to hide the tab bar completely.
    */
   tabBar?: () => React.ReactNode;
@@ -190,6 +195,7 @@ const TabView = <Route extends BaseRoute>({
   getHidden = ({ route }: { route: Route }) => route.hidden,
   getActiveTintColor = ({ route }: { route: Route }) => route.activeTintColor,
   getTestID = ({ route }: { route: Route }) => route.testID,
+  getRole = ({ route }: { route: Route }) => route.role,
   hapticFeedbackEnabled = false,
   // Android's native behavior is to show labels when there are less than 4 tabs. We leave it as undefined to use the platform default behavior.
   labeled = Platform.OS !== 'android' ? true : undefined,
@@ -261,6 +267,7 @@ const TabView = <Route extends BaseRoute>({
           activeTintColor: processColor(getActiveTintColor({ route })),
           hidden: getHidden?.({ route }),
           testID: getTestID?.({ route }),
+          role: getRole?.({ route }),
         };
       }),
     [
@@ -271,6 +278,7 @@ const TabView = <Route extends BaseRoute>({
       getActiveTintColor,
       getHidden,
       getTestID,
+      getRole,
     ]
   );
 
