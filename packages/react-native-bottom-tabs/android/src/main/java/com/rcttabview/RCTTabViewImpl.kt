@@ -36,7 +36,8 @@ class RCTTabViewImpl {
               badge = if (item.hasKey("badge")) item.getString("badge") else null,
               activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
               hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
-              testID = item.getString("testID")
+              testID = item.getString("testID"),
+              role = item.getString("role"),
             )
           )
       }
