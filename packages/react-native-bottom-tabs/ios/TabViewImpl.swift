@@ -3,16 +3,35 @@ import React
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 
-/**
- SwiftUI implementation of TabView used to render React Native views.
- */
+/// SwiftUI implementation of TabView used to render React Native views.
 struct TabViewImpl: View {
   @ObservedObject var props: TabViewProps
-#if os(macOS)
-  @Weak var tabBar: NSTabView?
-#else
-  @Weak var tabBar: UITabBar?
-#endif
+  #if os(macOS)
+    @Weak var tabBar: NSTabView?
+  #else
+    @Weak var tabBar: UITabBar?
+  #endif
+
+  @ViewBuilder
+  var tabContent: some View {
+    if #available(iOS 18, macOS 15, visionOS 2, tvOS 18, *) {
+      NewTabView(
+        props: props,
+        onLayout: onLayout,
+        onSelect: onSelect
+      ) {
+        updateTabBarAppearance(props: props, tabBar: tabBar)
+      }
+    } else {
+      LegacyTabView(
+        props: props,
+        onLayout: onLayout,
+        onSelect: onSelect
+      ) {
+        updateTabBarAppearance(props: props, tabBar: tabBar)
+      }
+    }
+  }
 
   var onSelect: (_ key: String) -> Void
   var onLongPress: (_ key: String) -> Void
@@ -20,128 +39,82 @@ struct TabViewImpl: View {
   var onTabBarMeasured: (_ height: Int) -> Void
 
   var body: some View {
-    TabView(selection: $props.selectedPage) {
-      ForEach(props.children.indices, id: \.self) { index in
-        renderTabItem(at: index)
-      }
-      .measureView { size in
-        onLayout(size)
-      }
-    }
-    .tabBarMinimizeBehavior(props.minimizeBehavior)
-#if !os(tvOS) && !os(macOS) && !os(visionOS)
-    .onTabItemEvent { index, isLongPress in
-      let item = props.filteredItems[safe: index]
-      guard let key = item?.key else { return }
+    tabContent
+      .tabBarMinimizeBehavior(props.minimizeBehavior)
+      #if !os(tvOS) && !os(macOS) && !os(visionOS)
+        .onTabItemEvent { index, isLongPress in
+          let item = props.filteredItems[safe: index]
+          guard let key = item?.key else { return }
 
-      if isLongPress {
-        onLongPress(key)
-        emitHapticFeedback(longPress: true)
-      } else {
-        onSelect(key)
-        emitHapticFeedback()
-      }
-    }
-#endif
-    .introspectTabView { tabController in
-#if os(macOS)
-      tabBar = tabController
-#else
-      tabBar = tabController.tabBar
-      if !props.tabBarHidden {
-        onTabBarMeasured(
-          Int(tabController.tabBar.frame.size.height)
-        )
-      }
-#endif
-    }
-#if !os(macOS)
-    .configureAppearance(props: props, tabBar: tabBar)
-#endif
-    .tintColor(props.selectedActiveTintColor)
-    .getSidebarAdaptable(enabled: props.sidebarAdaptable ?? false)
-    .onChange(of: props.selectedPage ?? "") { newValue in
-#if !os(macOS)
-      if props.disablePageAnimations {
-        UIView.setAnimationsEnabled(false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-          UIView.setAnimationsEnabled(true)
+          if isLongPress {
+            onLongPress(key)
+            emitHapticFeedback(longPress: true)
+          } else {
+            onSelect(key)
+            emitHapticFeedback()
+          }
         }
+      #endif
+      .introspectTabView { tabController in
+        #if os(macOS)
+          tabBar = tabController
+        #else
+          tabBar = tabController.tabBar
+          if !props.tabBarHidden {
+            onTabBarMeasured(
+              Int(tabController.tabBar.frame.size.height)
+            )
+          }
+        #endif
       }
-#endif
-#if os(tvOS) || os(macOS) || os(visionOS)
-      onSelect(newValue)
-#endif
-    }
-  }
-
-  @ViewBuilder
-  private func renderTabItem(at index: Int) -> some View {
-    let tabData = props.items[safe: index]
-    let isHidden = tabData?.hidden ?? false
-    let isFocused = props.selectedPage == tabData?.key
-
-    if !isHidden || isFocused {
-      let child = props.children[safe: index] ?? PlatformView()
-      let icon = props.icons[index]
-
-      RepresentableView(view: child)
-        .ignoresSafeArea(.container, edges: .all)
-        .tabItem {
-          TabItem(
-            title: tabData?.title,
-            icon: icon,
-            sfSymbol: tabData?.sfSymbol,
-            labeled: props.labeled
-          )
-          .accessibilityIdentifier(tabData?.testID ?? "")
-        }
-        .tag(tabData?.key)
-        .tabBadge(tabData?.badge)
-        .hideTabBar(props.tabBarHidden)
-        .onAppear {
-#if !os(macOS)
-          updateTabBarAppearance(props: props, tabBar: tabBar)
-#endif
-
-#if os(iOS)
-          guard index >= 4,
-                let key = tabData?.key,
-                props.selectedPage != key else { return }
-          onSelect(key)
-#endif
-        }
-    }
+      #if !os(macOS)
+        .configureAppearance(props: props, tabBar: tabBar)
+      #endif
+      .tintColor(props.selectedActiveTintColor)
+      .getSidebarAdaptable(enabled: props.sidebarAdaptable ?? false)
+      .onChange(of: props.selectedPage ?? "") { newValue in
+        #if !os(macOS)
+          if props.disablePageAnimations {
+            UIView.setAnimationsEnabled(false)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+              UIView.setAnimationsEnabled(true)
+            }
+          }
+        #endif
+        #if os(tvOS) || os(macOS) || os(visionOS)
+          onSelect(newValue)
+        #endif
+      }
   }
 
   func emitHapticFeedback(longPress: Bool = false) {
-#if os(iOS)
-    if !props.hapticFeedbackEnabled {
-      return
-    }
+    #if os(iOS)
+      if !props.hapticFeedbackEnabled {
+        return
+      }
 
-    if longPress {
-      UINotificationFeedbackGenerator().notificationOccurred(.success)
-    } else {
-      UISelectionFeedbackGenerator().selectionChanged()
-    }
-#endif
+      if longPress {
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+      } else {
+        UISelectionFeedbackGenerator().selectionChanged()
+      }
+    #endif
   }
 }
 
 #if !os(macOS)
-private func updateTabBarAppearance(props: TabViewProps, tabBar: UITabBar?) {
-  guard let tabBar else { return }
+  private func updateTabBarAppearance(props: TabViewProps, tabBar: UITabBar?) {
+    guard let tabBar else { return }
 
-  tabBar.isHidden = props.tabBarHidden
+    tabBar.isHidden = props.tabBarHidden
 
-  if props.scrollEdgeAppearance == "transparent" {
-    configureTransparentAppearance(tabBar: tabBar, props: props)
-    return
+    if props.scrollEdgeAppearance == "transparent" {
+      configureTransparentAppearance(tabBar: tabBar, props: props)
+      return
+    }
+
+    configureStandardAppearance(tabBar: tabBar, props: props)
   }
-
-  configureStandardAppearance(tabBar: tabBar, props: props)
-}
 #endif
 
 private func createFontAttributes(
@@ -170,85 +143,85 @@ private func createFontAttributes(
 }
 
 #if os(tvOS)
-let tabBarDefaultFontSize: CGFloat = 30.0
+  let tabBarDefaultFontSize: CGFloat = 30.0
 #else
-let tabBarDefaultFontSize: CGFloat = UIFont.smallSystemFontSize
+  let tabBarDefaultFontSize: CGFloat = UIFont.smallSystemFontSize
 #endif
 
 #if !os(macOS)
-private func configureTransparentAppearance(tabBar: UITabBar, props: TabViewProps) {
-  tabBar.barTintColor = props.barTintColor
-#if !os(visionOS)
-  tabBar.isTranslucent = props.translucent
-#endif
-  tabBar.unselectedItemTintColor = props.inactiveTintColor
+  private func configureTransparentAppearance(tabBar: UITabBar, props: TabViewProps) {
+    tabBar.barTintColor = props.barTintColor
+    #if !os(visionOS)
+      tabBar.isTranslucent = props.translucent
+    #endif
+    tabBar.unselectedItemTintColor = props.inactiveTintColor
 
-  guard let items = tabBar.items else { return }
+    guard let items = tabBar.items else { return }
 
-  let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : tabBarDefaultFontSize
-  let attributes = createFontAttributes(
-    size: fontSize,
-    family: props.fontFamily,
-    weight: props.fontWeight,
-    inactiveTintColor: nil
-  )
+    let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : tabBarDefaultFontSize
+    let attributes = createFontAttributes(
+      size: fontSize,
+      family: props.fontFamily,
+      weight: props.fontWeight,
+      inactiveTintColor: nil
+    )
 
-  items.forEach { item in
-    item.setTitleTextAttributes(attributes, for: .normal)
-  }
-}
-
-private func configureStandardAppearance(tabBar: UITabBar, props: TabViewProps) {
-  let appearance = UITabBarAppearance()
-
-  // Configure background
-  switch props.scrollEdgeAppearance {
-  case "opaque":
-    appearance.configureWithOpaqueBackground()
-  default:
-    appearance.configureWithDefaultBackground()
+    items.forEach { item in
+      item.setTitleTextAttributes(attributes, for: .normal)
+    }
   }
 
-  if props.translucent == false {
-    appearance.configureWithOpaqueBackground()
+  private func configureStandardAppearance(tabBar: UITabBar, props: TabViewProps) {
+    let appearance = UITabBarAppearance()
+
+    // Configure background
+    switch props.scrollEdgeAppearance {
+    case "opaque":
+      appearance.configureWithOpaqueBackground()
+    default:
+      appearance.configureWithDefaultBackground()
+    }
+
+    if props.translucent == false {
+      appearance.configureWithOpaqueBackground()
+    }
+
+    if props.barTintColor != nil {
+      appearance.backgroundColor = props.barTintColor
+    }
+
+    // Configure item appearance
+    let itemAppearance = UITabBarItemAppearance()
+    let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : tabBarDefaultFontSize
+
+    var attributes = createFontAttributes(
+      size: fontSize,
+      family: props.fontFamily,
+      weight: props.fontWeight,
+      inactiveTintColor: props.inactiveTintColor
+    )
+
+    if let inactiveTintColor = props.inactiveTintColor {
+      attributes[.foregroundColor] = inactiveTintColor
+    }
+
+    if let inactiveTintColor = props.inactiveTintColor {
+      itemAppearance.normal.iconColor = inactiveTintColor
+    }
+
+    itemAppearance.normal.titleTextAttributes = attributes
+
+    // Apply item appearance to all layouts
+    appearance.stackedLayoutAppearance = itemAppearance
+    appearance.inlineLayoutAppearance = itemAppearance
+    appearance.compactInlineLayoutAppearance = itemAppearance
+
+    // Apply final appearance
+    tabBar.standardAppearance = appearance
+    if #available(iOS 15.0, *) {
+      tabBar.scrollEdgeAppearance = appearance.copy()
+    }
   }
-
-  if props.barTintColor != nil {
-    appearance.backgroundColor = props.barTintColor
-  }
-
-  // Configure item appearance
-  let itemAppearance = UITabBarItemAppearance()
-  let fontSize = props.fontSize != nil ? CGFloat(props.fontSize!) : tabBarDefaultFontSize
-
-  var attributes = createFontAttributes(
-    size: fontSize,
-    family: props.fontFamily,
-    weight: props.fontWeight,
-    inactiveTintColor: props.inactiveTintColor
-  )
-
-  if let inactiveTintColor = props.inactiveTintColor {
-    attributes[.foregroundColor] = inactiveTintColor
-  }
-
-  if let inactiveTintColor = props.inactiveTintColor {
-    itemAppearance.normal.iconColor = inactiveTintColor
-  }
-
-  itemAppearance.normal.titleTextAttributes = attributes
-
-  // Apply item appearance to all layouts
-  appearance.stackedLayoutAppearance = itemAppearance
-  appearance.inlineLayoutAppearance = itemAppearance
-  appearance.compactInlineLayoutAppearance = itemAppearance
-
-  // Apply final appearance
-  tabBar.standardAppearance = appearance
-  if #available(iOS 15.0, *) {
-    tabBar.scrollEdgeAppearance = appearance.copy()
-  }
-}
 #endif
 
 extension View {
@@ -256,11 +229,11 @@ extension View {
   func getSidebarAdaptable(enabled: Bool) -> some View {
     if #available(iOS 18.0, macOS 15.0, tvOS 18.0, visionOS 2.0, *) {
       if enabled {
-#if compiler(>=6.0)
-        self.tabViewStyle(.sidebarAdaptable)
-#else
-        self
-#endif
+        #if compiler(>=6.0)
+          self.tabViewStyle(.sidebarAdaptable)
+        #else
+          self
+        #endif
       } else {
         self
       }
@@ -273,11 +246,11 @@ extension View {
   func tabBadge(_ data: String?) -> some View {
     if #available(iOS 15.0, macOS 15.0, visionOS 2.0, tvOS 15.0, *) {
       if let data {
-#if !os(tvOS)
-        self.badge(data)
-#else
-        self
-#endif
+        #if !os(tvOS)
+          self.badge(data)
+        #else
+          self
+        #endif
       } else {
         self
       }
@@ -286,39 +259,39 @@ extension View {
     }
   }
 
-#if !os(macOS)
-  @ViewBuilder
-  func configureAppearance(props: TabViewProps, tabBar: UITabBar?) -> some View {
-    self
-      .onChange(of: props.barTintColor) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.scrollEdgeAppearance) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.translucent) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.inactiveTintColor) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.selectedActiveTintColor) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.fontSize) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.fontFamily) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.fontWeight) { _ in
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-      }
-      .onChange(of: props.tabBarHidden) { newValue in
-        tabBar?.isHidden = newValue
-      }
-  }
-#endif
+  #if !os(macOS)
+    @ViewBuilder
+    func configureAppearance(props: TabViewProps, tabBar: UITabBar?) -> some View {
+      self
+        .onChange(of: props.barTintColor) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.scrollEdgeAppearance) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.translucent) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.inactiveTintColor) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.selectedActiveTintColor) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.fontSize) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.fontFamily) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.fontWeight) { _ in
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+        }
+        .onChange(of: props.tabBarHidden) { newValue in
+          tabBar?.isHidden = newValue
+        }
+    }
+  #endif
 
   @ViewBuilder
   func tintColor(_ color: PlatformColor?) -> some View {
@@ -336,37 +309,37 @@ extension View {
 
   @ViewBuilder
   func tabBarMinimizeBehavior(_ behavior: MinimizeBehavior?) -> some View {
-#if compiler(>=6.2)
-    if #available(iOS 26.0, *) {
-      if let behavior {
-        self.tabBarMinimizeBehavior(behavior.convert())
+    #if compiler(>=6.2)
+      if #available(iOS 26.0, *) {
+        if let behavior {
+          self.tabBarMinimizeBehavior(behavior.convert())
+        } else {
+          self
+        }
       } else {
         self
       }
-    } else {
+    #else
       self
-    }
-#else
-    self
-#endif
+    #endif
   }
 
   @ViewBuilder
   func hideTabBar(_ flag: Bool) -> some View {
-#if !os(macOS)
-    if flag {
-      if #available(iOS 16.0, tvOS 16.0, *) {
-        self.toolbar(.hidden, for: .tabBar)
+    #if !os(macOS)
+      if flag {
+        if #available(iOS 16.0, tvOS 16.0, *) {
+          self.toolbar(.hidden, for: .tabBar)
+        } else {
+          // We fallback to isHidden on UITabBar
+          self
+        }
       } else {
-        // We fallback to isHidden on UITabBar
         self
       }
-    } else {
+    #else
       self
-    }
-#else
-    self
-#endif
+    #endif
   }
 
   // Allows TabView to use unfilled SFSymbols.
