@@ -21,7 +21,7 @@ struct NewTabView: AnyTabView {
               if tabData.role == "search" {
                 return .search
               }
-              
+
               return nil
             }
 

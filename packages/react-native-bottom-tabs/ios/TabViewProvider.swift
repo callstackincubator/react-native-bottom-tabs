@@ -277,7 +277,7 @@ public final class TabInfo: NSObject {
             activeTintColor: RCTConvert.uiColor(itemDict["activeTintColor"] as? NSNumber),
             hidden: itemDict["hidden"] as? Bool ?? false,
             testID: itemDict["testID"] as? String ?? "",
-            role: itemDict["role"] as? String ?? nil,
+            role: itemDict["role"] as? String,
           )
         )
       }
