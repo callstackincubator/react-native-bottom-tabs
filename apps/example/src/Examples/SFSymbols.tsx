@@ -41,6 +41,7 @@ export default function SFSymbols() {
         ? require('../../assets/icons/person_dark.png')
         : { sfSymbol: 'person.fill' },
       title: 'Contacts',
+      role: 'search',
     },
   ]);
 

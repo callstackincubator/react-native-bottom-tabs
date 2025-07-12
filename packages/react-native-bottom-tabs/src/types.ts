@@ -5,6 +5,8 @@ export type IconSource = string | ImageSourcePropType;
 
 export type AppleIcon = { sfSymbol: SFSymbol };
 
+export type TabRole = 'search';
+
 export type BaseRoute = {
   key: string;
   title?: string;
@@ -15,6 +17,7 @@ export type BaseRoute = {
   activeTintColor?: string;
   hidden?: boolean;
   testID?: string;
+  role?: TabRole;
   freezeOnBlur?: boolean;
 };
 

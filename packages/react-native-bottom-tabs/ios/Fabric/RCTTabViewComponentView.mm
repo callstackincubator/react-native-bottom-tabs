@@ -37,7 +37,8 @@ bool operator==(const RNCTabViewItemsStruct& lhs, const RNCTabViewItemsStruct& r
   lhs.badge == rhs.badge &&
   lhs.activeTintColor == rhs.activeTintColor &&
   lhs.hidden == rhs.hidden &&
-  lhs.testID == rhs.testID;
+  lhs.testID == rhs.testID &&
+  lhs.role == rhs.role;
 }
 
 bool operator!=(const RNCTabViewItemsStruct& lhs, const RNCTabViewItemsStruct& rhs) {
@@ -201,7 +202,8 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
                                        sfSymbol:RCTNSStringFromStringNilIfEmpty(item.sfSymbol)
                                 activeTintColor:RCTUIColorFromSharedColor(item.activeTintColor)
                                          hidden:item.hidden
-                                         testID:RCTNSStringFromStringNilIfEmpty(item.testID)];
+                                         testID:RCTNSStringFromStringNilIfEmpty(item.testID)
+                                         role:RCTNSStringFromStringNilIfEmpty(item.role)];
 
     [result addObject:tabInfo];
   }
