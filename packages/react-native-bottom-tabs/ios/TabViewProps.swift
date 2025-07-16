@@ -23,6 +23,18 @@ internal enum MinimizeBehavior: String {
 #endif
 }
 
+public enum TabBarRole: String {
+  case search
+  
+  @available(iOS 18, macOS 15, visionOS 2, tvOS 18, *)
+  func convert() -> TabRole {
+    switch self {
+      case .search:
+        return .search
+    }
+  }
+}
+
 /**
  Props that component accepts. SwiftUI view gets re-rendered when ObservableObject changes.
  */
