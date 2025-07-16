@@ -13,7 +13,7 @@ public final class TabInfo: NSObject {
   public let activeTintColor: PlatformColor?
   public let hidden: Bool
   public let testID: String?
-  public let role: String?
+  public let role: TabBarRole?
 
   public init(
     key: String,
@@ -32,7 +32,7 @@ public final class TabInfo: NSObject {
     self.activeTintColor = activeTintColor
     self.hidden = hidden
     self.testID = testID
-    self.role = role
+    self.role = TabBarRole(rawValue: role ?? "")
     super.init()
   }
 }
