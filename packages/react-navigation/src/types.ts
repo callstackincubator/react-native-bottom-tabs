@@ -93,7 +93,7 @@ export type NativeBottomTabNavigationOptions = {
   tabBarButtonTestID?: string;
 
   /**
-   * role for the tab. (iOS only)
+   * Role for the tab. (iOS only)
    */
   tabBarRole?: TabRole;
 
