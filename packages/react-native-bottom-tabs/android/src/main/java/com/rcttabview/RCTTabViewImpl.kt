@@ -17,7 +17,6 @@ data class TabInfo(
   val activeTintColor: Int?,
   val hidden: Boolean,
   val testID: String?,
-  val role: String?
 )
 
 class RCTTabViewImpl {
@@ -36,8 +35,7 @@ class RCTTabViewImpl {
               badge = if (item.hasKey("badge")) item.getString("badge") else null,
               activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
               hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
-              testID = item.getString("testID"),
-              role = item.getString("role"),
+              testID = item.getString("testID")
             )
           )
       }
