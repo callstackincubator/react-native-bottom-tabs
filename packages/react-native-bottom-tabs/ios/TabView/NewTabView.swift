@@ -17,13 +17,7 @@ struct NewTabView: AnyTabView {
 
           if !tabData.hidden || isFocused {
             let icon = props.icons[index]
-            var role: TabRole? {
-              if tabData.role == "search" {
-                return .search
-              }
-
-              return nil
-            }
+            let role = tabData.role?.convert() ?? nil
 
             let platformChild = props.children[safe: index] ?? PlatformView()
             let child = RepresentableView(view: platformChild)
