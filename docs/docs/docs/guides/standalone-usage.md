@@ -212,6 +212,7 @@ Each route in the `routes` array can have the following properties:
 - `activeTintColor`: Custom active tint color for this specific tab
 - `lazy`: Whether to lazy load this tab's content
 - `freezeOnBlur`: Whether to freeze the tab's content when it's not visible
+- `role`: A value that defines the purpose of the tab
 
 ### Helper Props
 
@@ -260,3 +261,9 @@ Function to determine if a tab should be hidden.
 Function to get the test ID for a tab item.
 
 - Default: Uses `route.testID`
+
+#### `getRole`
+
+Function to get the role for a tab item.
+
+- Default: Uses `route.role`
