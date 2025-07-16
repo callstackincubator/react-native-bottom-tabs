@@ -95,7 +95,7 @@ export type NativeBottomTabNavigationOptions = {
   /**
    * Role for the tab. (iOS only)
    */
-  tabBarRole?: TabRole;
+  role?: TabRole;
 
   /**
    * Whether inactive screens should be suspended from re-rendering. Defaults to `false`.
