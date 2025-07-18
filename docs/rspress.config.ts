@@ -11,6 +11,7 @@ export default defineConfig({
   logoText: 'React Native Bottom Tabs',
   icon: '/img/phone.png',
   logo: '/img/phone.png',
+  globalStyles: path.join(__dirname, 'styles.css'),
   themeConfig: {
     enableContentAnimation: true,
     enableAppearanceAnimation: false,
