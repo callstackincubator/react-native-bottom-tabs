@@ -12,6 +12,7 @@ export default defineConfig({
   icon: '/img/phone.png',
   logo: '/img/phone.png',
   globalStyles: path.join(__dirname, 'styles.css'),
+  ssg: false,
   themeConfig: {
     enableContentAnimation: true,
     enableAppearanceAnimation: false,
