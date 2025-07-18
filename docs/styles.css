@@ -16,11 +16,3 @@
   font-display: block;
   src: local('Inter Medium'), local('Inter'), local('system-ui'), local('sans-serif');
 }
-
-/* Alternative: Use a web font as fallback */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
-
-/* Override the font-family if needed */
-:root {
-  --font-family-heading: 'Alliance No. 2', 'Inter', system-ui, sans-serif;
-}
