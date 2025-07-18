@@ -1785,7 +1785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@callstack/rspress-theme@npm:0.2.0":
+"@callstack/rspress-theme@npm:^0.2.0":
   version: 0.2.0
   resolution: "@callstack/rspress-theme@npm:0.2.0"
   peerDependencies:
@@ -5612,10 +5612,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16":
-  version: 16.18.126
-  resolution: "@types/node@npm:16.18.126"
-  checksum: 10/33e0fa9209a4a96459a8fdf6b078ca9590eb67a8d51899180cfac8afecb9aa133c755d1c38a8b947b9f384f2faa184cabf4e567f5f6dded285be1b31588ec199
+"@types/node@npm:^20":
+  version: 20.19.8
+  resolution: "@types/node@npm:20.19.8"
+  dependencies:
+    undici-types: "npm:~6.21.0"
+  checksum: 10/f80d8f41597b91fa8a86d4e77fc02aa999412617107bf42b9a99b3bd5509fb354a936608d8ea9ea6110d4ca28ffa23f18f7c1ad0aefa4275b400877028270e9c
   languageName: node
   linkType: hard
 
@@ -15424,10 +15426,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-native-bottom-tabs-docs@workspace:docs"
   dependencies:
-    "@callstack/rspress-theme": "npm:0.2.0"
-    "@types/node": "npm:^16"
+    "@callstack/rspress-theme": "npm:^0.2.0"
+    "@types/node": "npm:^20"
     rsbuild-plugin-open-graph: "npm:^1.0.2"
-    rspress: "npm:2.0.0-beta.21"
+    rspress: "npm:^2.0.0-beta.21"
   languageName: unknown
   linkType: soft
 
@@ -16696,7 +16698,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rspress@npm:2.0.0-beta.21":
+"rspress@npm:^2.0.0-beta.21":
   version: 2.0.0-beta.21
   resolution: "rspress@npm:2.0.0-beta.21"
   dependencies:
@@ -18470,6 +18472,13 @@ __metadata:
   version: 0.1.2
   resolution: "unc-path-regex@npm:0.1.2"
   checksum: 10/a05fa2006bf4606051c10fc7968f08ce7b28fa646befafa282813aeb1ac1a56f65cb1b577ca7851af2726198d59475bb49b11776036257b843eaacee2860a4ec
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.21.0":
+  version: 6.21.0
+  resolution: "undici-types@npm:6.21.0"
+  checksum: 10/ec8f41aa4359d50f9b59fa61fe3efce3477cc681908c8f84354d8567bb3701fafdddf36ef6bff307024d3feb42c837cf6f670314ba37fc8145e219560e473d14
   languageName: node
   linkType: hard
 

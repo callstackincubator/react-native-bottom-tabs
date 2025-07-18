@@ -1,6 +1,5 @@
 // theme/index.tsx
 import {
-  Announcement,
   Button,
   HomeBanner,
   HomeFeature,
@@ -15,20 +14,10 @@ import {
   HomeLayout as RspressHomeLayout,
   Layout as RspressLayout,
 } from 'rspress/theme';
-import React from 'react';
 
 // You can customize the default Layout and HomeLayout like this:
 const Layout = () => (
-  <RspressLayout
-    beforeNav={
-      <Announcement
-        href="./guide"
-        message="React Native Bottom Tabs Documentation"
-        localStorageKey="rn-bottom-tabs-announcement"
-      />
-    }
-    afterOutline={<OutlineCTA href="https://callstack.com" />}
-  />
+  <RspressLayout afterOutline={<OutlineCTA href="https://callstack.com" />} />
 );
 
 const HomeLayout = () => (
@@ -42,9 +31,6 @@ const HomeLayout = () => (
   />
 );
 
-// Export the default theme components
-export * from 'rspress/theme';
-
 // Export your custom layouts and components
 export {
   Layout,
@@ -55,13 +41,7 @@ export {
   HomeHero,
   LinkCard,
   VersionBadge,
-  Announcement,
 };
 
-// Create a default export with the custom layouts
-const theme = {
-  Layout,
-  HomeLayout,
-};
-
-export default theme;
+// Export the default theme components
+export * from 'rspress/theme';

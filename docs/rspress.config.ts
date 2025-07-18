@@ -11,8 +11,7 @@ export default defineConfig({
   logoText: 'React Native Bottom Tabs',
   icon: '/img/phone.png',
   logo: '/img/phone.png',
-  globalStyles: path.join(__dirname, 'styles.css'),
-  ssg: false,
+  globalStyles: path.join(__dirname, 'theme/styles.css'),
   themeConfig: {
     enableContentAnimation: true,
     enableAppearanceAnimation: false,
@@ -25,10 +24,7 @@ export default defineConfig({
       },
     ],
   },
-  plugins: [
-    // @ts-ignore
-    pluginCallstackTheme(),
-  ],
+  plugins: [pluginCallstackTheme()],
   builderConfig: {
     plugins: [
       pluginOpenGraph({
