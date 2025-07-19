@@ -1,5 +1,11 @@
 # @bottom-tabs/react-navigation
 
+## 0.10.0
+
+### Minor Changes
+
+- [#390](https://github.com/callstackincubator/react-native-bottom-tabs/pull/390) [`993b1aa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/993b1aa53a6661a927856f1d3a6d808a846f0c1e) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: add ios tab roles
+
 ## 0.9.2
 
 ## 0.9.1
