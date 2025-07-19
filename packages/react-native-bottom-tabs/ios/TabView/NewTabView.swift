@@ -17,7 +17,6 @@ struct NewTabView: AnyTabView {
 
           if !tabData.hidden || isFocused {
             let icon = props.icons[index]
-            let role = tabData.role?.convert() ?? nil
 
             let platformChild = props.children[safe: index] ?? PlatformView()
             let child = RepresentableView(view: platformChild)
@@ -29,7 +28,7 @@ struct NewTabView: AnyTabView {
               onSelect: onSelect
             )
 
-            Tab(value: tabData.key, role: role) {
+            Tab(value: tabData.key, role: tabData.role?.convert()) {
               child
                 .ignoresSafeArea(.container, edges: .all)
                 .tabAppear(using: context)
