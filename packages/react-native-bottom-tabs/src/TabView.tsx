@@ -47,7 +47,7 @@ interface Props<Route extends BaseRoute> {
    */
   disablePageAnimations?: boolean;
   /**
-   * Whether to enable haptic feedback. Defaults to `true`.
+   * Whether to enable haptic feedback. Defaults to `false`.
    */
   hapticFeedbackEnabled?: boolean;
   /**
