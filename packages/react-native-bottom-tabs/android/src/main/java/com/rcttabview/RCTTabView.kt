@@ -399,27 +399,34 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   }
 
   private fun updateTextAppearance() {
-    if (fontSize != null || fontFamily != null || fontWeight != null) {
-      val menuView = bottomNavigation.getChildAt(0) as? ViewGroup ?: return
-      val size = fontSize?.toFloat()?.takeIf { it > 0 } ?: 12f
-      val typeface = ReactFontManager.getInstance().getTypeface(
+    // Early return if there is no custom text appearance
+    if (fontSize == null && fontFamily == null && fontWeight == null) {
+      return
+    }
+
+    val typeface = if (fontFamily != null || fontWeight != null) {
+      ReactFontManager.getInstance().getTypeface(
         fontFamily ?: "",
         Utils.getTypefaceStyle(fontWeight),
         context.assets
       )
+    } else null
+    val size = fontSize?.toFloat()?.takeIf { it > 0 }
 
-      for (i in 0 until menuView.childCount) {
-        val item = menuView.getChildAt(i)
-        val largeLabel =
-          item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_large_label_view)
-        val smallLabel =
-          item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_small_label_view)
+    val menuView = bottomNavigation.getChildAt(0) as? ViewGroup ?: return
+    for (i in 0 until menuView.childCount) {
+      val item = menuView.getChildAt(i)
+      val largeLabel =
+        item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_large_label_view)
+      val smallLabel =
+        item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_small_label_view)
 
-        listOf(largeLabel, smallLabel).forEach { label ->
-          label?.apply {
+      listOf(largeLabel, smallLabel).forEach { label ->
+        label?.apply {
+          size?.let { size ->
             setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
-            setTypeface(typeface)
           }
+          typeface?.let { setTypeface(it) }
         }
       }
     }
