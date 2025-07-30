@@ -1,5 +1,21 @@
 # react-native-bottom-tabs
 
+## 0.10.0
+
+### Minor Changes
+
+- [#378](https://github.com/callstackincubator/react-native-bottom-tabs/pull/378) [`e9b06e7`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/e9b06e784314ca8f71376c0a247c6cba83ec1597) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: adjust the behavior of empty string for badge prop
+
+- [#390](https://github.com/callstackincubator/react-native-bottom-tabs/pull/390) [`993b1aa`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/993b1aa53a6661a927856f1d3a6d808a846f0c1e) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: add ios tab roles
+
+### Patch Changes
+
+- [#393](https://github.com/callstackincubator/react-native-bottom-tabs/pull/393) [`44dd50d`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/44dd50d3467a8a6bbec78ba9ff11bdd1cf0b55d1) Thanks [@joarkosberg](https://github.com/joarkosberg)! - fix: apply typeface and size individually in android text appearance.
+
+- [#379](https://github.com/callstackincubator/react-native-bottom-tabs/pull/379) [`51c281d`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/51c281d0447c1388ff24417692c1f8c2d5861730) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: adjust default font size on iOS
+
+- [#367](https://github.com/callstackincubator/react-native-bottom-tabs/pull/367) [`89b6a5b`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/89b6a5b67b3acde71aa8e44d24b2dfe296ded8bf) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: implement iOS 26 minimizeBehavior feature
+
 ## 0.9.2
 
 ### Patch Changes
