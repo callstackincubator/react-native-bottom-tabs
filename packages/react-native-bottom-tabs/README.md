@@ -17,7 +17,7 @@
 
 ## Documentation
 
-The full documentation can be found on our [website](https://okwasniewski.github.io/react-native-bottom-tabs/).
+The full documentation can be found on our [website](https://callstackincubator.github.io/react-native-bottom-tabs/).
 
 ## Contributing
 
