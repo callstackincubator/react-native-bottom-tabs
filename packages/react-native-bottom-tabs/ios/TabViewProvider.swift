@@ -63,12 +63,6 @@ public final class TabInfo: NSObject {
     }
   }
 
-  @objc public var children: [PlatformView] = [] {
-    didSet {
-      props.children = children
-    }
-  }
-
   @objc public var sidebarAdaptable: Bool = false {
     didSet {
       props.sidebarAdaptable = sidebarAdaptable
@@ -220,6 +214,22 @@ public final class TabInfo: NSObject {
       hostingController.didMove(toParent: parentViewController)
 #endif
     }
+  }
+  
+  @objc(insertChild:atIndex:)
+  public func insertChild(_ child: UIView, at index: Int) {
+    guard index >= 0 && index <= props.children.count else {
+      return
+    }
+    props.children.insert(child, at: index)
+  }
+  
+  @objc(removeChildAtIndex:)
+  public func removeChild(at index: Int) {
+    guard index >= 0 && index < props.children.count else {
+      return
+    }
+    props.children.remove(at: index)
   }
 
   private func loadIcons(_ icons: NSArray?) {

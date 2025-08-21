@@ -57,7 +57,6 @@ using namespace facebook::react;
 
 @implementation RCTTabViewComponentView {
   TabViewProvider *_tabViewProvider;
-  NSMutableArray<PlatformView *> *_reactSubviews;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -69,7 +68,6 @@ using namespace facebook::react;
 {
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNCTabViewProps>();
-    _reactSubviews = [NSMutableArray new];
     _tabViewProvider = [[TabViewProvider alloc] initWithDelegate:self];
     self.contentView = _tabViewProvider;
     _props = defaultProps;
@@ -84,24 +82,12 @@ using namespace facebook::react;
   return NO;
 }
 
-- (void)layoutSubviews {
-  [super layoutSubviews];
-  _tabViewProvider.children = [self reactSubviews];
-}
-
-- (NSArray<PlatformView *> *)reactSubviews
-{
-  return _reactSubviews;
-}
-
 - (void)mountChildComponentView:(PlatformView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index {
-  [_reactSubviews insertObject:childComponentView atIndex:index];
-  _tabViewProvider.children = [self reactSubviews];
+  [_tabViewProvider insertChild:childComponentView atIndex:index];
 }
 
 - (void)unmountChildComponentView:(PlatformView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index {
-  [_reactSubviews removeObjectAtIndex:index];
-
+  [_tabViewProvider removeChildAtIndex:index];
   [childComponentView removeFromSuperview];
 }
 
