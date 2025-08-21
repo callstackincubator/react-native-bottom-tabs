@@ -45,7 +45,7 @@ public final class TabInfo: NSObject {
 }
 
 @objc public class TabViewProvider: PlatformView {
-  private var delegate: TabViewProviderDelegate?
+  private weak var delegate: TabViewProviderDelegate?
   private var props = TabViewProps()
   private var hostingController: PlatformHostingController<TabViewImpl>?
   private var coalescingKey: UInt16 = 0
@@ -212,6 +212,7 @@ public final class TabInfo: NSObject {
 
     if let hostingController = self.hostingController, let parentViewController = reactViewController() {
       parentViewController.addChild(hostingController)
+      hostingController.view.backgroundColor = .clear
       addSubview(hostingController.view)
       hostingController.view.translatesAutoresizingMaskIntoConstraints = false
       hostingController.view.pinEdges(to: self)

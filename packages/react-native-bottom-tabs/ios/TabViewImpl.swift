@@ -56,6 +56,8 @@ struct TabViewImpl: View {
         }
       #endif
       .introspectTabView { tabController in
+        tabController.view.backgroundColor = .clear
+        tabController.viewControllers?.forEach { $0.view.backgroundColor = .clear }
         #if os(macOS)
           tabBar = tabController
         #else
