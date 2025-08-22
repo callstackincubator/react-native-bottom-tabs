@@ -33,12 +33,16 @@ import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_UNLABELED
 import com.google.android.material.transition.platform.MaterialFadeThrough
 
+/**
+ * Extended BottomNavigationView that supports more than 5 items
+ */
 class ExtendedBottomNavigationView(context: Context) : BottomNavigationView(context) {
-  override fun getMaxItemCount(): Int {
-    return 100
-  }
+  override fun getMaxItemCount(): Int = 100
 }
 
+/**
+ * A FrameLayout optimized for React Native measurement and layout compatibility
+ */
 class ReactCompatibleFrameLayout(context: Context) : FrameLayout(context) {
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     // Get the available dimensions
@@ -64,35 +68,56 @@ class ReactCompatibleFrameLayout(context: Context) : FrameLayout(context) {
   }
 }
 
+/**
+ * Main React Native Tab View that intelligently switches between phone and tablet modes.
+ * 
+ * - Phone mode: Uses Material's BottomNavigationView at the bottom of the screen
+ * - Tablet mode: Uses Material's NavigationRailView as a sidebar
+ * 
+ * Provides unified content management and seamless transition between both modes
+ * based on device screen size configuration.
+ */
 class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   var isTablet: Boolean = (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
   var bottomNavigation: ViewGroup? = null
   var railNavigation: ReactNavigationRailView? = null
   val layoutHolder = FrameLayout(context)
 
+  // Event listeners
   var onTabSelectedListener: ((key: String) -> Unit)? = null
   var onTabLongPressedListener: ((key: String) -> Unit)? = null
   var onNativeLayoutListener: ((width: Double, height: Double) -> Unit)? = null
   var onTabBarMeasuredListener: ((height: Int) -> Unit)? = null
+  
+  // Configuration
   var disablePageAnimations = false
+  
+  // Data and state
   var items: MutableList<TabInfo> = mutableListOf()
-  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
-  private val drawableCache: MutableMap<ImageSource, Drawable> = mutableMapOf()
-
-  private var isLayoutEnqueued = false
   private var selectedItem: String? = null
+  
+  // Visual appearance properties
   private var activeTintColor: Int? = null
   private var inactiveTintColor: Int? = null
-  private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
-  private val uncheckedStateSet = intArrayOf(-android.R.attr.state_checked)
-  private var hapticFeedbackEnabled = false
   private var fontSize: Int? = null
   private var fontFamily: String? = null
   private var fontWeight: Int? = null
   private var labeled: Boolean? = null
-  private var lastReportedSize: Size? = null
   private var hasCustomAppearance = false
+  private var hapticFeedbackEnabled = false
+  
+  // Layout and UI state
+  private var isLayoutEnqueued = false
+  private var lastReportedSize: Size? = null
   private var uiModeConfiguration: Int = Configuration.UI_MODE_NIGHT_UNDEFINED
+  
+  // Icon and image management
+  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
+  private val drawableCache: MutableMap<ImageSource, Drawable> = mutableMapOf()
+  
+  // Material state constants
+  private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
+  private val uncheckedStateSet = intArrayOf(-android.R.attr.state_checked)
 
   private val imageLoader = ImageLoader.Builder(context)
     .components {

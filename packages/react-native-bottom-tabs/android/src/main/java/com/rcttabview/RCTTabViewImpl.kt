@@ -10,21 +10,29 @@ import com.rcttabview.events.OnTabBarMeasuredEvent
 import com.rcttabview.events.PageSelectedEvent
 import com.rcttabview.events.TabLongPressEvent
 
+/**
+ * Data class representing tab information
+ */
 data class TabInfo(
-  val key: String,
-  val title: String,
-  val badge: String?,
-  val activeTintColor: Int?,
-  val hidden: Boolean,
-  val testID: String?
+    val key: String,
+    val title: String,
+    val badge: String?,
+    val activeTintColor: Int?,
+    val hidden: Boolean,
+    val testID: String?
 )
 
+/**
+ * Implementation class for RCTTabView that handles the bridge between 
+ * React Native props and native Android view methods.
+ * Supports both phone (BottomNavigationView) and tablet (NavigationRailView) modes.
+ */
 class RCTTabViewImpl {
   fun getName(): String {
     return NAME
-  }
+    }
 
-  fun setItems(view: ReactBottomNavigationView, items: ReadableArray) {
+    fun setItems(view: ReactBottomNavigationView, items: ReadableArray) {
     val itemsArray = mutableListOf<TabInfo>()
     for (i in 0 until items.size()) {
       items.getMap(i)?.let { item ->
@@ -44,12 +52,16 @@ class RCTTabViewImpl {
     view.updateItems(itemsArray)
   }
 
+  // MARK: - Selection Management
+
   fun setSelectedPage(view: ReactBottomNavigationView, key: String) {
     // Always call the main view's setSelectedItem for both modes
     view.setSelectedItem(key)
     
     // The main view will handle the rail navigation updates in tablet mode
   }
+
+  // MARK: - Configuration Methods
 
   fun setLabeled(view: ReactBottomNavigationView, flag: Boolean?) {
     if (view.isTablet) {
@@ -66,6 +78,8 @@ class RCTTabViewImpl {
       view.setIcons(icons)
     }
   }
+
+  // MARK: - Color Configuration
 
   fun setBarTintColor(view: ReactBottomNavigationView, color: Int?) {
     if (view.isTablet) {
@@ -109,6 +123,8 @@ class RCTTabViewImpl {
    view.isHapticFeedbackEnabled = enabled
   }
 
+  // MARK: - Event Management
+
   fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any>? {
     return MapBuilder.of(
       PageSelectedEvent.EVENT_NAME,
@@ -121,6 +137,8 @@ class RCTTabViewImpl {
       MapBuilder.of("registrationName", "onTabBarMeasured")
     )
   }
+
+  // MARK: - Layout Management
 
   fun getChildCount(parent: ReactBottomNavigationView): Int {
     return parent.layoutHolder.childCount ?: 0
