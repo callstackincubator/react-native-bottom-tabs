@@ -28,48 +28,72 @@ class RCTTabViewImpl {
     val itemsArray = mutableListOf<TabInfo>()
     for (i in 0 until items.size()) {
       items.getMap(i)?.let { item ->
-          itemsArray.add(
-            TabInfo(
-              key = item.getString("key") ?: "",
-              title = item.getString("title") ?: "",
-              badge = if (item.hasKey("badge")) item.getString("badge") else null,
-              activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
-              hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
-              testID = item.getString("testID")
-            )
+        itemsArray.add(
+          TabInfo(
+            key = item.getString("key") ?: "",
+            title = item.getString("title") ?: "",
+            badge = if (item.hasKey("badge")) item.getString("badge") else null,
+            activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
+            hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
+            testID = item.getString("testID")
           )
+        )
       }
     }
+    // Always update the main view items for both tablet and phone
     view.updateItems(itemsArray)
   }
 
   fun setSelectedPage(view: ReactBottomNavigationView, key: String) {
+    // Always call the main view's setSelectedItem for both modes
     view.setSelectedItem(key)
+    
+    // The main view will handle the rail navigation updates in tablet mode
   }
 
   fun setLabeled(view: ReactBottomNavigationView, flag: Boolean?) {
-    view.setLabeled(flag)
+    if (view.isTablet) {
+      view.railNavigation?.setLabeled(flag)
+    } else {
+      view.setLabeled(flag)
+    }
   }
 
   fun setIcons(view: ReactBottomNavigationView, icons: ReadableArray?) {
-    view.setIcons(icons)
+    if (view.isTablet) {
+      view.railNavigation?.setIcons(icons)
+    } else {
+      view.setIcons(icons)
+    }
   }
 
   fun setBarTintColor(view: ReactBottomNavigationView, color: Int?) {
-    view.setBarTintColor(color)
+    if (view.isTablet) {
+      view.railNavigation?.setBarTintColor(color)
+    } else {
+      view.setBarTintColor(color)
+    }
   }
 
   fun setRippleColor(view: ReactBottomNavigationView, rippleColor: Int?) {
-    if (rippleColor != null) {
-      val color = ColorStateList.valueOf(rippleColor)
-      view.setRippleColor(color)
+    if (view.isTablet) {
+      view.railNavigation?.setRippleColor(rippleColor)
+    } else {
+      if (rippleColor != null) {
+        val color = ColorStateList.valueOf(rippleColor)
+        view.setRippleColor(color)
+      }
     }
   }
 
   fun setActiveIndicatorColor(view: ReactBottomNavigationView, color: Int?) {
-    if (color != null) {
-      val color = ColorStateList.valueOf(color)
-      view.setActiveIndicatorColor(color)
+    if (view.isTablet) {
+      view.railNavigation?.setActiveIndicatorColor(color)
+    } else {
+      if (color != null) {
+        val color = ColorStateList.valueOf(color)
+        view.setActiveIndicatorColor(color)
+      }
     }
   }
 
