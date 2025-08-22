@@ -1,5 +1,13 @@
 # react-native-bottom-tabs
 
+## 0.10.1
+
+### Patch Changes
+
+- [#402](https://github.com/callstackincubator/react-native-bottom-tabs/pull/402) [`9940e8e`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/9940e8eab5ab9a50eff814260836425cfc9184eb) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: make tabview background transparent
+
+- [#404](https://github.com/callstackincubator/react-native-bottom-tabs/pull/404) [`ee427b7`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ee427b72c50489119b9552c64d9791632a5a18b3) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: improve subview management on iOS
+
 ## 0.10.0
 
 ### Minor Changes
