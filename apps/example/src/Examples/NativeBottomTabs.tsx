@@ -66,14 +66,14 @@ function NativeBottomTabs() {
         name="Contacts"
         component={Contacts}
         listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
+          tabPress: () => {
             console.log('Contacts tab press prevented');
           },
         }}
         options={{
           tabBarIcon: () => require('../../assets/icons/person_dark.png'),
           tabBarActiveTintColor: 'yellow',
+          preventsDefault: true,
         }}
       />
       <Tab.Screen

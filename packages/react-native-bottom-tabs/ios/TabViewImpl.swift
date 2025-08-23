@@ -44,7 +44,7 @@ struct TabViewImpl: View {
       #if !os(tvOS) && !os(macOS) && !os(visionOS)
         .onTabItemEvent { index, isLongPress in
           let item = props.filteredItems[safe: index]
-          guard let key = item?.key else { return }
+          guard let key = item?.key else { return false }
 
           if isLongPress {
             onLongPress(key)
@@ -53,6 +53,7 @@ struct TabViewImpl: View {
             onSelect(key)
             emitHapticFeedback()
           }
+          return item?.preventsDefault ?? false
         }
       #endif
       .introspectTabView { tabController in

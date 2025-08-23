@@ -53,6 +53,7 @@ export default function App() {
           component={SettingsScreen}
           options={{
             tabBarIcon: () => ({ sfSymbol: 'gear' }),
+            preventsDefault: true, // Prevents automatic tab switching
           }}
         />
       </Tab.Navigator>
@@ -321,6 +322,17 @@ Boolean indicating whether to prevent inactive screens from re-rendering. Defaul
 
 It's working separately from `enableFreeze()` in `react-native-screens`. So settings won't be shared between them.
 
+#### `preventsDefault`
+
+Whether to prevent default tab switching behavior when this tab is pressed. This is useful when you want to handle tab press events manually without switching tabs.
+
+- Type: `boolean`
+- Default: `false`
+
+:::note
+Due to iOS 26's new tab switching animations, controlling tab switching from JavaScript can cause significant delays. The `preventsDefault` option allows you to define this behavior statically to avoid animation delays.
+:::
+
 
 #### `tabBarButtonTestID`
 
@@ -361,9 +373,9 @@ To prevent the default behavior, you can call `event.preventDefault`:
 ```tsx
 React.useEffect(() => {
   const unsubscribe = navigation.addListener('tabPress', (e) => {
-    // Prevent default behavior
-    e.preventDefault();
-
+    // Note: For iOS 26+, use the `preventsDefault` option instead of `e.preventDefault()`
+    // to avoid animation delays
+    
     // Do something manually
     // ...
   });

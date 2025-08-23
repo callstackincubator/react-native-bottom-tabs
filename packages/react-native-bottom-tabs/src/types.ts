@@ -20,6 +20,7 @@ export type BaseRoute = {
   role?: TabRole;
   freezeOnBlur?: boolean;
   style?: StyleProp<ViewStyle>;
+  preventsDefault?: boolean;
 };
 
 export type NavigationState<Route extends BaseRoute> = {

@@ -7,7 +7,7 @@ import UIKit
 #if !os(macOS) && !os(visionOS)
 
 private final class TabBarDelegate: NSObject, UITabBarControllerDelegate {
-  var onClick: ((_ index: Int) -> Void)?
+  var onClick: ((_ index: Int) -> Bool)?
 
   func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
 #if os(iOS)
@@ -17,15 +17,21 @@ private final class TabBarDelegate: NSObject, UITabBarControllerDelegate {
     }
 #endif
 
+    // Unfortunately, due to iOS 26 new tab switching animations, controlling state from JavaScript is causing significant delays when switching tabs.
+    // See: https://github.com/callstackincubator/react-native-bottom-tabs/issues/383
+    // Due to this, whether the tab prevents default has to be defined statically.
     if let index = tabBarController.viewControllers?.firstIndex(of: viewController) {
-      onClick?(index)
+      let defaultPrevented = onClick?(index) ?? false
+      
+      return !defaultPrevented
     }
+    
     return false
   }
 }
 
 struct TabItemEventModifier: ViewModifier {
-  let onTabEvent: (_ key: Int, _ isLongPress: Bool) -> Void
+  let onTabEvent: (_ key: Int, _ isLongPress: Bool) -> Bool
   private let delegate = TabBarDelegate()
 
   func body(content: Content) -> some View {
@@ -54,7 +60,7 @@ struct TabItemEventModifier: ViewModifier {
     }
 
     // Create gesture handler
-    let handler = LongPressGestureHandler(tabBar: tabController.tabBar, handler: onTabEvent)
+    let handler = LongPressGestureHandler(tabBar: tabController.tabBar, handler: { key, isLongPress in _ = onTabEvent(key,isLongPress) })
     let gesture = UILongPressGestureRecognizer(target: handler, action: #selector(LongPressGestureHandler.handleLongPress(_:)))
     gesture.minimumPressDuration = 0.5
 
@@ -103,7 +109,10 @@ private class LongPressGestureHandler: NSObject {
 }
 
 extension View {
-  func onTabItemEvent(_ handler: @escaping (Int, Bool) -> Void) -> some View {
+  /**
+   Event for tab items. Returns true if should prevent default (switching tabs).
+   */
+  func onTabItemEvent(_ handler: @escaping (Int, Bool) -> Bool) -> some View {
     modifier(TabItemEventModifier(onTabEvent: handler))
   }
 }

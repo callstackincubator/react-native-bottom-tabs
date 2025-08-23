@@ -214,6 +214,7 @@ Each route in the `routes` array can have the following properties:
 - `freezeOnBlur`: Whether to freeze the tab's content when it's not visible
 - `role`: A value that defines the purpose of the tab
 - `style`: Style object for the component wrapping the screen content
+- `preventsDefault`: Whether to prevent default tab switching behavior when pressed
 
 ### Helper Props
 
@@ -274,3 +275,9 @@ Function to get the role for a tab item.
 Function to get the style for a tab scene.
 
 - Default: Uses `route.style`
+
+#### `getPreventsDefault`
+
+Function to determine if a tab should prevent default switching behavior when pressed.
+
+- Default: Uses `route.preventsDefault`

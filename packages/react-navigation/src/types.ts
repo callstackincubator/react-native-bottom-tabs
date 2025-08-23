@@ -106,6 +106,10 @@ export type NativeBottomTabNavigationOptions = {
    * Style object for the component wrapping the screen content.
    */
   sceneStyle?: StyleProp<ViewStyle>;
+  /**
+   * Whether to prevent default action of the tab. Defaults to `false`.
+   */
+  preventsDefault?: boolean;
 };
 
 export type NativeBottomTabDescriptor = Descriptor<
@@ -145,6 +149,7 @@ export type NativeBottomTabNavigationConfig = Partial<
     | 'tabBar'
     | 'getFreezeOnBlur'
     | 'getSceneStyle'
+    | 'getPreventsDefault'
   >
 > & {
   tabBar?: (props: BottomTabBarProps) => React.ReactNode;

@@ -108,6 +108,10 @@ interface Props<Route extends BaseRoute> {
    */
   getActiveTintColor?: (props: { route: Route }) => ColorValue | undefined;
   /**
+   * Determines whether the tab prevents default action (switching tabs) on press, uses `route.preventsDefault` by default.
+   */
+  getPreventsDefault?: (props: { route: Route }) => boolean | undefined;
+  /**
    * Get icon for the tab, uses `route.focusedIcon` by default.
    */
   getIcon?: (props: {
@@ -204,6 +208,7 @@ const TabView = <Route extends BaseRoute>({
   getTestID = ({ route }: { route: Route }) => route.testID,
   getRole = ({ route }: { route: Route }) => route.role,
   getSceneStyle = ({ route }: { route: Route }) => route.style,
+  getPreventsDefault = ({ route }: { route: Route }) => route.preventsDefault,
   hapticFeedbackEnabled = false,
   // Android's native behavior is to show labels when there are less than 4 tabs. We leave it as undefined to use the platform default behavior.
   labeled = Platform.OS !== 'android' ? true : undefined,
@@ -276,6 +281,7 @@ const TabView = <Route extends BaseRoute>({
           hidden: getHidden?.({ route }),
           testID: getTestID?.({ route }),
           role: getRole?.({ route }),
+          preventsDefault: getPreventsDefault?.({ route }),
         };
       }),
     [
@@ -287,6 +293,7 @@ const TabView = <Route extends BaseRoute>({
       getHidden,
       getTestID,
       getRole,
+      getPreventsDefault,
     ]
   );
 
