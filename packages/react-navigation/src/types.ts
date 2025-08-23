@@ -101,6 +101,10 @@ export type NativeBottomTabNavigationOptions = {
    * Whether inactive screens should be suspended from re-rendering. Defaults to `false`.
    */
   freezeOnBlur?: boolean;
+  /**
+   * Whether to prevent default action of the tab. Defaults to `false`.
+   */
+  preventsDefault?: boolean;
 };
 
 export type NativeBottomTabDescriptor = Descriptor<
@@ -139,6 +143,7 @@ export type NativeBottomTabNavigationConfig = Partial<
     | 'getRole'
     | 'tabBar'
     | 'getFreezeOnBlur'
+    | 'getPreventsDefault'
   >
 > & {
   tabBar?: (props: BottomTabBarProps) => React.ReactNode;

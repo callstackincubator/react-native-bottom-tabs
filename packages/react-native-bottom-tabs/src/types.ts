@@ -19,6 +19,7 @@ export type BaseRoute = {
   testID?: string;
   role?: TabRole;
   freezeOnBlur?: boolean;
+  preventsDefault?: boolean;
 };
 
 export type NavigationState<Route extends BaseRoute> = {

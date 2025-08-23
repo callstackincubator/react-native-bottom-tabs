@@ -78,6 +78,9 @@ export default function NativeBottomTabView({
           target: route.key,
         });
       }}
+      getPreventsDefault={({ route }) =>
+        descriptors[route.key]?.options.preventsDefault
+      }
       onIndexChange={(index) => {
         const route = state.routes[index];
         if (!route) {
@@ -90,7 +93,10 @@ export default function NativeBottomTabView({
           canPreventDefault: true,
         });
 
-        if (event.defaultPrevented) {
+        if (
+          event.defaultPrevented ||
+          descriptors[route.key]?.options.preventsDefault
+        ) {
           return;
         } else {
           navigation.dispatch({
