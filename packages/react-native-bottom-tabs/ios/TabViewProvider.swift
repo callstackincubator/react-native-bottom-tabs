@@ -14,6 +14,7 @@ public final class TabInfo: NSObject {
   public let hidden: Bool
   public let testID: String?
   public let role: TabBarRole?
+  public let preventsDefault: Bool
 
   public init(
     key: String,
@@ -23,7 +24,8 @@ public final class TabInfo: NSObject {
     activeTintColor: PlatformColor?,
     hidden: Bool,
     testID: String?,
-    role: String?
+    role: String?,
+    preventsDefault: Bool = false
   ) {
     self.key = key
     self.title = title
@@ -33,6 +35,7 @@ public final class TabInfo: NSObject {
     self.hidden = hidden
     self.testID = testID
     self.role = TabBarRole(rawValue: role ?? "")
+    self.preventsDefault = preventsDefault
     super.init()
   }
 }
@@ -288,7 +291,8 @@ public final class TabInfo: NSObject {
             activeTintColor: RCTConvert.uiColor(itemDict["activeTintColor"] as? NSNumber),
             hidden: itemDict["hidden"] as? Bool ?? false,
             testID: itemDict["testID"] as? String ?? "",
-            role: itemDict["role"] as? String
+            role: itemDict["role"] as? String,
+            preventsDefault: itemDict["preventsDefault"] as? Bool ?? false
           )
         )
       }

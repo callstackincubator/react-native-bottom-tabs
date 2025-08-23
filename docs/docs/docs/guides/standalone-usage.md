@@ -213,6 +213,7 @@ Each route in the `routes` array can have the following properties:
 - `lazy`: Whether to lazy load this tab's content
 - `freezeOnBlur`: Whether to freeze the tab's content when it's not visible
 - `role`: A value that defines the purpose of the tab
+- `preventsDefault`: Whether to prevent default tab switching behavior when pressed
 
 ### Helper Props
 
@@ -267,3 +268,9 @@ Function to get the test ID for a tab item.
 Function to get the role for a tab item.
 
 - Default: Uses `route.role`
+
+#### `getPreventsDefault`
+
+Function to determine if a tab should prevent default switching behavior when pressed.
+
+- Default: Uses `route.preventsDefault`

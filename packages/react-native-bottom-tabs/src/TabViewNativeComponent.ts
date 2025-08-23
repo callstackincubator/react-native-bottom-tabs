@@ -31,6 +31,7 @@ export type TabViewItems = ReadonlyArray<{
   hidden?: boolean;
   testID?: string;
   role?: string;
+  preventsDefault?: boolean;
 }>;
 
 export interface TabViewProps extends ViewProps {
