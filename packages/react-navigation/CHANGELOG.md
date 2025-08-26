@@ -1,5 +1,11 @@
 # @bottom-tabs/react-navigation
 
+## 0.10.2
+
+### Patch Changes
+
+- [#412](https://github.com/callstackincubator/react-native-bottom-tabs/pull/412) [`425aea5`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/425aea51bb214d516b8e4d563c5d55e9c945009c) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: introduce scene style
+
 ## 0.10.1
 
 ## 0.10.0
