@@ -213,6 +213,7 @@ Each route in the `routes` array can have the following properties:
 - `lazy`: Whether to lazy load this tab's content
 - `freezeOnBlur`: Whether to freeze the tab's content when it's not visible
 - `role`: A value that defines the purpose of the tab
+- `style`: Style object for the component wrapping the screen content
 
 ### Helper Props
 
@@ -267,3 +268,9 @@ Function to get the test ID for a tab item.
 Function to get the role for a tab item.
 
 - Default: Uses `route.role`
+
+#### `getSceneStyle`
+
+Function to get the style for a tab scene.
+
+- Default: Uses `route.style`

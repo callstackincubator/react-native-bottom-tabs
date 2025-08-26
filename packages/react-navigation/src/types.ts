@@ -7,7 +7,7 @@ import type {
   TabActionHelpers,
   TabNavigationState,
 } from '@react-navigation/native';
-import type { ImageSourcePropType } from 'react-native';
+import type { ImageSourcePropType, StyleProp, ViewStyle } from 'react-native';
 import type TabView from 'react-native-bottom-tabs';
 import type { AppleIcon, TabRole } from 'react-native-bottom-tabs';
 
@@ -101,6 +101,11 @@ export type NativeBottomTabNavigationOptions = {
    * Whether inactive screens should be suspended from re-rendering. Defaults to `false`.
    */
   freezeOnBlur?: boolean;
+
+  /**
+   * Style object for the component wrapping the screen content.
+   */
+  sceneStyle?: StyleProp<ViewStyle>;
 };
 
 export type NativeBottomTabDescriptor = Descriptor<
@@ -139,6 +144,7 @@ export type NativeBottomTabNavigationConfig = Partial<
     | 'getRole'
     | 'tabBar'
     | 'getFreezeOnBlur'
+    | 'getSceneStyle'
   >
 > & {
   tabBar?: (props: BottomTabBarProps) => React.ReactNode;

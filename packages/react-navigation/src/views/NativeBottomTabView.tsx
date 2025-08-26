@@ -67,6 +67,7 @@ export default function NativeBottomTabView({
       getFreezeOnBlur={({ route }) =>
         descriptors[route.key]?.options.freezeOnBlur
       }
+      getSceneStyle={({ route }) => descriptors[route.key]?.options.sceneStyle}
       onTabLongPress={(index) => {
         const route = state.routes[index];
         if (!route) {

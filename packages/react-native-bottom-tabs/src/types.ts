@@ -1,4 +1,4 @@
-import type { ImageSourcePropType } from 'react-native';
+import type { ImageSourcePropType, StyleProp, ViewStyle } from 'react-native';
 import type { SFSymbol } from 'sf-symbols-typescript';
 
 export type IconSource = string | ImageSourcePropType;
@@ -19,6 +19,7 @@ export type BaseRoute = {
   testID?: string;
   role?: TabRole;
   freezeOnBlur?: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
 export type NavigationState<Route extends BaseRoute> = {

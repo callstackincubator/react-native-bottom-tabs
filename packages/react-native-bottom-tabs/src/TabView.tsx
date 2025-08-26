@@ -10,8 +10,10 @@ import {
   type DimensionValue,
   Image,
   Platform,
+  type StyleProp,
   StyleSheet,
   View,
+  type ViewStyle,
   processColor,
 } from 'react-native';
 import { BottomTabBarHeightContext } from './utils/BottomTabBarHeightContext';
@@ -139,6 +141,11 @@ interface Props<Route extends BaseRoute> {
    */
   getFreezeOnBlur?: (props: { route: Route }) => boolean | undefined;
 
+  /**
+   * Get style for the scene, uses `route.style` by default.
+   */
+  getSceneStyle?: (props: { route: Route }) => StyleProp<ViewStyle>;
+
   tabBarStyle?: {
     /**
      * Background color of the tab bar.
@@ -196,6 +203,7 @@ const TabView = <Route extends BaseRoute>({
   getActiveTintColor = ({ route }: { route: Route }) => route.activeTintColor,
   getTestID = ({ route }: { route: Route }) => route.testID,
   getRole = ({ route }: { route: Route }) => route.role,
+  getSceneStyle = ({ route }: { route: Route }) => route.style,
   hapticFeedbackEnabled = false,
   // Android's native behavior is to show labels when there are less than 4 tabs. We leave it as undefined to use the platform default behavior.
   labeled = Platform.OS !== 'android' ? true : undefined,
@@ -374,12 +382,15 @@ const TabView = <Route extends BaseRoute>({
           const focused = route.key === focusedKey;
           const freeze = !focused ? getFreezeOnBlur({ route }) : false;
 
+          const customStyle = getSceneStyle({ route });
+
           return (
             <View
               key={route.key}
               style={[
                 styles.screen,
                 renderCustomTabBar ? styles.fullWidth : measuredDimensions,
+                customStyle,
               ]}
               collapsable={false}
               pointerEvents={focused ? 'auto' : 'none'}
