@@ -1,5 +1,15 @@
 # react-native-bottom-tabs
 
+## 0.11.0
+
+### Minor Changes
+
+- [#408](https://github.com/callstackincubator/react-native-bottom-tabs/pull/408) [`f564fde`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/f564fdeca3abef66f3db27a0454fb4f638baecb6) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: introduce preventsDefault option
+
+### Patch Changes
+
+- [#415](https://github.com/callstackincubator/react-native-bottom-tabs/pull/415) [`4d53ad5`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/4d53ad5dee6e2e9a6aa97eef96068437f6d6b421) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: improve subview foreach on iOS
+
 ## 0.10.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @bottom-tabs/react-navigation
 
+## 0.11.0
+
+### Minor Changes
+
+- [#408](https://github.com/callstackincubator/react-native-bottom-tabs/pull/408) [`f564fde`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/f564fdeca3abef66f3db27a0454fb4f638baecb6) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: introduce preventsDefault option
+
 ## 0.10.2
 
 ### Patch Changes
