@@ -22,10 +22,10 @@ private final class TabBarDelegate: NSObject, UITabBarControllerDelegate {
     // Due to this, whether the tab prevents default has to be defined statically.
     if let index = tabBarController.viewControllers?.firstIndex(of: viewController) {
       let defaultPrevented = onClick?(index) ?? false
-      
+
       return !defaultPrevented
     }
-    
+
     return false
   }
 }
@@ -60,7 +60,7 @@ struct TabItemEventModifier: ViewModifier {
     }
 
     // Create gesture handler
-    let handler = LongPressGestureHandler(tabBar: tabController.tabBar, handler: { key, isLongPress in _ = onTabEvent(key,isLongPress) })
+    let handler = LongPressGestureHandler(tabBar: tabController.tabBar) { key, isLongPress in _ = onTabEvent(key, isLongPress) }
     let gesture = UILongPressGestureRecognizer(target: handler, action: #selector(LongPressGestureHandler.handleLongPress(_:)))
     gesture.minimumPressDuration = 0.5
 

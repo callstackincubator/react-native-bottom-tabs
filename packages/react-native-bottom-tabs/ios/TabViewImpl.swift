@@ -120,7 +120,6 @@ struct TabViewImpl: View {
   }
 #endif
 
-
 #if !os(macOS)
   private func configureTransparentAppearance(tabBar: UITabBar, props: TabViewProps) {
     tabBar.barTintColor = props.barTintColor

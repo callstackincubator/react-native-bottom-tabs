@@ -11,15 +11,14 @@ struct NewTabView: AnyTabView {
   @ViewBuilder
   var body: some View {
     TabView(selection: $props.selectedPage) {
-      ForEach(props.children.indices, id: \.self) { index in
-        if let tabData = props.items[safe: index] {
+      ForEach(props.children) { child in
+        if let index = props.children.firstIndex(of: child),
+           let tabData = props.items[safe: index] {
           let isFocused = props.selectedPage == tabData.key
 
           if !tabData.hidden || isFocused {
             let icon = props.icons[index]
 
-            let platformChild = props.children[safe: index] ?? PlatformView()
-            let child = RepresentableView(view: platformChild)
             let context = TabAppearContext(
               index: index,
               tabData: tabData,
@@ -29,7 +28,7 @@ struct NewTabView: AnyTabView {
             )
 
             Tab(value: tabData.key, role: tabData.role?.convert()) {
-              child
+              RepresentableView(view: child.view)
                 .ignoresSafeArea(.container, edges: .all)
                 .tabAppear(using: context)
             } label: {

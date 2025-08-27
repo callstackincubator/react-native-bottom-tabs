@@ -10,8 +10,10 @@ struct LegacyTabView: AnyTabView {
   @ViewBuilder
   var body: some View {
     TabView(selection: $props.selectedPage) {
-      ForEach(props.children.indices, id: \.self) { index in
-        renderTabItem(at: index)
+      ForEach(props.children) { child in
+        if let index = props.children.firstIndex(of: child) {
+          renderTabItem(at: index)
+        }
       }
       .measureView { size in
         onLayout(size)
@@ -27,7 +29,7 @@ struct LegacyTabView: AnyTabView {
 
       if !tabData.hidden || isFocused {
         let icon = props.icons[index]
-        let child = props.children[safe: index] ?? PlatformView()
+        let child = props.children[safe: index]?.view ?? PlatformView()
         let context = TabAppearContext(
           index: index,
           tabData: tabData,

@@ -177,7 +177,7 @@ public final class TabInfo: NSObject {
   }
 
   override public func didUpdateReactSubviews() {
-    props.children = reactSubviews()
+    props.children = reactSubviews().map(IdentifiablePlatformView.init)
   }
 
 #if os(macOS)
@@ -218,15 +218,15 @@ public final class TabInfo: NSObject {
 #endif
     }
   }
-  
+
   @objc(insertChild:atIndex:)
   public func insertChild(_ child: UIView, at index: Int) {
     guard index >= 0 && index <= props.children.count else {
       return
     }
-    props.children.insert(child, at: index)
+    props.children.insert(IdentifiablePlatformView(child), at: index)
   }
-  
+
   @objc(removeChildAtIndex:)
   public func removeChild(at index: Int) {
     guard index >= 0 && index < props.children.count else {

@@ -25,7 +25,7 @@ internal enum MinimizeBehavior: String {
 
 public enum TabBarRole: String {
   case search
-  
+
   @available(iOS 18, macOS 15, visionOS 2, tvOS 18, *)
   func convert() -> TabRole {
     switch self {
@@ -35,11 +35,20 @@ public enum TabBarRole: String {
   }
 }
 
+struct IdentifiablePlatformView: Identifiable, Equatable {
+  let id = UUID()
+  let view: PlatformView
+
+  init(_ view: PlatformView) {
+    self.view = view
+  }
+}
+
 /**
  Props that component accepts. SwiftUI view gets re-rendered when ObservableObject changes.
  */
 class TabViewProps: ObservableObject {
-  @Published var children: [PlatformView] = []
+  @Published var children: [IdentifiablePlatformView] = []
   @Published var items: [TabInfo] = []
   @Published var selectedPage: String?
   @Published var icons: [Int: PlatformImage] = [:]

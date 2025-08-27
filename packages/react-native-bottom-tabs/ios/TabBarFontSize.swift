@@ -1,5 +1,5 @@
-import UIKit
 import React
+import UIKit
 
 enum TabBarFontSize {
   /// Returns the default font size for tab bar item labels based on the current platform
@@ -51,7 +51,7 @@ enum TabBarFontSize {
     }
 
     // Add color if provided
-    if let color = color {
+    if let color {
       attributes[.foregroundColor] = color
     }
 
