@@ -27,7 +27,7 @@ public enum TabBarRole: String {
   case search
 
   @available(iOS 18, macOS 15, visionOS 2, tvOS 18, *)
-  func convert() -> TabRole {
+  func convert() -> TabBarRole {
     switch self {
       case .search:
         return .search
