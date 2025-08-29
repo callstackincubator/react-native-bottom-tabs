@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.11.1
+
+### Patch Changes
+
+- [#416](https://github.com/callstackincubator/react-native-bottom-tabs/pull/416) [`efe1ff9`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/efe1ff9807325f27426cd7f0b4c3f0f3a7d4450c) Thanks [@douglowder](https://github.com/douglowder)! - fix(ios): do not add badges on Apple TV
+
 ## 0.11.0
 
 ### Minor Changes
