@@ -39,7 +39,9 @@ struct NewTabView: AnyTabView {
                 labeled: props.labeled
               )
             }
+            #if !os(tvOS)
             .badge(tabData.badge.flatMap { !$0.isEmpty ? Text($0) : nil })
+            #endif
             .accessibilityIdentifier(tabData.testID ?? "")
           }
         }
