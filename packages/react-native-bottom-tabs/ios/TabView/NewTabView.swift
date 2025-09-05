@@ -31,6 +31,7 @@ struct NewTabView: AnyTabView {
               RepresentableView(view: child.view)
                 .ignoresSafeArea(.container, edges: .all)
                 .tabAppear(using: context)
+                .hideTabBar(props.tabBarHidden)
             } label: {
               TabItem(
                 title: tabData.title,
@@ -50,6 +51,5 @@ struct NewTabView: AnyTabView {
     .measureView { size in
       onLayout(size)
     }
-    .hideTabBar(props.tabBarHidden)
   }
 }
