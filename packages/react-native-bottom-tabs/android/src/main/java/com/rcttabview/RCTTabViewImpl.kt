@@ -2,6 +2,8 @@ package com.rcttabview
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.view.View
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.facebook.react.bridge.ReactContext
@@ -82,6 +84,14 @@ class RCTTabViewImpl {
 
   fun setHapticFeedbackEnabled(view: ReactBottomNavigationView, enabled: Boolean) {
    view.setHapticFeedback(enabled)
+  }
+
+   fun removeView(view: ReactBottomNavigationView, child: View) {
+     view.removeView(child)
+   }
+
+  fun removeViewAt(view: ReactBottomNavigationView, index: Int) {
+    view.removeViewAt(index)
   }
 
   fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any>? {

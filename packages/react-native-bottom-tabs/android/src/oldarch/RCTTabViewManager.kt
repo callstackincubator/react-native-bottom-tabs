@@ -47,6 +47,26 @@ class RCTTabViewManager(context: ReactApplicationContext) : ViewGroupManager<Rea
     return true
   }
 
+  override fun getChildCount(parent: ReactBottomNavigationView): Int {
+    return parent.getParentChildCount()
+  }
+
+  override fun getChildAt(parent: ReactBottomNavigationView, index: Int): View? {
+    return parent.getParentChildAt(index)
+  }
+
+  override fun addView(parent: ReactBottomNavigationView, child: View, index: Int) {
+    parent.addView(child, index)
+  }
+
+  override fun removeView(parent: ReactBottomNavigationView, view: View) {
+   parent.removeView(view);
+  }
+
+  override fun removeViewAt(parent: ReactBottomNavigationView, index: Int) {
+    parent.removeViewAt(index)
+  }
+
   override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any>? {
     return tabViewImpl.getExportedCustomDirectEventTypeConstants()
   }

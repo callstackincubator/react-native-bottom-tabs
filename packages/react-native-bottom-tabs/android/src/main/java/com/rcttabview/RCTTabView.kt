@@ -16,9 +16,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
@@ -40,14 +38,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.window.core.layout.WindowWidthSizeClass
 import coil3.ImageLoader
 import coil3.asDrawable
+import coil3.request.ImageRequest
+import coil3.svg.SvgDecoder
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.views.imagehelper.ImageSource
 import com.facebook.react.views.text.ReactTypefaceUtils
-import coil3.request.ImageRequest
-import coil3.svg.SvgDecoder
+import androidx.core.view.isNotEmpty
 
 data class TabViewProps(
-//  var children: MutableMap<Int, View> = mutableMapOf(),
   var items: MutableList<TabInfo>? = null,
   var children: List<View> = emptyList(),
   var selectedItem: String? = null
@@ -70,24 +68,24 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
   private var fontFamily: String? = null
   private var fontWeight: Int? = null
 
-  private val imageLoader = ImageLoader.Builder(context)
-    .components {
-      add(SvgDecoder.Factory())
-    }
-    .build()
+  private val imageLoader =
+    ImageLoader.Builder(context).components { add(SvgDecoder.Factory()) }.build()
 
   init {
     val composeView = ComposeView(context)
     composeView.layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
-    composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+    composeView.setViewCompositionStrategy(
+      ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+    )
     composeView.setContent {
       MaterialTheme {
-        ColumnComposable(props = props.value, onClick = { key ->
-          onTabSelectedListener?.invoke(key)
-          emitHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-        }) { width, height ->
-          onLayoutListener?.invoke(width, height)
-        }
+        ColumnComposable(
+          props = props.value,
+          onClick = { key ->
+            onTabSelectedListener?.invoke(key)
+            emitHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+          }
+        ) { width, height -> onLayoutListener?.invoke(width, height) }
       }
     }
     addView(composeView)
@@ -101,6 +99,40 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
         props.value = props.value.copy(children = props.value.children + child)
       }
     }
+  }
+
+  override fun removeView(child: View?) {
+    if (child is ComposeView) {
+      super.removeView(child)
+    } else {
+      super.removeView(child) // Remove from actual hierarchy first
+      if (child != null) {
+        props.value = props.value.copy(children = props.value.children.filter { it.id != child.id })
+      }
+    }
+  }
+
+  override fun removeViewAt(index: Int) {
+    val children = props.value.children
+    if (index < children.size && index >= 0) {
+      val child = children[index]
+      if (child === null) {
+        return
+      }
+      if (child is ComposeView) {
+        super.removeViewAt(index)
+      } else {
+        props.value = props.value.copy(children = props.value.children.filter { it.id != child.id })
+      }
+    }
+  }
+
+  fun getParentChildAt(index: Int): View {
+    return props.value.children[index]
+  }
+
+  fun getParentChildCount(): Int {
+    return props.value.children.size
   }
 
   private fun onTabLongPressed(item: MenuItem) {
@@ -138,42 +170,35 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
       if (uri.isNullOrEmpty()) {
         continue
       }
-      val imageSource =
-      ImageSource(
-        context,
-        uri
-      )
+      val imageSource = ImageSource(context, uri)
       this.icons[idx] = imageSource
-
-      // Update existing item if exists.
-//      menu.findItem(idx)?.let { menuItem ->
-//        getDrawable(imageSource)  {
-//          menuItem.icon = it
-//        }
-//      }
     }
   }
 
-  fun setLabeled(labeled: Boolean?) {
-  }
+  fun setLabeled(labeled: Boolean?) {}
 
   fun setRippleColor(color: ColorStateList) {
-//    itemRippleColor = color
+    //    itemRippleColor = color
   }
 
   @SuppressLint("CheckResult")
   private fun getDrawable(imageSource: ImageSource, onDrawableReady: (Drawable?) -> Unit) {
-    val request = ImageRequest.Builder(context)
-      .data(imageSource.uri)
-      .target { drawable ->
-        post { onDrawableReady(drawable.asDrawable(context.resources)) }
-      }
-      .listener(
-        onError = { _, result ->
-          Log.e("RCTTabView", "Error loading image: ${imageSource.uri}", result.throwable)
+    val request =
+      ImageRequest.Builder(context)
+        .data(imageSource.uri)
+        .target { drawable ->
+          post { onDrawableReady(drawable.asDrawable(context.resources)) }
         }
-      )
-      .build()
+        .listener(
+          onError = { _, result ->
+            Log.e(
+              "RCTTabView",
+              "Error loading image: ${imageSource.uri}",
+              result.throwable
+            )
+          }
+        )
+        .build()
 
     imageLoader.enqueue(request)
   }
@@ -190,7 +215,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     // Apply the same color to both active and inactive states
     val colorDrawable = ColorDrawable(backgroundColor)
 
-//    itemBackground = colorDrawable
+    //    itemBackground = colorDrawable
     backgroundTintList = ColorStateList.valueOf(backgroundColor)
   }
 
@@ -205,7 +230,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
   }
 
   fun setActiveIndicatorColor(color: ColorStateList) {
-//    itemActiveIndicatorColor = color
+    //    itemActiveIndicatorColor = color
   }
 
   fun setHapticFeedback(enabled: Boolean) {
@@ -214,51 +239,54 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
 
   fun setFontSize(size: Int) {
     fontSize = size
-//    updateTextAppearance()
+    //    updateTextAppearance()
   }
 
   fun setFontFamily(family: String?) {
     fontFamily = family
-//    updateTextAppearance()
+    //    updateTextAppearance()
   }
 
- fun setFontWeight(weight: String?) {
-   val fontWeight = ReactTypefaceUtils.parseFontWeight(weight)
-   this.fontWeight = fontWeight
-//   updateTextAppearance()
+  fun setFontWeight(weight: String?) {
+    val fontWeight = ReactTypefaceUtils.parseFontWeight(weight)
+    this.fontWeight = fontWeight
+    //   updateTextAppearance()
   }
 
-  private fun getTypefaceStyle(weight: Int?) = when (weight) {
-    700 -> Typeface.BOLD
-    else -> Typeface.NORMAL
-  }
+  private fun getTypefaceStyle(weight: Int?) =
+    when (weight) {
+      700 -> Typeface.BOLD
+      else -> Typeface.NORMAL
+    }
 
-//  private fun updateTextAppearance() {
-//    if (fontSize != null || fontFamily != null || fontWeight != null) {
-//      val menuView = getChildAt(0) as? ViewGroup ?: return
-//      val size = fontSize?.toFloat()?.takeIf { it > 0 } ?: 12f
-//      val typeface = ReactFontManager.getInstance().getTypeface(
-//        fontFamily ?: "",
-//        getTypefaceStyle(fontWeight),
-//        context.assets
-//      )
-//
-//      for (i in 0 until menuView.childCount) {
-//        val item = menuView.getChildAt(i)
-//        val largeLabel =
-//          item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_large_label_view)
-//        val smallLabel =
-//          item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_small_label_view)
-//
-//        listOf(largeLabel, smallLabel).forEach { label ->
-//          label?.apply {
-//            setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
-//            setTypeface(typeface)
-//          }
-//        }
-//      }
-//    }
-//  }
+  //  private fun updateTextAppearance() {
+  //    if (fontSize != null || fontFamily != null || fontWeight != null) {
+  //      val menuView = getChildAt(0) as? ViewGroup ?: return
+  //      val size = fontSize?.toFloat()?.takeIf { it > 0 } ?: 12f
+  //      val typeface = ReactFontManager.getInstance().getTypeface(
+  //        fontFamily ?: "",
+  //        getTypefaceStyle(fontWeight),
+  //        context.assets
+  //      )
+  //
+  //      for (i in 0 until menuView.childCount) {
+  //        val item = menuView.getChildAt(i)
+  //        val largeLabel =
+  //
+  // item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_large_label_view)
+  //        val smallLabel =
+  //
+  // item.findViewById<TextView>(com.google.android.material.R.id.navigation_bar_item_small_label_view)
+  //
+  //        listOf(largeLabel, smallLabel).forEach { label ->
+  //          label?.apply {
+  //            setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
+  //            setTypeface(typeface)
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }
 
   private fun emitHapticFeedback(feedbackConstants: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && hapticFeedbackEnabled) {
@@ -270,17 +298,20 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     // First let's check current item color.
     val currentItemTintColor = items?.find { it.title == item?.title }?.activeTintColor
 
-    // getDeaultColor will always return a valid color but to satisfy the compiler we need to check for null
-    val colorPrimary = currentItemTintColor ?: activeTintColor ?: getDefaultColorFor(android.R.attr.colorPrimary) ?: return
+    // getDeaultColor will always return a valid color but to satisfy the compiler we need to check
+    // for null
+    val colorPrimary =
+      currentItemTintColor
+        ?: activeTintColor ?: getDefaultColorFor(android.R.attr.colorPrimary) ?: return
     val colorSecondary =
       inactiveTintColor ?: getDefaultColorFor(android.R.attr.textColorSecondary) ?: return
     val states = arrayOf(uncheckedStateSet, checkedStateSet)
     val colors = intArrayOf(colorSecondary, colorPrimary)
 
-//    ColorStateList(states, colors).apply {
-//      this@ReactBottomNavigationView.itemTextColor = this
-//      this@ReactBottomNavigationView.itemIconTintList = this
-//    }
+    //    ColorStateList(states, colors).apply {
+    //      this@ReactBottomNavigationView.itemTextColor = this
+    //      this@ReactBottomNavigationView.itemIconTintList = this
+    //    }
   }
 
   private fun getDefaultColorFor(baseColorThemeAttr: Int): Int? {
@@ -288,15 +319,16 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
     if (!context.theme.resolveAttribute(baseColorThemeAttr, value, true)) {
       return null
     }
-    val baseColor = AppCompatResources.getColorStateList(
-      context, value.resourceId
-    )
+    val baseColor = AppCompatResources.getColorStateList(context, value.resourceId)
     return baseColor.defaultColor
   }
 }
 
 @Composable
-fun ColumnComposable(props: TabViewProps, onClick: (key: String) -> Unit, onLayout: (width: Double, height: Double) -> Unit
+fun ColumnComposable(
+  props: TabViewProps,
+  onClick: (key: String) -> Unit,
+  onLayout: (width: Double, height: Double) -> Unit
 ) {
   val context = LocalContext.current
   val windowWidthClass = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
@@ -305,53 +337,49 @@ fun ColumnComposable(props: TabViewProps, onClick: (key: String) -> Unit, onLayo
   NavigationSuiteScaffold(
     navigationSuiteItems = {
       props.items?.forEach {
-          item(
-            icon = {
-              Icon(
-                Icons.Default.Home,
-                contentDescription = ""
-              )
-            },
-            label = { Text(it.title) },
-            selected = it.key == props.selectedItem,
-            onClick = {
-              onClick(it.key)
-            },
-            alwaysShowLabel = false
-          )
+        item(
+          icon = { Icon(Icons.Default.Home, contentDescription = "") },
+          label = { Text(it.title) },
+          selected = it.key == props.selectedItem,
+          onClick = { onClick(it.key) },
+          alwaysShowLabel = false
+        )
       }
     },
-    layoutType = if(windowWidthClass == WindowWidthSizeClass.EXPANDED) {
-      NavigationSuiteType.NavigationDrawer
-    } else {
-      NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
-        currentWindowAdaptiveInfo()
-      )
-    }
+    layoutType =
+      if (windowWidthClass == WindowWidthSizeClass.EXPANDED) {
+        NavigationSuiteType.NavigationDrawer
+      } else {
+        NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
+          currentWindowAdaptiveInfo()
+        )
+      }
   ) {
-      val selectedIndex = props.items?.indexOfFirst { it.key == props.selectedItem } ?: 0
-      AndroidView(
-        modifier = Modifier.fillMaxSize()
+    val selectedIndex = props.items?.indexOfFirst { it.key == props.selectedItem } ?: 0
+    AndroidView(
+      modifier =
+        Modifier
+          .fillMaxSize()
           .onGloballyPositioned { coordinates ->
             val size = coordinates.size
-            val dpWidth = (size.width / context.resources.displayMetrics.density).toDouble()
-            val dpHeight = (size.height / context.resources.displayMetrics.density).toDouble()
+            val dpWidth =
+              (size.width / context.resources.displayMetrics.density).toDouble()
+            val dpHeight =
+              (size.height / context.resources.displayMetrics.density).toDouble()
             val newSize = Pair(dpWidth, dpHeight)
             if (previousSize.value != newSize) {
               previousSize.value = newSize
               onLayout(dpWidth, dpHeight)
             }
           },
-        factory = { context ->
-          FrameLayout(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-              MATCH_PARENT,
-              MATCH_PARENT
-            )
-          }
-        },
-        update = { container ->
-          val currentView = if (container.childCount > 0) container.getChildAt(0) else null
+      factory = { context ->
+        FrameLayout(context).apply {
+          layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        }
+      },
+      update = { container ->
+        val currentView = if (container.isNotEmpty()) container.getChildAt(0) else null
+        if (selectedIndex < props.children.size && selectedIndex >= 0) {
           val newView = props.children[selectedIndex]
 
           if (currentView != newView) {
@@ -363,6 +391,7 @@ fun ColumnComposable(props: TabViewProps, onClick: (key: String) -> Unit, onLayo
             container.addView(newView)
           }
         }
-      )
-    }
+      }
+    )
+  }
 }
