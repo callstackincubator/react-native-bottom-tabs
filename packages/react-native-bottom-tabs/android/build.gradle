@@ -127,6 +127,7 @@ dependencies {
   implementation("io.coil-kt.coil3:coil:${COIL_VERSION}")
   implementation("io.coil-kt.coil3:coil-network-okhttp:${COIL_VERSION}")
   implementation("io.coil-kt.coil3:coil-svg:${COIL_VERSION}")
+  implementation("io.coil-kt:coil-compose:2.7.0")
   def composeBom = platform('androidx.compose:compose-bom:2024.11.00')
   implementation composeBom
   androidTestImplementation composeBom
