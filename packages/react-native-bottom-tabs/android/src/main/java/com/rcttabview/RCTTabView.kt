@@ -3,6 +3,7 @@ package com.rcttabview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.ImageDecoder
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -17,6 +18,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
@@ -30,10 +32,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.window.core.layout.WindowWidthSizeClass
 import coil3.ImageLoader
@@ -44,11 +49,19 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.views.imagehelper.ImageSource
 import com.facebook.react.views.text.ReactTypefaceUtils
 import androidx.core.view.isNotEmpty
+import coil.compose.AsyncImage
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.core.net.toUri
+import coil.compose.rememberAsyncImagePainter
 
 data class TabViewProps(
   var items: MutableList<TabInfo>? = null,
   var children: List<View> = emptyList(),
-  var selectedItem: String? = null
+  var selectedItem: String? = null,
+  var icons: MutableMap<Int, Uri> = mutableMapOf()
 )
 
 class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
@@ -172,6 +185,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
       }
       val imageSource = ImageSource(context, uri)
       this.icons[idx] = imageSource
+      props.value.icons[idx] = imageSource.uri
     }
   }
 
@@ -324,6 +338,7 @@ class ReactBottomNavigationView(context: Context) : FrameLayout(context) {
   }
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun ColumnComposable(
   props: TabViewProps,
@@ -336,12 +351,24 @@ fun ColumnComposable(
 
   NavigationSuiteScaffold(
     navigationSuiteItems = {
-      props.items?.forEach {
+      props.items?.forEachIndexed { index, item ->
         item(
-          icon = { Icon(Icons.Default.Home, contentDescription = "") },
-          label = { Text(it.title) },
-          selected = it.key == props.selectedItem,
-          onClick = { onClick(it.key) },
+          icon = {
+            val uri = props.icons[index]
+            if(uri == null) {
+              Icon(Icons.Default.Home, contentDescription = item.title)
+            } else {
+              val painter = rememberAsyncImagePainter(uri)
+              // TODO check it in the production bundle
+              Icon(
+                painter = painter,
+                contentDescription = item.title,
+              )
+            }
+                 },
+          label = { Text(item.title) },
+          selected = item.key == props.selectedItem,
+          onClick = { onClick(item.key) },
           alwaysShowLabel = false
         )
       }
