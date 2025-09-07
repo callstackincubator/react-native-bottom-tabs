@@ -1,0 +1,66 @@
+[versions]
+# Build tools
+agp = "7.2.1"
+kotlin = "2.0.0"
+
+# Android SDK versions
+compileSdk = "31"
+minSdk = "21"
+targetSdk = "31"
+ndkVersion = "21.4.7075529"
+
+# Compose
+composeBom = "2024.11.00"
+
+# Dependencies
+material = "1.13.0-alpha06"
+coil = "3.0.2"
+coilCompose = "2.7.0"
+
+[libraries]
+# Build plugins
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+# Kotlin
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+
+# React Native
+react-native = { group = "com.facebook.react", name = "react-native", version = "+" }
+
+# Material Design
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Compose BOM and libraries
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive" }
+compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
+
+# Coil image loading
+coil-core = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
+coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+coil-svg = { group = "io.coil-kt.coil3", name = "coil-svg", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+[bundles]
+compose = [
+    "compose-material3",
+    "compose-ui",
+    "compose-material3-adaptive",
+    "compose-material3-adaptive-navigation-suite"
+]
+
+coil = [
+    "coil-core",
+    "coil-network", 
+    "coil-svg",
+    "coil-compose"
+]

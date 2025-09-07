@@ -8,9 +8,21 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:7.2.1"
-    // noinspection DifferentKotlinGradleVersion
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    // Use version catalog if available, otherwise fallback to hardcoded versions
+    try {
+      classpath libs.android.gradlePlugin
+      classpath libs.kotlin.gradlePlugin
+    } catch (Exception e) {
+      classpath "com.android.tools.build:gradle:7.2.1"
+      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+    
+    // Add Compose Compiler plugin to buildscript dependencies
+    try {
+      classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${libs.versions.kotlin.get()}"
+    } catch (Exception e) {
+      classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.0.0"
+    }
   }
 }
 
@@ -27,16 +39,46 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-kapt"
 
+// Apply Compose Compiler plugin using version catalog
+try {
+  apply plugin: libs.plugins.compose.compiler.get().pluginId
+} catch (Exception e) {
+  // Fallback for when version catalog is not available
+  apply plugin: "org.jetbrains.kotlin.plugin.compose"
+}
+
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
 }
 
 def getExtOrDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["RCTTabView_" + name]
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["RCTTabView_" + name] ?: getVersionCatalogValue(name)
 }
 
 def getExtOrIntegerDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["RCTTabView_" + name]).toInteger()
+  def value = rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["RCTTabView_" + name] ?: getVersionCatalogValue(name)
+  return value.toString().toInteger()
+}
+
+def getVersionCatalogValue(name) {
+  try {
+    switch(name) {
+      case "compileSdkVersion": return libs.versions.compileSdk.get()
+      case "minSdkVersion": return libs.versions.minSdk.get()
+      case "targetSdkVersion": return libs.versions.targetSdk.get()
+      case "kotlinVersion": return libs.versions.kotlin.get()
+      default: return null
+    }
+  } catch (Exception e) {
+    // Fallback to default values if version catalog is not available
+    switch(name) {
+      case "compileSdkVersion": return "31"
+      case "minSdkVersion": return "21"
+      case "targetSdkVersion": return "31"
+      case "kotlinVersion": return "2.0.0"
+      default: return null
+    }
+  }
 }
 
 def supportsNamespace() {
@@ -79,10 +121,6 @@ android {
     }
   }
 
-  composeOptions {
-    kotlinCompilerExtensionVersion = "1.5.14"
-  }
-
   lintOptions {
     disable "GradleCompatible"
   }
@@ -108,6 +146,12 @@ android {
   }
 }
 
+// Configure Compose Compiler settings (optional)
+composeCompiler {
+  // Enable reports for Compose compiler insights (optional)
+  // reportsDestination = layout.buildDirectory.dir("compose_compiler")
+}
+
 repositories {
   mavenCentral()
   google()
@@ -116,26 +160,39 @@ repositories {
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
-  def COIL_VERSION = "3.0.2"
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-native:+"
-  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.google.android.material:material:1.13.0-alpha06'
+  
+  // Try to use version catalog, fallback to traditional dependencies
+  try {
+    implementation libs.react.native
+    implementation libs.kotlin.stdlib
+    implementation libs.material
 
-  implementation("io.coil-kt.coil3:coil:${COIL_VERSION}")
-  implementation("io.coil-kt.coil3:coil-network-okhttp:${COIL_VERSION}")
-  implementation("io.coil-kt.coil3:coil-svg:${COIL_VERSION}")
-  implementation("io.coil-kt:coil-compose:2.7.0")
-  def composeBom = platform('androidx.compose:compose-bom:2024.11.00')
-  implementation composeBom
-  androidTestImplementation composeBom
-  implementation 'androidx.compose.material3:material3'
-  implementation 'androidx.compose.ui:ui'
-  implementation 'androidx.compose.material3.adaptive:adaptive'
-  implementation 'androidx.compose.material3:material3-adaptive-navigation-suite'
+    implementation libs.bundles.coil
+    implementation platform(libs.compose.bom)
+    androidTestImplementation platform(libs.compose.bom)
+    implementation libs.bundles.compose
+  } catch (Exception e) {
+    // Fallback to traditional dependencies if version catalog is not available
+    def COIL_VERSION = "3.0.2"
+    implementation "com.facebook.react:react-native:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'com.google.android.material:material:1.13.0-alpha06'
 
+    implementation("io.coil-kt.coil3:coil:${COIL_VERSION}")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:${COIL_VERSION}")
+    implementation("io.coil-kt.coil3:coil-svg:${COIL_VERSION}")
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    def composeBom = platform('androidx.compose:compose-bom:2024.11.00')
+    implementation composeBom
+    androidTestImplementation composeBom
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.material3.adaptive:adaptive'
+    implementation 'androidx.compose.material3:material3-adaptive-navigation-suite'
+  }
 }
 
 if (isNewArchitectureEnabled()) {
