@@ -43,7 +43,6 @@ function NativeBottomTabNavigator({
   screenOptions,
   tabBarActiveTintColor: customActiveTintColor,
   tabBarInactiveTintColor: customInactiveTintColor,
-  UNSTABLE_getStateForRouteNamesChange,
   ...rest
 }: NativeBottomTabNavigatorProps) {
   const { colors } = useTheme();
@@ -72,7 +71,6 @@ function NativeBottomTabNavigator({
       layout,
       screenListeners,
       screenOptions,
-      UNSTABLE_getStateForRouteNamesChange,
     });
 
   return (

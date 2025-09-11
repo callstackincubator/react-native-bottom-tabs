@@ -68,14 +68,14 @@
   },
   "devDependencies": {
     "@expo/config-plugins": "^7.0.0 || ^8.0.0",
-    "@react-native/babel-plugin-codegen": "0.78.0",
-    "@react-native/eslint-config": "0.78.0",
+    "@react-native/babel-plugin-codegen": "0.81.1",
+    "@react-native/eslint-config": "0.81.1",
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
-    "react": "18.3.1",
-    "react-native": "0.78.0",
-    "react-native-builder-bob": "^0.37.0",
-    "typescript": "^5.2.2"
+    "react": "^19.1.0",
+    "react-native": "0.81.1",
+    "react-native-builder-bob": "^0.40.13",
+    "typescript": "^5.9.2"
   },
   "peerDependencies": {
     "react": "*",
@@ -102,8 +102,7 @@
       [
         "typescript",
         {
-          "project": "tsconfig.build.json",
-          "esm": true
+          "project": "tsconfig.build.json"
         }
       ]
     ]

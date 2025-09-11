@@ -10,4 +10,4 @@ workspace 'ReactNativeBottomTabsExample.xcworkspace'
 
 apply_modular_headers_for_swift_dependencies()
 
-use_test_app!
+use_test_app! :hermes_enabled => true, :fabric_enabled => true

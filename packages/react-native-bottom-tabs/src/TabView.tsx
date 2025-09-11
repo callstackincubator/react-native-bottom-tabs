@@ -18,11 +18,11 @@ import {
 } from 'react-native';
 import { BottomTabBarHeightContext } from './utils/BottomTabBarHeightContext';
 
-//@ts-ignore
+// eslint-disable-next-line @react-native/no-deep-imports
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
 import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
-import type { BaseRoute, NavigationState, TabRole } from './types';
+import type { AppleIcon, BaseRoute, NavigationState, TabRole } from './types';
 import DelayedFreeze from './DelayedFreeze';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
@@ -117,7 +117,7 @@ interface Props<Route extends BaseRoute> {
   getIcon?: (props: {
     route: Route;
     focused: boolean;
-  }) => ImageSource | undefined;
+  }) => ImageSource | AppleIcon | undefined | null;
 
   /**
    * Get hidden for the tab, uses `route.hidden` by default.
@@ -302,7 +302,8 @@ const TabView = <Route extends BaseRoute>({
       // Pass empty object for icons that are not provided to avoid index mismatch on native side.
       icons.map((icon) =>
         icon && !isAppleSymbol(icon)
-          ? Image.resolveAssetSource(icon)
+          ? // @ts-expect-error: TODO: Migrate of deep imports
+            Image.resolveAssetSource(icon)
           : { uri: '' }
       ),
     [icons]

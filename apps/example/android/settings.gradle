@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "BottomTabsExample"
+rootProject.name = "ReactNativeBottomTabs"
 
 apply(from: {
     def searchDir = rootDir.toPath()

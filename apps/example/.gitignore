@@ -3,6 +3,8 @@
 *.xcworkspace/
 *.zip
 .DS_Store
+.bundle/*
+!.bundle/config
 .gradle/
 .idea/
 .vs/
