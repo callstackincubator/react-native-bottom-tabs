@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 0.11.2
+
+### Patch Changes
+
+- [#420](https://github.com/callstackincubator/react-native-bottom-tabs/pull/420) [`14f9c04`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/14f9c04baaaf140ff739786a1c376cf1b8409340) Thanks [@r0b0t3d](https://github.com/r0b0t3d)! - fix: tabbar showing duplicates on iOS
+
 ## 0.11.1
 
 ### Patch Changes
