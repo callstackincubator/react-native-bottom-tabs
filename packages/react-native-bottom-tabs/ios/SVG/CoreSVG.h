@@ -1,18 +1,19 @@
-#if !TARGET_OS_OSX
-
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+typedef NSImage PlatformImage;
+#else
 #import <UIKit/UIKit.h>
+typedef UIImage PlatformImage;
+#endif
+
 
 @interface CoreSVGWrapper : NSObject
 
-+ (instancetype)sharedWrapper;
++ (instancetype)shared;
 
-- (UIImage *)imageFromSVGData:(NSData *)data;
-- (UIImage *)imageFromSVGData:(NSData *)data targetSize:(CGSize)targetSize;
-- (UIImage *)imageFromSVGData:(NSData *)data targetSize:(CGSize)targetSize preserveAspectRatio:(BOOL)preserveAspectRatio;
+- (PlatformImage *)imageFromSVGData:(NSData *)data;
 
-- (BOOL)isSVGData:(NSData *)data;
-+ (BOOL)supportsVectorSVG;
++ (BOOL)isSVGData:(NSData *)data;
++ (BOOL)supportsVectorSVGImage;
 
 @end
-
-#endif

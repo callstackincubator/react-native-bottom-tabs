@@ -7,28 +7,8 @@ RCT_EXPORT_MODULE()
 
 - (BOOL)canDecodeImageData:(NSData *)imageData
 {
-#if TARGET_OS_OSX
-  return NO;
-#endif
-  
-  if (!imageData || imageData.length == 0) {
-    return NO;
-  }
-
-  NSString *dataString = [[NSString alloc] initWithData:imageData encoding:NSUTF8StringEncoding];
-
-  if (!dataString) {
-    return NO;
-  }
-
-  NSString *lowercaseString = [dataString lowercaseString];
-  BOOL containsSVGTag = [lowercaseString containsString:@"<svg"];
-  BOOL containsXMLDeclaration = [lowercaseString containsString:@"<?xml"];
-  BOOL containsSVGNamespace = [lowercaseString containsString:@"http://www.w3.org/2000/svg"];
-
-  return containsSVGTag || (containsXMLDeclaration && containsSVGNamespace);
+  return [CoreSVGWrapper isSVGData:imageData];
 }
-
 
 - (RCTImageLoaderCancellationBlock)decodeImageData:(NSData *)imageData
                                               size:(CGSize)size
@@ -36,8 +16,7 @@ RCT_EXPORT_MODULE()
                                         resizeMode:(RCTResizeMode)resizeMode
                                  completionHandler:(RCTImageLoaderCompletionBlock)completionHandler
 {
-#if !TARGET_OS_OSX
-  UIImage *image = [[CoreSVGWrapper alloc] imageFromSVGData:imageData targetSize:size];
+  UIImage *image = [CoreSVGWrapper.shared imageFromSVGData:imageData];
 
   if (image) {
     completionHandler(nil, image);
@@ -48,9 +27,6 @@ RCT_EXPORT_MODULE()
     completionHandler(error, nil);
   }
   return ^{};
-#else
-  return ^{};
-#endif
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
