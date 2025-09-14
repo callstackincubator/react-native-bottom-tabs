@@ -21,8 +21,6 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.dependency "SwiftUIIntrospect", '~> 1.0'
-  s.dependency 'SDWebImage', '>= 5.19.1'
-  s.dependency 'SDWebImageSVGCoder', '>= 1.7.0'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES'

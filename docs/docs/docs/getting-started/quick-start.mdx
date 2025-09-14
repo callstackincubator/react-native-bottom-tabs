@@ -19,38 +19,6 @@ If you are going to use [React Navigation / Expo Router Integration](/docs/guide
 
 <PackageManagerTabs command="install @bottom-tabs/react-navigation" />
 
-<details>
-  <summary>If you use React Native <b>version 0.75 or lower</b></summary>
-
-- For `@react-native-community/cli` users, open Podfile in ios folder and change minimum iOS version to `14.0` before `pod install`
-
-```diff
-- platform :ios, min_ios_version_supported
-+ platform :ios, '14.0'
-```
-
-- For Expo users, install `expo-build-properties`, open app.json file and update `deploymentTarget` for `ios` as below
-
-```json
-{
-  "expo": {
-    "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "deploymentTarget": "14.0"
-          }
-        }
-      ]
-    ],
-  }
-}
-```
-
-</details>
-
-
 
 ### Expo
 
@@ -60,53 +28,6 @@ Add the library plugin in your `app.json` config file and [create a new build](h
 ```diff
   "expo": {
 +   "plugins": ["react-native-bottom-tabs"]
-  }
-}
-```
-
-Then install `expo-build-properties` to enable static linking for iOS by adding `"useFrameworks": "static"` in the plugin.
-
-```sh
-npx expo install expo-build-properties
-```
-
-```diff
-{
-  "expo": {
-    "plugins": [
-       "react-native-bottom-tabs",
-+      [
-+        "expo-build-properties",
-+        {
-+          "ios": {
-+            "useFrameworks": "static"
-+          }
-+        }
-+      ]
-+    ]
-  }
-}
-```
-
-Alternatively, you can avoid enabling static linking (which can cause problems with your existing packages) by adding the following in the `expo-build-properties` plugin.
-
-```diff
-{
-  "expo": {
-    "plugins": [
-       "react-native-bottom-tabs",
-+      [
-+        "expo-build-properties",
-+        {
-+          "ios": {
-+            "extraPods": [
-+              { name: "SDWebImage", modular_headers: true }, // Work around for not enabling static framework, required for react-native-bottom-tabs
-+              { name: "SDWebImageSVGCoder", modular_headers: true }
-+            ]
-+          }
-+        }
-+      ]
-+    ]
   }
 }
 ```
@@ -132,12 +53,6 @@ Edit `android/app/src/main/res/values/styles.xml` to inherit from provided theme
 ```
 
 Here you can read more about [Android Native Styling](/docs/guides/android-native-styling).
-
-To enable static linking for iOS, Open the `./ios/Podfile` file and add the following:
-
-```ruby
-use_frameworks! :linkage => :static
-```
 
 
 ## Example usage

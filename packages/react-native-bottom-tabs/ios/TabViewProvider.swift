@@ -1,7 +1,5 @@
 import Foundation
 import React
-import SDWebImage
-import SDWebImageSVGCoder
 import SwiftUI
 
 @objcMembers
@@ -48,6 +46,7 @@ public final class TabInfo: NSObject {
 }
 
 @objc public class TabViewProvider: PlatformView {
+  private var imageLoader: RCTImageLoaderProtocol?
   private weak var delegate: TabViewProviderDelegate?
   private var props = TabViewProps()
   private var hostingController: PlatformHostingController<TabViewImpl>?
@@ -170,10 +169,10 @@ public final class TabInfo: NSObject {
     }
   }
 
-  @objc public convenience init(delegate: TabViewProviderDelegate) {
+  @objc public convenience init(delegate: TabViewProviderDelegate, imageLoader: RCTImageLoader) {
     self.init()
     self.delegate = delegate
-    SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
+    self.imageLoader = imageLoader
   }
 
   override public func didUpdateReactSubviews() {
@@ -238,40 +237,27 @@ public final class TabInfo: NSObject {
   private func loadIcons(_ icons: NSArray?) {
     // TODO: Diff the arrays and update only changed items.
     // Now if the user passes `unfocusedIcon` we update every item.
-    guard let imageSources = icons as? [RCTImageSource?] else { return }
-
-    for (index, imageSource) in imageSources.enumerated() {
-      guard let imageSource,
-            let url = imageSource.request.url else { continue }
-
-      let isSVG = url.pathExtension.lowercased() == "svg"
-
-      var options: SDWebImageOptions = [.continueInBackground,
-                                        .scaleDownLargeImages,
-                                        .avoidDecodeImage,
-                                        .highPriority]
-
-      if isSVG {
-        options.insert(.decodeFirstFrameOnly)
-      }
-
-      let context: [SDWebImageContextOption: Any]? = isSVG ? [
-        .imageThumbnailPixelSize: iconSize,
-        .imagePreserveAspectRatio: true
-      ] : nil
-
-      SDWebImageManager.shared.loadImage(
-        with: url,
-        options: options,
-        context: context,
-        progress: nil
-      ) { [weak self] image, _, _, _, _, _ in
-        guard let self else { return }
-        DispatchQueue.main.async {
-          if let image {
-            self.props.icons[index] = image.resizeImageTo(size: self.iconSize)
-          }
-        }
+    if let imageSources = icons as? [RCTImageSource?] {
+      for (index, imageSource) in imageSources.enumerated() {
+        guard let imageSource, let imageLoader else { continue }
+        imageLoader.loadImage(
+          with: imageSource.request,
+          size: imageSource.size,
+          scale: imageSource.scale,
+          clipped: true,
+          resizeMode: RCTResizeMode.contain,
+          progressBlock: { _,_ in },
+          partialLoad: { _ in },
+          completionBlock: { error, image in
+            if error != nil {
+              print("[TabView] Error loading image: \(error!.localizedDescription)")
+              return
+            }
+            guard let image else { return }
+            DispatchQueue.main.async {
+              self.props.icons[index] = image.resizeImageTo(size: self.iconSize)
+            }
+          })
       }
     }
   }

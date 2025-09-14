@@ -69,7 +69,9 @@ using namespace facebook::react;
 {
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNCTabViewProps>();
-    _tabViewProvider = [[TabViewProvider alloc] initWithDelegate:self];
+    // TODO: Find a better way to retrieve ImageLoader module.
+    RCTImageLoader *imageLoader = [[RCTBridge currentBridge] moduleForName:@"RCTImageLoader" lazilyLoadIfNecessary:YES];
+    _tabViewProvider = [[TabViewProvider alloc] initWithDelegate:self imageLoader:imageLoader];
     self.contentView = _tabViewProvider;
     _props = defaultProps;
   }
