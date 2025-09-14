@@ -73,8 +73,10 @@ RCT_EXPORT_VIEW_PROPERTY(tabBarHidden, BOOL)
 - (UIView *) view
 #endif
 {
+  TabViewProvider *tabview = [[TabViewProvider alloc] initWithDelegate:self];
   RCTImageLoader *imageLoader = [self.bridge moduleForClass:[RCTImageLoader class]];
-  return [[TabViewProvider alloc] initWithDelegate:self imageLoader:imageLoader];
+  [tabview setImageLoader:imageLoader];
+  return tabview;
 }
 
 @end

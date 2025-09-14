@@ -1,3 +1,5 @@
+#if !TARGET_OS_OSX
+
 #import <UIKit/UIKit.h>
 
 @interface CoreSVGWrapper : NSObject
@@ -12,3 +14,5 @@
 + (BOOL)supportsVectorSVG;
 
 @end
+
+#endif

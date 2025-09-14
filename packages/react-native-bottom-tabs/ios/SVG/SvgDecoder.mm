@@ -7,6 +7,10 @@ RCT_EXPORT_MODULE()
 
 - (BOOL)canDecodeImageData:(NSData *)imageData
 {
+#if TARGET_OS_OSX
+  return NO;
+#endif
+  
   if (!imageData || imageData.length == 0) {
     return NO;
   }
@@ -32,6 +36,7 @@ RCT_EXPORT_MODULE()
                                         resizeMode:(RCTResizeMode)resizeMode
                                  completionHandler:(RCTImageLoaderCompletionBlock)completionHandler
 {
+#if !TARGET_OS_OSX
   UIImage *image = [[CoreSVGWrapper alloc] imageFromSVGData:imageData targetSize:size];
 
   if (image) {
@@ -42,8 +47,10 @@ RCT_EXPORT_MODULE()
                                      userInfo:@{NSLocalizedDescriptionKey: @"Failed to render SVG to image"}];
     completionHandler(error, nil);
   }
-
   return ^{};
+#else
+  return ^{};
+#endif
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

@@ -1,3 +1,5 @@
+#if !TARGET_OS_OSX
+
 #import "CoreSVG.h"
 #import <dlfcn.h>
 #import <objc/runtime.h>
@@ -202,3 +204,5 @@ static inline NSString *Base64DecodedString(NSString *base64String) {
 }
 
 @end
+
+#endif

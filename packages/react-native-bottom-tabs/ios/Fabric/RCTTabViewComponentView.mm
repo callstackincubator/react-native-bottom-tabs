@@ -1,7 +1,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RCTTabViewComponentView.h"
 
-#import <react/renderer/components/RNCTabView/ComponentDescriptors.h>
+#import <react/renderer/components/RNCTabView/RNCTabViewComponentDescriptor.h>
 #import <react/renderer/components/RNCTabView/EventEmitters.h>
 #import <react/renderer/components/RNCTabView/Props.h>
 #import <react/renderer/components/RNCTabView/RCTComponentViewHelpers.h>
@@ -19,6 +19,7 @@
 #import <React/RCTBridge+Private.h>
 #import "RCTImagePrimitivesConversions.h"
 #import "RCTConversions.h"
+#import <react/utils/ManagedObjectWrapper.h>
 
 #if TARGET_OS_OSX
 typedef NSView PlatformView;
@@ -69,9 +70,7 @@ using namespace facebook::react;
 {
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNCTabViewProps>();
-    // TODO: Find a better way to retrieve ImageLoader module.
-    RCTImageLoader *imageLoader = [[RCTBridge currentBridge] moduleForName:@"RCTImageLoader" lazilyLoadIfNecessary:YES];
-    _tabViewProvider = [[TabViewProvider alloc] initWithDelegate:self imageLoader:imageLoader];
+    _tabViewProvider = [[TabViewProvider alloc] initWithDelegate:self];
     self.contentView = _tabViewProvider;
     _props = defaultProps;
   }
@@ -200,6 +199,15 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
   }
 
   return result;
+}
+
+- (void)updateState:(const facebook::react::State::Shared &)state oldState:(const facebook::react::State::Shared &)oldState
+{
+  auto _state = std::static_pointer_cast<RNCTabViewShadowNode::ConcreteState const>(state);
+  auto data = _state->getData();
+  if (auto imgLoaderPtr = _state.get()->getData().getImageLoader().lock()) {
+    [_tabViewProvider setImageLoader:unwrapManagedObject(imgLoaderPtr)];
+  }
 }
 
 //  MARK: TabViewProviderDelegate

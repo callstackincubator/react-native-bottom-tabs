@@ -169,10 +169,14 @@ public final class TabInfo: NSObject {
     }
   }
 
-  @objc public convenience init(delegate: TabViewProviderDelegate, imageLoader: RCTImageLoader) {
+  @objc public convenience init(delegate: TabViewProviderDelegate) {
     self.init()
     self.delegate = delegate
+  }
+  
+  @objc public func setImageLoader(_ imageLoader: RCTImageLoader) {
     self.imageLoader = imageLoader
+    loadIcons(icons)
   }
 
   override public func didUpdateReactSubviews() {
