@@ -39,15 +39,7 @@ To run the React Native example app on Android:
 yarn workspace react-native-bottom-tabs-example android
 ```
 
-To run the React Native example app on iOS:
-
-Make sure to install [`cocoapods-swift-modular-headers`](https://github.com/callstack/cocoapods-swift-modular-headers) gem, otherwise `pod install` will fail.
-
-```sh
-gem install cocoapods-swift-modular-headers
-```
-
-Next you can install cocoapods.
+To run the React Native example app on iOS, you need to install cocoapods.
 
 ```sh
 cd apps/example/ios

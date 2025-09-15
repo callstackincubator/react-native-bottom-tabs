@@ -1,4 +1,4 @@
-plugin 'cocoapods-swift-modular-headers'
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 
 ws_dir = Pathname.new(__dir__)
 ws_dir = ws_dir.parent until
@@ -7,7 +7,5 @@ ws_dir = ws_dir.parent until
 require "#{ws_dir}/node_modules/react-native-test-app/test_app.rb"
 
 workspace 'ReactNativeBottomTabsExample.xcworkspace'
-
-apply_modular_headers_for_swift_dependencies()
 
 use_test_app! :hermes_enabled => true, :fabric_enabled => true

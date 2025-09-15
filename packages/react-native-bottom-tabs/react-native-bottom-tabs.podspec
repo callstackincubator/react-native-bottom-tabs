@@ -1,6 +1,7 @@
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 
 Pod::Spec.new do |s|
   s.name         = "react-native-bottom-tabs"
@@ -20,9 +21,14 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,cpp,swift}"
   s.static_framework = true
 
+  if new_arch_enabled
+    s.subspec "common" do |ss|
+      ss.source_files         = "common/cpp/**/*.{cpp,h}"
+      ss.pod_target_xcconfig  = { "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/common/cpp\"" }
+    end
+  end
+
   s.dependency "SwiftUIIntrospect", '~> 1.0'
-  s.dependency 'SDWebImage', '>= 5.19.1'
-  s.dependency 'SDWebImageSVGCoder', '>= 1.7.0'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES'
