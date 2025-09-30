@@ -1,5 +1,6 @@
 package com.rcttabview
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
 import com.facebook.react.bridge.ReactApplicationContext
@@ -16,15 +17,23 @@ import com.rcttabview.events.OnTabBarMeasuredEvent
 import com.rcttabview.events.PageSelectedEvent
 import com.rcttabview.events.TabLongPressEvent
 
+data class TabInfo(
+  val key: String,
+  val title: String,
+  val badge: String?,
+  val activeTintColor: Int?,
+  val hidden: Boolean,
+  val testID: String?
+)
 
-@ReactModule(name = RCTTabViewImpl.NAME)
+
+@ReactModule(name = RCTTabViewManager.NAME)
 class RCTTabViewManager(context: ReactApplicationContext) :
   ViewGroupManager<ReactBottomNavigationView>(),
   RNCTabViewManagerInterface<ReactBottomNavigationView> {
 
   private val delegate: RNCTabViewManagerDelegate<ReactBottomNavigationView, RCTTabViewManager> =
     RNCTabViewManagerDelegate(this)
-  private val tabViewImpl: RCTTabViewImpl = RCTTabViewImpl()
 
   override fun createViewInstance(context: ThemedReactContext): ReactBottomNavigationView {
     val view = ReactBottomNavigationView(context)
@@ -53,76 +62,96 @@ class RCTTabViewManager(context: ReactApplicationContext) :
   }
 
   override fun getName(): String {
-    return tabViewImpl.getName()
+    return NAME
   }
 
   override fun getChildCount(parent: ReactBottomNavigationView): Int {
-    return tabViewImpl.getChildCount(parent)
+    return parent.layoutHolder.childCount ?: 0
   }
 
   override fun getChildAt(parent: ReactBottomNavigationView, index: Int): View? {
-    return tabViewImpl.getChildAt(parent, index)
+    return parent.layoutHolder.getChildAt(index)
   }
 
   override fun removeView(parent: ReactBottomNavigationView, view: View) {
-    tabViewImpl.removeView(parent, view)
+    parent.layoutHolder.removeView(view)
   }
 
   override fun removeAllViews(parent: ReactBottomNavigationView) {
-    tabViewImpl.removeAllViews(parent)
+    parent.layoutHolder.removeAllViews()
   }
 
   override fun removeViewAt(parent: ReactBottomNavigationView, index: Int) {
-    tabViewImpl.removeViewAt(parent, index)
+    parent.layoutHolder.removeViewAt(index)
   }
 
   override fun needsCustomLayoutForChildren(): Boolean {
-    return tabViewImpl.needsCustomLayoutForChildren()
+    return true
   }
 
   override fun setItems(view: ReactBottomNavigationView?, value: ReadableArray?) {
-    if (view != null && value != null)
-      tabViewImpl.setItems(view, value)
+    if (view != null && value != null) {
+      val itemsArray = mutableListOf<TabInfo>()
+      for (i in 0 until value.size()) {
+        value.getMap(i)?.let { item ->
+            itemsArray.add(
+              TabInfo(
+                key = item.getString("key") ?: "",
+                title = item.getString("title") ?: "",
+                badge = if (item.hasKey("badge")) item.getString("badge") else null,
+                activeTintColor = if (item.hasKey("activeTintColor")) item.getInt("activeTintColor") else null,
+                hidden = if (item.hasKey("hidden")) item.getBoolean("hidden") else false,
+                testID = item.getString("testID")
+              )
+            )
+        }
+      }
+      view.updateItems(itemsArray)
+    }
   }
 
   override fun setSelectedPage(view: ReactBottomNavigationView?, value: String?) {
     if (view != null && value != null)
-      tabViewImpl.setSelectedPage(view, value)
+      view.setSelectedItem(value)
   }
 
   override fun setIcons(view: ReactBottomNavigationView?, value: ReadableArray?) {
     if (view != null)
-      tabViewImpl.setIcons(view, value)
+      view.setIcons(value)
   }
 
   override fun setLabeled(view: ReactBottomNavigationView?, value: Boolean) {
     if (view != null)
-      tabViewImpl.setLabeled(view, value)
+      view.setLabeled(value)
   }
 
   override fun setRippleColor(view: ReactBottomNavigationView?, value: Int?) {
-    if (view != null && value != null)
-      tabViewImpl.setRippleColor(view, value)
+    if (view != null && value != null) {
+      val color = ColorStateList.valueOf(value)
+      view.setRippleColor(color)
+    }
   }
 
   override fun setBarTintColor(view: ReactBottomNavigationView?, value: Int?) {
     if (view != null && value != null)
-      tabViewImpl.setBarTintColor(view, value)
+      view.setBarTintColor(value)
   }
 
   override fun setActiveTintColor(view: ReactBottomNavigationView?, value: Int?) {
     if (view != null && value != null)
-      tabViewImpl.setActiveTintColor(view, value)
+      view.setActiveTintColor(value)
   }
 
   override fun setInactiveTintColor(view: ReactBottomNavigationView?, value: Int?) {
     if (view != null && value != null)
-      tabViewImpl.setInactiveTintColor(view, value)
+      view.setInactiveTintColor(value)
   }
 
   override fun setActiveIndicatorColor(view: ReactBottomNavigationView?, value: Int?) {
-    if (view != null && value != null)
-      tabViewImpl.setActiveIndicatorColor(view, value)
+    if (view != null && value != null) {
+      val color = ColorStateList.valueOf(value)
+      view.setActiveIndicatorColor(color)
+    }
   }
 
   override fun getDelegate(): ViewManagerDelegate<ReactBottomNavigationView> {
@@ -131,7 +160,7 @@ class RCTTabViewManager(context: ReactApplicationContext) :
 
   override fun setHapticFeedbackEnabled(view: ReactBottomNavigationView?, value: Boolean) {
     if (view != null)
-      tabViewImpl.setHapticFeedbackEnabled(view, value)
+      view.isHapticFeedbackEnabled = value
   }
 
   override fun setFontFamily(view: ReactBottomNavigationView?, value: String?) {
@@ -165,5 +194,9 @@ class RCTTabViewManager(context: ReactApplicationContext) :
   }
 
   override fun setMinimizeBehavior(view: ReactBottomNavigationView?, value: String?) {
+  }
+
+  companion object {
+    const val NAME = "RNCTabView"
   }
 }

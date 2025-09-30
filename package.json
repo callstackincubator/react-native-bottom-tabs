@@ -14,7 +14,6 @@
     "typecheck": "turbo run typecheck",
     "build": "turbo run build",
     "build:android": "turbo run build:android",
-    "build:android:fabric": "turbo run build:android:fabric",
     "build:ios": "turbo run build:ios",
     "build:macos": "turbo run build:macos",
     "version-packages": "changeset version && yarn install --no-immutable",

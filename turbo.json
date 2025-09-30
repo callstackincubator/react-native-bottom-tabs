@@ -30,22 +30,6 @@
       ],
       "outputs": []
     },
-    "build:android:fabric": {
-      "env": ["JAVA_HOME", "ANDROID_NDK", "ANDROID_SDK", "ANDROID_HOME"],
-      "inputs": [
-        "packages/react-native-bottom-tabs/package.json",
-        "packages/react-native-bottom-tabs/android",
-        "packages/react-native-bottom-tabs/!android/build",
-        "packages/react-native-bottom-tabs/src/*.ts",
-        "packages/react-native-bottom-tabs/src/*.tsx",
-        "apps/example/package.json",
-        "apps/example/android",
-        "!apps/example/android/.gradle",
-        "!apps/example/android/build",
-        "!apps/example/android/app/build"
-      ],
-      "outputs": []
-    },
     "build:ios": {
       "env": ["RCT_NEW_ARCH_ENABLED"],
       "inputs": [

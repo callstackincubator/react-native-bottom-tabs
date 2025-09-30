@@ -113,12 +113,6 @@ public final class TabInfo: NSObject {
     }
   }
 
-  @objc var items: NSArray? {
-    didSet {
-      props.items = parseTabData(from: items)
-    }
-  }
-
   @objc public var barTintColor: PlatformColor? {
     didSet {
       props.barTintColor = barTintColor
@@ -160,8 +154,6 @@ public final class TabInfo: NSObject {
       props.tabBarHidden = tabBarHidden
     }
   }
-
-  // New arch specific properties
 
   @objc public var itemsData: [TabInfo] = [] {
     didSet {
@@ -267,30 +259,5 @@ public final class TabInfo: NSObject {
           })
       }
     }
-  }
-
-  private func parseTabData(from array: NSArray?) -> [TabInfo] {
-    guard let array else { return [] }
-    var items: [TabInfo] = []
-
-    for value in array {
-      if let itemDict = value as? [String: Any] {
-        items.append(
-          TabInfo(
-            key: itemDict["key"] as? String ?? "",
-            title: itemDict["title"] as? String ?? "",
-            badge: itemDict["badge"] as? String,
-            sfSymbol: itemDict["sfSymbol"] as? String ?? "",
-            activeTintColor: RCTConvert.uiColor(itemDict["activeTintColor"] as? NSNumber),
-            hidden: itemDict["hidden"] as? Bool ?? false,
-            testID: itemDict["testID"] as? String ?? "",
-            role: itemDict["role"] as? String,
-            preventsDefault: itemDict["preventsDefault"] as? Bool ?? false
-          )
-        )
-      }
-    }
-
-    return items
   }
 }

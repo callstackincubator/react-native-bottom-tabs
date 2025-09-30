@@ -48,29 +48,7 @@ cd -
 yarn ios
 ```
 
-By default, the example is configured to build with the new architecture. To run the example with the old architecture, you can do the following:
-
-1. For Android, run:
-
-   ```sh
-   cd apps/example
-   ORG_GRADLE_PROJECT_newArchEnabled=false yarn android
-   ```
-
-2. For iOS, run:
-
-   ```sh
-   cd apps/example/ios
-   RCT_NEW_ARCH_ENABLED=0 pod install
-   cd -
-   yarn example ios
-   ```
-
-If you are building for a different architecture than your previous build, make sure to remove the build folders first. You can run the following command to cleanup all build folders:
-
-```sh
-yarn clean
-```
+The example is configured to build with the new architecture (Fabric) by default. 
 
 To confirm that the app is running with the new architecture, you can check the Metro logs for a message like this:
 
