@@ -239,11 +239,13 @@ public final class TabInfo: NSObject {
   }
 
   private func loadIcons(_ icons: NSArray?) {
+    guard let imageLoader else { return }
+    
     // TODO: Diff the arrays and update only changed items.
     // Now if the user passes `unfocusedIcon` we update every item.
     if let imageSources = icons as? [RCTImageSource?] {
       for (index, imageSource) in imageSources.enumerated() {
-        guard let imageSource, let imageLoader else { continue }
+        guard let imageSource else { continue }
         imageLoader.loadImage(
           with: imageSource.request,
           size: imageSource.size,
@@ -258,7 +260,8 @@ public final class TabInfo: NSObject {
               return
             }
             guard let image else { return }
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+              guard let self else { return }
               self.props.icons[index] = image.resizeImageTo(size: self.iconSize)
             }
           })
