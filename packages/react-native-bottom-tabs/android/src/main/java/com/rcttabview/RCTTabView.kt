@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.transition.TransitionManager
-import android.util.Log
 import android.util.Size
 import android.util.TypedValue
 import android.view.Choreographer
@@ -34,39 +33,91 @@ import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY
 import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_UNLABELED
 import com.google.android.material.transition.platform.MaterialFadeThrough
 
+/**
+ * Extended BottomNavigationView that supports more than 5 items
+ */
 class ExtendedBottomNavigationView(context: Context) : BottomNavigationView(context) {
-  override fun getMaxItemCount(): Int {
-    return 100
+  override fun getMaxItemCount(): Int = 100
+}
+
+/**
+ * A FrameLayout optimized for React Native measurement and layout compatibility
+ */
+class ReactCompatibleFrameLayout(context: Context) : FrameLayout(context) {
+  override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    // Get the available dimensions
+    val width = MeasureSpec.getSize(widthMeasureSpec)
+    val height = MeasureSpec.getSize(heightMeasureSpec)
+    
+    // Only use special handling if we have valid dimensions
+    if (width > 0 && height > 0) {
+      for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        
+        // Force explicit dimensions for all children to avoid React Native measurement issues
+        child.measure(
+          MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+          MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+        )
+      }
+      setMeasuredDimension(width, height)
+    } else {
+      // Fallback to normal measurement if dimensions aren't available
+      super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
   }
 }
 
+/**
+ * Main React Native Tab View that intelligently switches between phone and tablet modes.
+ * 
+ * - Phone mode: Uses Material's BottomNavigationView at the bottom of the screen
+ * - Tablet mode: Uses Material's NavigationRailView as a sidebar
+ * 
+ * Provides unified content management and seamless transition between both modes
+ * based on device screen size configuration.
+ */
 class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
-  private var bottomNavigation = ExtendedBottomNavigationView(context)
+  var isTablet: Boolean = (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
+  var bottomNavigation: ViewGroup? = null
+  var railNavigation: ReactNavigationRailView? = null
   val layoutHolder = FrameLayout(context)
 
+  // Event listeners
   var onTabSelectedListener: ((key: String) -> Unit)? = null
   var onTabLongPressedListener: ((key: String) -> Unit)? = null
   var onNativeLayoutListener: ((width: Double, height: Double) -> Unit)? = null
   var onTabBarMeasuredListener: ((height: Int) -> Unit)? = null
+  
+  // Configuration
   var disablePageAnimations = false
+  
+  // Data and state
   var items: MutableList<TabInfo> = mutableListOf()
-  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
-  private val drawableCache: MutableMap<ImageSource, Drawable> = mutableMapOf()
-
-  private var isLayoutEnqueued = false
   private var selectedItem: String? = null
+  
+  // Visual appearance properties
   private var activeTintColor: Int? = null
   private var inactiveTintColor: Int? = null
-  private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
-  private val uncheckedStateSet = intArrayOf(-android.R.attr.state_checked)
-  private var hapticFeedbackEnabled = false
   private var fontSize: Int? = null
   private var fontFamily: String? = null
   private var fontWeight: Int? = null
   private var labeled: Boolean? = null
-  private var lastReportedSize: Size? = null
   private var hasCustomAppearance = false
+  private var hapticFeedbackEnabled = false
+  
+  // Layout and UI state
+  private var isLayoutEnqueued = false
+  private var lastReportedSize: Size? = null
   private var uiModeConfiguration: Int = Configuration.UI_MODE_NIGHT_UNDEFINED
+  
+  // Icon and image management
+  private val iconSources: MutableMap<Int, ImageSource> = mutableMapOf()
+  private val drawableCache: MutableMap<ImageSource, Drawable> = mutableMapOf()
+  
+  // Material state constants
+  private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
+  private val uncheckedStateSet = intArrayOf(-android.R.attr.state_checked)
 
   private val imageLoader = ImageLoader.Builder(context)
     .components {
@@ -75,32 +126,57 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     .build()
 
   init {
-    orientation = VERTICAL
+    orientation = if (isTablet) HORIZONTAL else VERTICAL
 
+    // Always add layoutHolder first - this is where React Native content lives
     addView(
       layoutHolder, LayoutParams(
-        LayoutParams.MATCH_PARENT,
-        0,
-      ).apply { weight = 1f }
+        if (isTablet) 0 else LayoutParams.MATCH_PARENT,
+        if (isTablet) LayoutParams.MATCH_PARENT else 0,
+      ).apply { 
+        if (isTablet) weight = 1f else weight = 1f 
+      }
     )
+    
+    if (isTablet) {
+      // Add rail navigation before the content (so it appears on the left)
+      removeView(layoutHolder)
+      railNavigation = ReactNavigationRailView(context)
+      
+      // Connect the rail navigation's selection listener to our tab switching logic
+      railNavigation?.onTabSelectedListener = { key ->
+        setSelectedItem(key)
+        // Also notify the parent component
+        onTabSelectedListener?.invoke(key)
+      }
+      
+      addView(railNavigation, LayoutParams(
+        LayoutParams.WRAP_CONTENT,
+        LayoutParams.MATCH_PARENT
+      ))
+      addView(
+        layoutHolder, LayoutParams(
+          0,
+          LayoutParams.MATCH_PARENT,
+        ).apply { weight = 1f }
+      )
+    } else {
+      bottomNavigation = ExtendedBottomNavigationView(context)
+      addView(bottomNavigation, LayoutParams(
+        LayoutParams.MATCH_PARENT,
+        LayoutParams.WRAP_CONTENT
+      ))
+    }
+    
     layoutHolder.isSaveEnabled = false
-
-    addView(bottomNavigation, LayoutParams(
-      LayoutParams.MATCH_PARENT,
-      LayoutParams.WRAP_CONTENT
-    ))
     uiModeConfiguration = resources.configuration.uiMode
 
     post {
       addOnLayoutChangeListener { _, left, top, right, bottom,
-                                  _, _, _, _ ->
+        oldLeft, oldTop, oldRight, oldBottom ->
         val newWidth = right - left
         val newHeight = bottom - top
-
-        // Notify about tab bar height.
-        onTabBarMeasuredListener?.invoke(Utils.convertPixelsToDp(context, bottomNavigation.height).toInt())
-
-        if (newWidth != lastReportedSize?.width || newHeight != lastReportedSize?.height) {
+        if (lastReportedSize?.width != newWidth || lastReportedSize?.height != newHeight) {
           val dpWidth = Utils.convertPixelsToDp(context, layoutHolder.width)
           val dpHeight = Utils.convertPixelsToDp(context, layoutHolder.height)
 
@@ -141,43 +217,93 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     }
   }
 
+  private var pendingSelection: String? = null
+
   fun setSelectedItem(value: String) {
     selectedItem = value
-    setSelectedIndex(items.indexOfFirst { it.key == value })
+    val index = items.indexOfFirst { it.key == value }
+    if (index >= 0) {
+      pendingSelection = null
+      setSelectedIndex(index)
+    } else {
+      pendingSelection = value
+    }
   }
 
   override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams?) {
-    if (child === layoutHolder || child === bottomNavigation) {
+    if (child === layoutHolder || child === bottomNavigation || child === railNavigation) {
       super.addView(child, index, params)
       return
     }
 
+    // Create container exactly like bottom navigation does
     val container = createContainer()
-    container.addView(child, params)
+    container.addView(child, FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT,
+      FrameLayout.LayoutParams.MATCH_PARENT
+    ))
+    
+    // Always add to main layoutHolder - same for both phone and tablet
     layoutHolder.addView(container, index)
-
-    val itemKey = items[index].key
-    if (selectedItem == itemKey) {
-      setSelectedIndex(index)
-      refreshLayout()
+    
+    // If we have a selected item but haven't updated visibility yet (because content wasn't ready), do it now
+    selectedItem?.let { selected ->
+      val selectedIndex = items.indexOfFirst { it.key == selected }
+      if (selectedIndex >= 0) {
+        post {
+          // Update content visibility now that containers exist
+          layoutHolder.forEachIndexed { idx, view ->
+            if (selectedIndex == idx) {
+              toggleViewVisibility(view, true)
+            } else {
+              toggleViewVisibility(view, false)
+            }
+          }
+        }
+      }
     }
   }
 
-  private fun createContainer(): FrameLayout {
-    val container = FrameLayout(context).apply {
+  private fun createContainer(): ViewGroup {
+    return ReactCompatibleFrameLayout(context).apply {
       layoutParams = FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.MATCH_PARENT,
         FrameLayout.LayoutParams.MATCH_PARENT
       )
       isSaveEnabled = false
-      visibility = GONE
-      isEnabled = false
+      
+      // Different default visibility logic for phone vs tablet
+      if (isTablet) {
+        // For tablet: start with the first container visible, others hidden
+        visibility = if (layoutHolder.childCount == 0) VISIBLE else GONE
+        isEnabled = layoutHolder.childCount == 0
+      } else {
+        // For phone: also make first container visible (like tablet)
+        visibility = if (layoutHolder.childCount == 0) VISIBLE else GONE
+        isEnabled = layoutHolder.childCount == 0
+      }
     }
-    return container
   }
 
   private fun setSelectedIndex(itemId: Int) {
-    bottomNavigation.selectedItemId = itemId
+    // Update navigation UI based on mode
+    if (isTablet) {
+      railNavigation?.setSelectedItem(items.getOrNull(itemId)?.key ?: "")
+    } else {
+      try {
+        (bottomNavigation as? BottomNavigationView)?.selectedItemId = itemId
+      } catch (e: Exception) {
+        // Silently handle bottom navigation selection errors
+      }
+    }
+    
+    // Check if we have content to show
+    if (layoutHolder.childCount == 0) {
+      // Store the selection but don't update visibility yet - it will be handled when containers are added
+      return
+    }
+    
+    // Content visibility logic - identical for both modes
     if (!disablePageAnimations) {
       val fadeThrough = MaterialFadeThrough()
       TransitionManager.beginDelayedTransition(layoutHolder, fadeThrough)
@@ -197,7 +323,6 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
   private fun toggleViewVisibility(view: View, isVisible: Boolean) {
     check(view is ViewGroup) { "Native component tree is corrupted." }
-
     view.visibility = if (isVisible) VISIBLE else GONE
     view.isEnabled = isVisible
   }
@@ -219,68 +344,130 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   }
 
   fun setTabBarHidden(isHidden: Boolean) {
-    if (isHidden) {
-      bottomNavigation.visibility = GONE
+    if (isTablet) {
+      if (isHidden) {
+        railNavigation?.visibility = GONE
+      } else {
+        railNavigation?.visibility = VISIBLE
+      }
     } else {
-      bottomNavigation.visibility = VISIBLE
+      if (isHidden) {
+        bottomNavigation?.visibility = GONE
+      } else {
+        bottomNavigation?.visibility = VISIBLE
+      }
     }
   }
 
   fun updateItems(items: MutableList<TabInfo>) {
     // If an item got removed, let's re-add all items
     if (items.size < this.items.size) {
-      bottomNavigation.menu.clear()
+      if (isTablet) {
+        railNavigation?.menu?.clear()
+      } else {
+        (bottomNavigation as? BottomNavigationView)?.menu?.clear()
+      }
     }
     this.items = items
-    items.forEachIndexed { index, item ->
-      val menuItem = getOrCreateItem(index, item.title)
-      if (item.title !== menuItem.title) {
-        menuItem.title = item.title
-      }
-
-      menuItem.isVisible = !item.hidden
-      if (iconSources.containsKey(index)) {
-        getDrawable(iconSources[index]!!) {
-          menuItem.icon = it
+    
+    if (isTablet) {
+      railNavigation?.updateItems(items)
+      
+      // Handle any pending selection that couldn't be processed earlier (from setSelectedPage)
+      pendingSelection?.let { pendingKey ->
+        val pendingIndex = items.indexOfFirst { it.key == pendingKey }
+        if (pendingIndex >= 0) {
+          pendingSelection = null
+          selectedItem = pendingKey
+          setSelectedIndex(pendingIndex)
+          return // Don't do auto-selection if we processed a pending selection
         }
       }
-
-      if (item.badge?.isNotEmpty() == true) {
-        val badge = bottomNavigation.getOrCreateBadge(index)
-        badge.isVisible = true
-        badge.text = item.badge
-      } else {
-        bottomNavigation.removeBadge(index)
+      
+      // Only auto-select if React Native hasn't set a selection and we have content
+      if (selectedItem == null && items.isNotEmpty() && layoutHolder.childCount > 0) {
+        selectedItem = items[0].key
+        setSelectedIndex(0)
       }
-      post {
-        val itemView = bottomNavigation.findViewById<View>(menuItem.itemId)
-        itemView?.let { view ->
-          view.setOnLongClickListener {
-            onTabLongPressed(menuItem)
-            true
-          }
-          view.setOnClickListener {
-            onTabSelected(menuItem)
-          }
+    } else {
+      items.forEachIndexed { index, item ->
+        val menuItem = getOrCreateItem(index, item.title)
+        if (item.title != menuItem.title) {
+          menuItem.title = item.title
+        }
 
-          item.testID?.let { testId ->
-            view.findViewById<View>(com.google.android.material.R.id.navigation_bar_item_content_container)
-              ?.apply {
-                tag = testId
-              }
+        menuItem.isVisible = !item.hidden
+        if (iconSources.containsKey(index)) {
+          getDrawable(iconSources[index]!!) {
+            menuItem.icon = it
           }
         }
+
+        if (item.badge?.isNotEmpty() == true) {
+          (bottomNavigation as? BottomNavigationView)?.getOrCreateBadge(index)?.let { badge ->
+            badge.isVisible = true
+            badge.text = item.badge
+          }
+        } else {
+          (bottomNavigation as? BottomNavigationView)?.removeBadge(index)
+        }
+        post {
+          val itemView = (bottomNavigation as? BottomNavigationView)?.findViewById<View>(menuItem.itemId)
+          itemView?.let { view ->
+            view.setOnLongClickListener {
+              onTabLongPressed(menuItem)
+              true
+            }
+            view.setOnClickListener {
+              onTabSelected(menuItem)
+            }
+
+            item.testID?.let { testId ->
+              view.findViewById<View>(com.google.android.material.R.id.navigation_bar_item_content_container)
+                ?.apply {
+                  tag = testId
+                }
+            }
+          }
+        }
+      }
+      
+      // Auto-selection logic for phone mode
+      // Handle any pending selection that couldn't be processed earlier (from setSelectedPage)
+      pendingSelection?.let { pendingKey ->
+        val pendingIndex = items.indexOfFirst { it.key == pendingKey }
+        if (pendingIndex >= 0) {
+          pendingSelection = null
+          selectedItem = pendingKey
+          setSelectedIndex(pendingIndex)
+          return // Don't do auto-selection if we processed a pending selection
+        }
+      }
+      
+      // Only auto-select if React Native hasn't set a selection and we have content
+      if (selectedItem == null && items.isNotEmpty() && layoutHolder.childCount > 0) {
+        selectedItem = items[0].key
+        setSelectedIndex(0)
       }
     }
+    
     // Update tint colors and text appearance after updating all items.
     post {
-      updateTextAppearance()
-      updateTintColors()
+      if (isTablet) {
+        railNavigation?.post {
+          railNavigation?.updateTextAppearance()
+          railNavigation?.updateTintColors()
+        }
+      } else {
+        updateTextAppearance()
+        updateTintColors()
+      }
     }
   }
 
   private fun getOrCreateItem(index: Int, title: String): MenuItem {
-    return bottomNavigation.menu.findItem(index) ?: bottomNavigation.menu.add(0, index, 0, title)
+    val menu = (bottomNavigation as? BottomNavigationView)?.menu
+    return menu?.findItem(index) ?: menu?.add(0, index, 0, title)!!
   }
 
   fun setIcons(icons: ReadableArray?) {
@@ -299,7 +486,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       this.iconSources[idx] = imageSource
 
       // Update existing item if exists.
-      bottomNavigation.menu.findItem(idx)?.let { menuItem ->
+      (bottomNavigation as? BottomNavigationView)?.menu?.findItem(idx)?.let { menuItem ->
         getDrawable(imageSource) {
           menuItem.icon = it
         }
@@ -309,7 +496,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
 
   fun setLabeled(labeled: Boolean?) {
     this.labeled = labeled
-    bottomNavigation.labelVisibilityMode = when (labeled) {
+    (bottomNavigation as? BottomNavigationView)?.labelVisibilityMode = when (labeled) {
       false -> {
         LABEL_VISIBILITY_UNLABELED
       }
@@ -323,7 +510,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   }
 
   fun setRippleColor(color: ColorStateList) {
-    bottomNavigation.itemRippleColor = color
+    (bottomNavigation as? BottomNavigationView)?.itemRippleColor = color
   }
 
   @SuppressLint("CheckResult")
@@ -343,7 +530,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       }
       .listener(
         onError = { _, result ->
-          Log.e("RCTTabView", "Error loading image: ${imageSource.uri}", result.throwable)
+          // Silently handle image loading errors
         }
       )
       .build()
@@ -359,8 +546,8 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     // Apply the same color to both active and inactive states
     val colorDrawable = ColorDrawable(backgroundColor)
 
-    bottomNavigation.itemBackground = colorDrawable
-    bottomNavigation.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+    (bottomNavigation as? BottomNavigationView)?.itemBackground = colorDrawable
+    (bottomNavigation as? BottomNavigationView)?.backgroundTintList = ColorStateList.valueOf(backgroundColor)
     hasCustomAppearance = true
   }
 
@@ -375,7 +562,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
   }
 
   fun setActiveIndicatorColor(color: ColorStateList) {
-    bottomNavigation.itemActiveIndicatorColor = color
+    (bottomNavigation as? BottomNavigationView)?.itemActiveIndicatorColor = color
   }
 
   fun setFontSize(size: Int) {
@@ -413,7 +600,7 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     } else null
     val size = fontSize?.toFloat()?.takeIf { it > 0 }
 
-    val menuView = bottomNavigation.getChildAt(0) as? ViewGroup ?: return
+    val menuView = (bottomNavigation as? BottomNavigationView)?.getChildAt(0) as? ViewGroup ?: return
     for (i in 0 until menuView.childCount) {
       val item = menuView.getChildAt(i)
       val largeLabel =
@@ -454,8 +641,8 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
     val colors = intArrayOf(colorSecondary, colorPrimary)
 
     ColorStateList(states, colors).apply {
-      this@ReactBottomNavigationView.bottomNavigation.itemTextColor = this
-      this@ReactBottomNavigationView.bottomNavigation.itemIconTintList = this
+      (bottomNavigation as? BottomNavigationView)?.itemTextColor = this
+      (bottomNavigation as? BottomNavigationView)?.itemIconTintList = this
     }
   }
 
@@ -465,20 +652,31 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       return
     }
 
-    // User has hidden the bottom navigation bar, don't re-attach it.
-    if (bottomNavigation.visibility == GONE) {
-      return
-    }
+    if (isTablet) {
+      // User has hidden the navigation rail, don't re-attach it.
+      if (railNavigation?.visibility == GONE) {
+        return
+      }
 
-    // If appearance wasn't changed re-create the bottom navigation view when configuration changes.
-    // React Native opts out ouf Activity re-creation when configuration changes, this workarounds that.
-    // We also opt-out of this recreation when custom styles are used.
-    removeView(bottomNavigation)
-    bottomNavigation = ExtendedBottomNavigationView(context)
-    addView(bottomNavigation)
-    updateItems(items)
-    setLabeled(this.labeled)
-    this.selectedItem?.let { setSelectedItem(it) }
+      // If appearance wasn't changed re-create the navigation rail when configuration changes.
+      railNavigation?.handleConfigurationChanged(newConfig)
+    } else {
+      // User has hidden the bottom navigation bar, don't re-attach it.
+      if (bottomNavigation?.visibility == GONE) {
+        return
+      }
+
+      // If appearance wasn't changed re-create the bottom navigation view when configuration changes.
+      // React Native opts out ouf Activity re-creation when configuration changes, this workarounds that.
+      // We also opt-out of this recreation when custom styles are used.
+      removeView(bottomNavigation)
+      bottomNavigation = ExtendedBottomNavigationView(context)
+      addView(bottomNavigation)
+      updateItems(items)
+      setLabeled(this.labeled)
+      this.selectedItem?.let { setSelectedItem(it) }
+    }
+    
     uiModeConfiguration = newConfig?.uiMode ?: uiModeConfiguration
   }
 }
