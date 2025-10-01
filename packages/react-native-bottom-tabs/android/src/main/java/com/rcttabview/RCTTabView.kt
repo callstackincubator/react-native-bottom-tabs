@@ -248,7 +248,11 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       if (item.badge?.isNotEmpty() == true) {
         val badge = bottomNavigation.getOrCreateBadge(index)
         badge.isVisible = true
-        badge.text = item.badge
+        // Set the badge text only if it's different than an empty space to show a small badge.
+        // More context: https://github.com/callstackincubator/react-native-bottom-tabs/issues/422
+        if (item.badge != " ") {
+          badge.text = item.badge
+        }
       } else {
         bottomNavigation.removeBadge(index)
       }
