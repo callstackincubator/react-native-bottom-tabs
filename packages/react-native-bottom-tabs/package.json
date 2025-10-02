@@ -27,6 +27,7 @@
     "android",
     "ios",
     "cpp",
+    "common",
     "react-native.config.js",
     "app.plugin.js",
     "*.podspec",
