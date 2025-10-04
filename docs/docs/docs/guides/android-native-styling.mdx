@@ -32,6 +32,7 @@ Available options:
 - `material2` - Material Design 2 styling
 - `material3` - Material Design 3 styling
 - `material3-dynamic` - Material Design 3 styling with dynamic theming (Material You)
+- `material3-expressive` - Material Design 3 Expressive styling
 
 ## React Native Community CLI users
 
@@ -64,6 +65,17 @@ If you want to use Material Design 2, you can extend from `Theme.MaterialCompone
 <resources>
 - <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
 + <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- … -->
+  </style>
+</resources>
+```
+
+For Material Design 3 Expressive styling, you can use `Theme.Material3Expressive.DayNight.NoActionBar`:
+
+```diff
+<resources>
+- <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
++ <style name="AppTheme" parent="Theme.Material3Expressive.DayNight.NoActionBar">
     <!-- … -->
   </style>
 </resources>
