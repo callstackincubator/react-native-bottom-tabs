@@ -1,10 +1,16 @@
 import React
+#if os(macOS)
+import AppKit
+#else
 import UIKit
+#endif
 
 enum TabBarFontSize {
   /// Returns the default font size for tab bar item labels based on the current platform
 #if os(tvOS)
   static let defaultSize: CGFloat = 30.0
+#elseif os(macOS)
+  static let defaultSize: CGFloat = 11.0
 #else
   static let defaultSize: CGFloat = {
     if UIDevice.current.userInterfaceIdiom == .pad {

@@ -7,8 +7,11 @@ internal enum MinimizeBehavior: String {
   case onScrollDown
 
 #if compiler(>=6.2)
-  @available(iOS 26.0, *)
+  @available(iOS 26.0, macOS 26.0, *)
   func convert() -> TabBarMinimizeBehavior {
+#if os(macOS)
+    return .automatic
+#else
     switch self {
     case .automatic:
       return .automatic
@@ -19,6 +22,7 @@ internal enum MinimizeBehavior: String {
     case .onScrollDown:
       return .onScrollDown
     }
+#endif
   }
 #endif
 }

@@ -20,7 +20,9 @@ struct TabViewImpl: View {
         onLayout: onLayout,
         onSelect: onSelect
       ) {
+        #if !os(macOS)
         updateTabBarAppearance(props: props, tabBar: tabBar)
+        #endif
       }
     } else {
       LegacyTabView(
@@ -28,7 +30,9 @@ struct TabViewImpl: View {
         onLayout: onLayout,
         onSelect: onSelect
       ) {
+        #if !os(macOS)
         updateTabBarAppearance(props: props, tabBar: tabBar)
+        #endif
       }
     }
   }
@@ -57,8 +61,10 @@ struct TabViewImpl: View {
         }
       #endif
       .introspectTabView { tabController in
+#if !os(macOS)
         tabController.view.backgroundColor = .clear
         tabController.viewControllers?.forEach { $0.view.backgroundColor = .clear }
+#endif
         #if os(macOS)
           tabBar = tabController
         #else
@@ -276,7 +282,7 @@ extension View {
   @ViewBuilder
   func tabBarMinimizeBehavior(_ behavior: MinimizeBehavior?) -> some View {
     #if compiler(>=6.2)
-      if #available(iOS 26.0, *) {
+    if #available(iOS 26.0, macOS 26.0, *) {
         if let behavior {
           self.tabBarMinimizeBehavior(behavior.convert())
         } else {

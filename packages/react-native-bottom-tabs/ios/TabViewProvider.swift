@@ -165,7 +165,7 @@ public final class TabInfo: NSObject {
     self.init()
     self.delegate = delegate
   }
-  
+
   @objc public func setImageLoader(_ imageLoader: RCTImageLoader) {
     self.imageLoader = imageLoader
     loadIcons(icons)
@@ -204,7 +204,9 @@ public final class TabInfo: NSObject {
 
     if let hostingController = self.hostingController, let parentViewController = reactViewController() {
       parentViewController.addChild(hostingController)
+#if !os(macOS)
       hostingController.view.backgroundColor = .clear
+#endif
       addSubview(hostingController.view)
       hostingController.view.translatesAutoresizingMaskIntoConstraints = false
       hostingController.view.pinEdges(to: self)
@@ -215,7 +217,7 @@ public final class TabInfo: NSObject {
   }
 
   @objc(insertChild:atIndex:)
-  public func insertChild(_ child: UIView, at index: Int) {
+  public func insertChild(_ child: PlatformView, at index: Int) {
     guard index >= 0 && index <= props.children.count else {
       return
     }
@@ -232,7 +234,7 @@ public final class TabInfo: NSObject {
 
   private func loadIcons(_ icons: NSArray?) {
     guard let imageLoader else { return }
-    
+
     // TODO: Diff the arrays and update only changed items.
     // Now if the user passes `unfocusedIcon` we update every item.
     if let imageSources = icons as? [RCTImageSource?] {
@@ -244,7 +246,7 @@ public final class TabInfo: NSObject {
           scale: imageSource.scale,
           clipped: true,
           resizeMode: RCTResizeMode.contain,
-          progressBlock: { _,_ in },
+          progressBlock: { _, _ in },
           partialLoad: { _ in },
           completionBlock: { error, image in
             if error != nil {
@@ -254,7 +256,7 @@ public final class TabInfo: NSObject {
             guard let image else { return }
             DispatchQueue.main.async { [weak self] in
               guard let self else { return }
-              self.props.icons[index] = image.resizeImageTo(size: self.iconSize)
+              props.icons[index] = image.resizeImageTo(size: iconSize)
             }
           })
       }
