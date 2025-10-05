@@ -38,7 +38,7 @@ https://github.com/user-attachments/assets/09e96ac3-827d-4ac0-add0-e7b88ee9197c
 
 ## Documentation
 
-The full documentation can be found on our [website](https://oss.callstack.com/react-native-bottom-tab).
+The full documentation can be found on our [website](https://oss.callstack.com/react-native-bottom-tabs).
 
 ## Contributing
 
