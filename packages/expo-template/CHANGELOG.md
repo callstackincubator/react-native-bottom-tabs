@@ -1,5 +1,17 @@
 # @bottom-tabs/expo-template
 
+## 1.0.0
+
+### Major Changes
+
+- [#435](https://github.com/callstackincubator/react-native-bottom-tabs/pull/435) [`4b4e781`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/4b4e781cead514784c46599ab09554fad6c41208) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat!: drop old architecture
+
+### Patch Changes
+
+- Updated dependencies [[`4b4e781`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/4b4e781cead514784c46599ab09554fad6c41208), [`e308c90`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/e308c9086034d376fe03fe1435cec6e7a9844a45), [`ba70ac2`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ba70ac2438d1a8818a6ab9c2e5b05c214fed18c4), [`28282f4`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/28282f4e7c171feb7c3cee309a94ebeb9287c413), [`35e88e4`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/35e88e46949b563f4cc42a970d5d8269f9260326), [`be266df`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/be266dfc04ef9981b99223692cb52f816cd5babc)]:
+  - react-native-bottom-tabs@1.0.0
+  - @bottom-tabs/react-navigation@1.0.0
+
 ## 0.0.20
 
 ### Patch Changes

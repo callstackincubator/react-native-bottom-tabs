@@ -1,5 +1,11 @@
 # @bottom-tabs/react-navigation
 
+## 1.0.0
+
+### Major Changes
+
+- [#435](https://github.com/callstackincubator/react-native-bottom-tabs/pull/435) [`4b4e781`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/4b4e781cead514784c46599ab09554fad6c41208) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat!: drop old architecture
+
 ## 0.12.0
 
 ## 0.11.2

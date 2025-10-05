@@ -1,5 +1,23 @@
 # react-native-bottom-tabs
 
+## 1.0.0
+
+### Major Changes
+
+- [#435](https://github.com/callstackincubator/react-native-bottom-tabs/pull/435) [`4b4e781`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/4b4e781cead514784c46599ab09554fad6c41208) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat!: drop old architecture
+
+### Patch Changes
+
+- [#443](https://github.com/callstackincubator/react-native-bottom-tabs/pull/443) [`e308c90`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/e308c9086034d376fe03fe1435cec6e7a9844a45) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: make sure everything works correctly on macOS
+
+- [#442](https://github.com/callstackincubator/react-native-bottom-tabs/pull/442) [`ba70ac2`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ba70ac2438d1a8818a6ab9c2e5b05c214fed18c4) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: release and bob config
+
+- [#441](https://github.com/callstackincubator/react-native-bottom-tabs/pull/441) [`28282f4`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/28282f4e7c171feb7c3cee309a94ebeb9287c413) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: include common in files shipped to npm
+
+- [#444](https://github.com/callstackincubator/react-native-bottom-tabs/pull/444) [`35e88e4`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/35e88e46949b563f4cc42a970d5d8269f9260326) Thanks [@okwasniewski](https://github.com/okwasniewski)! - feat: support material3 expressive
+
+- [#438](https://github.com/callstackincubator/react-native-bottom-tabs/pull/438) [`be266df`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/be266dfc04ef9981b99223692cb52f816cd5babc) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: show small badge on Android when passing empty space
+
 ## 0.12.0
 
 ### Minor Changes
