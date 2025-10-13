@@ -12,6 +12,7 @@ import {
   Platform,
   type StyleProp,
   StyleSheet,
+  Text,
   View,
   type ViewStyle,
   processColor,
@@ -24,6 +25,7 @@ import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
 import type { AppleIcon, BaseRoute, NavigationState, TabRole } from './types';
 import DelayedFreeze from './DelayedFreeze';
+import BottomAccessoryViewNativeComponent from './BottomAccessoryViewNativeComponent';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
   icon?.sfSymbol;
@@ -225,6 +227,10 @@ const TabView = <Route extends BaseRoute>({
   const [measuredDimensions, setMeasuredDimensions] = React.useState<
     { width: DimensionValue; height: DimensionValue } | undefined
   >({ width: '100%', height: '100%' });
+  const [bottomAccessoryDimensions, setBottomAccessoryDimensions] =
+    React.useState<
+      { width: DimensionValue; height: DimensionValue } | undefined
+    >({ width: '100%', height: '100%' });
 
   const trimmedRoutes = React.useMemo(() => {
     if (
@@ -416,6 +422,19 @@ const TabView = <Route extends BaseRoute>({
             </View>
           );
         })}
+        <BottomAccessoryViewNativeComponent
+          style={[
+            { position: 'absolute', top: 0, left: 0 },
+            bottomAccessoryDimensions,
+          ]}
+          onNativeLayout={(e) => {
+            setBottomAccessoryDimensions(e.nativeEvent);
+          }}
+        >
+          <Text style={{ color: 'blue', textAlign: 'center' }}>
+            Bottom Accessory
+          </Text>
+        </BottomAccessoryViewNativeComponent>
       </NativeTabView>
       {renderCustomTabBar ? (
         <View ref={customTabBarWrapperRef}>{renderCustomTabBar()}</View>
