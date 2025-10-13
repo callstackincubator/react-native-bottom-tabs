@@ -76,15 +76,11 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   }
   
   func body(content: Content) -> some View {
-    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *) {
-      if hasBottomAccessory {
+    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *), hasBottomAccessory {
         content
-          .tabViewBottomAccessory {
-            renderBottomAccessoryView()
-          }
-      } else {
-        content
-      }
+        .tabViewBottomAccessory {
+          renderBottomAccessoryView()
+        }
     } else {
       content
     }
@@ -93,17 +89,41 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   @ViewBuilder
   private func renderBottomAccessoryView() -> some View {
     if let accessoryView = bottomAccessoryView {
-      BottomAccessoryRepresentableView(view: accessoryView)
+      if #available(iOS 26.0, *) {
+        BottomAccessoryRepresentableView(view: accessoryView)
+      }
     }
   }
 }
 
+@available(iOS 26.0, *)
 struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
+  @Environment(\.tabViewBottomAccessoryPlacement) var tabViewBottomAccessoryPlacement
   var view: PlatformView
 
   func makeUIView(context: Context) -> PlatformView {
+    // Emit initial placement
+    emitPlacementChanged(for: view)
     return view
   }
 
-  func updateUIView(_ uiView: PlatformView, context: Context) {}
+  func updateUIView(_ uiView: PlatformView, context: Context) {
+    // Emit placement changes
+    emitPlacementChanged(for: view)
+  }
+  
+  private func emitPlacementChanged(for uiView: PlatformView) {
+    let selectorString = "emitOnPlacementChanged:"
+    let selector = NSSelectorFromString(selectorString)
+    
+    if uiView.responds(to: selector) {
+      var placementValue = "none"
+      if (tabViewBottomAccessoryPlacement == .inline) {
+        placementValue = "inline"
+      } else if (tabViewBottomAccessoryPlacement == .expanded) {
+        placementValue = "expanded"
+      }
+      uiView.perform(selector, with: placementValue)
+    }
+  }
 }

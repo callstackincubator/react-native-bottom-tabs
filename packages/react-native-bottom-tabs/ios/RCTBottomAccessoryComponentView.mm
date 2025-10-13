@@ -46,10 +46,16 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &oldViewProps = *std::static_pointer_cast<BottomAccessoryViewProps const>(oldProps);
-  const auto &newViewProps = *std::static_pointer_cast<BottomAccessoryViewProps const>(props);
-
   [super updateProps:props oldProps:oldProps];
+}
+
+- (void)emitOnPlacementChanged:(NSString *)placement {
+  auto eventEmitter = std::static_pointer_cast<const BottomAccessoryViewEventEmitter>(_eventEmitter);
+  if (eventEmitter) {
+    eventEmitter->onPlacementChanged(BottomAccessoryViewEventEmitter::OnPlacementChanged {
+      .placement = std::string([placement UTF8String])
+    });
+  }
 }
 
 
