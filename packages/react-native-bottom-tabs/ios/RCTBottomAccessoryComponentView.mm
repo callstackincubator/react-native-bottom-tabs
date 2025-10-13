@@ -32,6 +32,18 @@ using namespace facebook::react;
   return self;
 }
 
+- (void)setFrame:(CGRect)frame
+{
+  [super setFrame:frame];
+  auto eventEmitter = std::static_pointer_cast<const BottomAccessoryViewEventEmitter>(_eventEmitter);
+  if (eventEmitter) {
+    eventEmitter->onNativeLayout(BottomAccessoryViewEventEmitter::OnNativeLayout {
+      .height = frame.size.height,
+      .width = frame.size.width
+    });
+  }
+}
+
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &oldViewProps = *std::static_pointer_cast<BottomAccessoryViewProps const>(oldProps);

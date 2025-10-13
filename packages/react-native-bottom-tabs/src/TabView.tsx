@@ -430,6 +430,7 @@ const TabView = <Route extends BaseRoute>({
           onNativeLayout={(e) => {
             setBottomAccessoryDimensions(e.nativeEvent);
           }}
+          onLayout={(e) => console.log(e.nativeEvent)}
         >
           <Text style={{ color: 'blue', textAlign: 'center' }}>
             Bottom Accessory

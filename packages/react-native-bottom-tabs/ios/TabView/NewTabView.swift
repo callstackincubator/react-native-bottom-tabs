@@ -63,9 +63,7 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   private var hasBottomAccessory: Bool {
     props.children.contains { child in
       let className = String(describing: type(of: child.view))
-      print("🔍 Checking child view type: \(className)")
-      // Temporarily detect unimplemented view until proper component registration is fixed
-      return className.contains("RCTUnimplementedViewComponentView")
+      return className == "RCTBottomAccessoryComponentView"
     }
   }
   
@@ -73,8 +71,7 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   private var bottomAccessoryView: PlatformView? {
     props.children.first { child in
       let className = String(describing: type(of: child.view))
-      // Temporarily detect unimplemented view until proper component registration is fixed
-      return className.contains("RCTUnimplementedViewComponentView")
+      return className == "RCTBottomAccessoryComponentView"
     }?.view
   }
   
@@ -96,7 +93,17 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   @ViewBuilder
   private func renderBottomAccessoryView() -> some View {
     if let accessoryView = bottomAccessoryView {
-      RepresentableView(view: accessoryView)
+      BottomAccessoryRepresentableView(view: accessoryView)
     }
   }
+}
+
+struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
+  var view: PlatformView
+
+  func makeUIView(context: Context) -> PlatformView {
+    return view
+  }
+
+  func updateUIView(_ uiView: PlatformView, context: Context) {}
 }
