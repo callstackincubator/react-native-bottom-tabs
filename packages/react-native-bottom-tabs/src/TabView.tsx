@@ -12,7 +12,6 @@ import {
   Platform,
   type StyleProp,
   StyleSheet,
-  Text,
   View,
   type ViewStyle,
   processColor,
