@@ -20,34 +20,24 @@ const renderScene = SceneMap({
   contacts: Contacts,
 });
 
-const isAndroid = false;
 export default function BottomAccessoryView() {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     {
       key: 'article',
       title: 'Article',
-      focusedIcon: isAndroid
-        ? require('../../assets/icons/article_dark.png')
-        : { sfSymbol: 'document.fill' },
-      unfocusedIcon: isAndroid
-        ? require('../../assets/icons/chat_dark.png')
-        : { sfSymbol: 'document' },
+      focusedIcon: require('../../assets/icons/article_dark.png'),
       badge: '!',
     },
     {
       key: 'albums',
       title: 'Albums',
-      focusedIcon: isAndroid
-        ? require('../../assets/icons/grid_dark.png')
-        : { sfSymbol: 'square.grid.3x2.fill' },
+      focusedIcon: require('../../assets/icons/grid_dark.png'),
       badge: '5',
     },
     {
       key: 'contacts',
-      focusedIcon: isAndroid
-        ? require('../../assets/icons/person_dark.png')
-        : { sfSymbol: 'person.fill' },
+      focusedIcon: require('../../assets/icons/person_dark.png'),
       title: 'Contacts',
       role: 'search',
     },
