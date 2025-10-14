@@ -102,20 +102,17 @@ struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
   var view: PlatformView
 
   func makeUIView(context: Context) -> PlatformView {
-    // Emit initial placement
     emitPlacementChanged(for: view)
     return view
   }
 
   func updateUIView(_ uiView: PlatformView, context: Context) {
-    // Emit placement changes
     emitPlacementChanged(for: view)
   }
   
   private func emitPlacementChanged(for uiView: PlatformView) {
     let selectorString = "emitOnPlacementChanged:"
     let selector = NSSelectorFromString(selectorString)
-    
     if uiView.responds(to: selector) {
       var placementValue = "none"
       if (tabViewBottomAccessoryPlacement == .inline) {
