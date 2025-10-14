@@ -25,7 +25,10 @@ import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
 import type { AppleIcon, BaseRoute, NavigationState, TabRole } from './types';
 import DelayedFreeze from './DelayedFreeze';
-import BottomAccessoryViewNativeComponent from './BottomAccessoryViewNativeComponent';
+import {
+  BottomAccessoryView,
+  type BottomAccessoryViewProps,
+} from './BottomAccessoryView';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
   icon?.sfSymbol;
@@ -184,6 +187,13 @@ interface Props<Route extends BaseRoute> {
      */
     fontSize?: number;
   };
+  /**
+   * A function that returns a React element to display as bottom accessory view.
+   * iOS 26+ only.
+   *
+   * @platform ios
+   */
+  renderBottomAccessoryView?: BottomAccessoryViewProps['renderBottomAccessoryView'];
 }
 
 const ANDROID_MAX_TABS = 100;
@@ -218,6 +228,7 @@ const TabView = <Route extends BaseRoute>({
   tabBar: renderCustomTabBar,
   tabBarStyle,
   tabLabelStyle,
+  renderBottomAccessoryView,
   ...props
 }: Props<Route>) => {
   // @ts-ignore
@@ -227,10 +238,6 @@ const TabView = <Route extends BaseRoute>({
   const [measuredDimensions, setMeasuredDimensions] = React.useState<
     { width: DimensionValue; height: DimensionValue } | undefined
   >({ width: '100%', height: '100%' });
-  const [bottomAccessoryDimensions, setBottomAccessoryDimensions] =
-    React.useState<
-      { width: DimensionValue; height: DimensionValue } | undefined
-    >({ width: '100%', height: '100%' });
 
   const trimmedRoutes = React.useMemo(() => {
     if (
@@ -422,21 +429,14 @@ const TabView = <Route extends BaseRoute>({
             </View>
           );
         })}
-        <BottomAccessoryViewNativeComponent
-          style={[
-            { position: 'absolute', top: 0, left: 0 },
-            bottomAccessoryDimensions,
-          ]}
-          onNativeLayout={(e) => {
-            setBottomAccessoryDimensions(e.nativeEvent);
-          }}
-          onPlacementChanged={(placement) => console.log(placement.nativeEvent)}
-          onLayout={(e) => console.log(e.nativeEvent)}
-        >
-          <Text style={{ color: 'blue', textAlign: 'center' }}>
-            Bottom Accessory
-          </Text>
-        </BottomAccessoryViewNativeComponent>
+        {Platform.OS === 'ios' &&
+        parseFloat(Platform.Version) >= 26 &&
+        renderBottomAccessoryView &&
+        !renderCustomTabBar ? (
+          <BottomAccessoryView
+            renderBottomAccessoryView={renderBottomAccessoryView}
+          />
+        ) : null}
       </NativeTabView>
       {renderCustomTabBar ? (
         <View ref={customTabBarWrapperRef}>{renderCustomTabBar()}</View>

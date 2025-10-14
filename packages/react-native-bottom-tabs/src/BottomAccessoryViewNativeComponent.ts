@@ -14,12 +14,12 @@ export type OnPlacementChanged = Readonly<{
   placement: string;
 }>;
 
-export interface BottomAccessoryViewProps extends ViewProps {
+export interface BottomAccessoryViewNativeProps extends ViewProps {
   onNativeLayout?: DirectEventHandler<OnNativeLayout>;
   onPlacementChanged?: DirectEventHandler<OnPlacementChanged>;
 }
 
-export default codegenNativeComponent<BottomAccessoryViewProps>(
+export default codegenNativeComponent<BottomAccessoryViewNativeProps>(
   'BottomAccessoryView',
   {
     excludedPlatforms: ['android'],
