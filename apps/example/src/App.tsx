@@ -151,7 +151,11 @@ const examples = [
   },
   { component: MaterialBottomTabs, name: 'Material (JS) Bottom Tabs' },
   { component: TintColorsExample, name: 'Tint Colors' },
-  { component: BottomAccessoryView, name: 'Bottom Accessory View' },
+  {
+    component: BottomAccessoryView,
+    name: 'Bottom Accessory View',
+    screenOptions: { headerShown: false },
+  },
 ];
 
 function App() {
