@@ -24,6 +24,10 @@ import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
 import type { AppleIcon, BaseRoute, NavigationState, TabRole } from './types';
 import DelayedFreeze from './DelayedFreeze';
+import {
+  BottomAccessoryView,
+  type BottomAccessoryViewProps,
+} from './BottomAccessoryView';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
   icon?.sfSymbol;
@@ -182,6 +186,13 @@ interface Props<Route extends BaseRoute> {
      */
     fontSize?: number;
   };
+  /**
+   * A function that returns a React element to display as bottom accessory view.
+   * iOS 26+ only.
+   *
+   * @platform ios
+   */
+  renderBottomAccessoryView?: BottomAccessoryViewProps['renderBottomAccessoryView'];
 }
 
 const ANDROID_MAX_TABS = 100;
@@ -216,6 +227,7 @@ const TabView = <Route extends BaseRoute>({
   tabBar: renderCustomTabBar,
   tabBarStyle,
   tabLabelStyle,
+  renderBottomAccessoryView,
   ...props
 }: Props<Route>) => {
   // @ts-ignore
@@ -416,6 +428,14 @@ const TabView = <Route extends BaseRoute>({
             </View>
           );
         })}
+        {Platform.OS === 'ios' &&
+        parseFloat(Platform.Version) >= 26 &&
+        renderBottomAccessoryView &&
+        !renderCustomTabBar ? (
+          <BottomAccessoryView
+            renderBottomAccessoryView={renderBottomAccessoryView}
+          />
+        ) : null}
       </NativeTabView>
       {renderCustomTabBar ? (
         <View ref={customTabBarWrapperRef}>{renderCustomTabBar()}</View>

@@ -30,6 +30,7 @@ import NativeBottomTabsRemoteIcons from './Examples/NativeBottomTabsRemoteIcons'
 import NativeBottomTabsUnmounting from './Examples/NativeBottomTabsUnmounting';
 import NativeBottomTabsCustomTabBar from './Examples/NativeBottomTabsCustomTabBar';
 import NativeBottomTabsFreezeOnBlur from './Examples/NativeBottomTabsFreezeOnBlur';
+import BottomAccessoryView from './Examples/BottomAccessoryView';
 
 const HiddenTab = () => {
   return <FourTabs hideOneTab />;
@@ -150,6 +151,11 @@ const examples = [
   },
   { component: MaterialBottomTabs, name: 'Material (JS) Bottom Tabs' },
   { component: TintColorsExample, name: 'Tint Colors' },
+  {
+    component: BottomAccessoryView,
+    name: 'Bottom Accessory View',
+    screenOptions: { headerShown: false },
+  },
 ];
 
 function App() {
