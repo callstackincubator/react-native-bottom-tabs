@@ -88,9 +88,9 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
 
   @ViewBuilder
   private func renderBottomAccessoryView() -> some View {
-    if let accessoryView = bottomAccessoryView {
+    if let bottomAccessoryView {
       if #available(iOS 26.0, *) {
-        BottomAccessoryRepresentableView(view: accessoryView)
+        BottomAccessoryRepresentableView(view: bottomAccessoryView)
       }
     }
   }
