@@ -102,11 +102,19 @@ struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
   var view: PlatformView
 
   func makeUIView(context: Context) -> PlatformView {
+    let wrapper = UIView()
+    wrapper.addSubview(view)
+    
+    view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    
     emitPlacementChanged(for: view)
-    return view
+    return wrapper
   }
 
   func updateUIView(_ uiView: PlatformView, context: Context) {
+    if let subview = uiView.subviews.first {
+      subview.frame = uiView.bounds
+    }
     emitPlacementChanged(for: view)
   }
 
@@ -117,7 +125,7 @@ struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
       var placementValue = "none"
       if tabViewBottomAccessoryPlacement == .inline {
         placementValue = "inline"
-      } else if tabViewBottomAccessoryPlacement == .expanded {
+      } else if (tabViewBottomAccessoryPlacement == .expanded) {
         placementValue = "expanded"
       }
       uiView.perform(selector, with: placementValue)
