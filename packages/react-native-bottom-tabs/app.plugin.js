@@ -1,1 +1,1 @@
-module.exports = require('./lib/commonjs/expo');
+module.exports = require('./lib/module/expo');
