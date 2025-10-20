@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 1.0.1
+
+### Patch Changes
+
+- [#452](https://github.com/callstackincubator/react-native-bottom-tabs/pull/452) [`171cb6f`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/171cb6f7f11217e6e7293893aab298bb92012393) Thanks [@baveku](https://github.com/baveku)! - fix expo plugin path
+
 ## 1.0.0
 
 ### Major Changes
