@@ -2,17 +2,7 @@
 
 React Native Bottom Tabs uses native platform primitives (SwiftUI on iOS and Material Design on Android) which are not available on web. For web applications, you'll need to use JavaScript-based tab implementations as a fallback.
 
-## Why Web Requires a Different Approach
-
-Native bottom tabs rely on platform-specific UI components that don't exist in web browsers. React Native Web translates React Native components to web equivalents, but native modules require explicit web implementations.
-
-:::note
-
-Web support requires using platform-specific files or a custom tab bar implementation. This guide shows you both approaches.
-
-:::
-
-## Approach 1: Platform-Specific Files (Recommended)
+## How It Works
 
 React Native's Metro bundler automatically resolves platform-specific files. You can create separate implementations for native platforms and web.
 
@@ -114,118 +104,11 @@ export default function App() {
 }
 ```
 
-## Approach 2: Custom Tab Bar with Standalone Usage
+## Icon Support
 
-If you're using the standalone `TabView` component, you can provide a custom `tabBar` prop that renders a web-compatible implementation.
+On web, you cannot use SF Symbols. Instead, use cross-platform icon libraries:
 
-```tsx
-import { Platform } from 'react-native';
-import TabView from 'react-native-bottom-tabs';
-
-function MyTabs() {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'home', title: 'Home' },
-    { key: 'settings', title: 'Settings' },
-  ]);
-
-  const renderScene = SceneMap({
-    home: HomeScreen,
-    settings: SettingsScreen,
-  });
-
-  return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      tabBar={Platform.OS === 'web' ? CustomWebTabBar : undefined}
-    />
-  );
-}
-```
-
-### Example Custom Web Tab Bar
-
-```tsx
-function CustomWebTabBar() {
-  return (
-    <View style={styles.tabBar}>
-      <TouchableOpacity style={styles.tab}>
-        <Text>Home</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.tab}>
-        <Text>Settings</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    height: 60,
-  },
-  tab: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-```
-
-## Approach 3: Conditional Platform Rendering
-
-For simpler cases, you can conditionally render different navigators based on platform:
-
-```tsx
-import { Platform } from 'react-native';
-import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-const NativeTabs = createNativeBottomTabNavigator();
-const JSTabs = createBottomTabNavigator();
-
-const Tabs = Platform.OS === 'web' ? JSTabs : NativeTabs;
-
-export function TabNavigator() {
-  return (
-    <Tabs.Navigator>
-      <Tabs.Screen name="Home" component={HomeScreen} />
-      <Tabs.Screen name="Settings" component={SettingsScreen} />
-    </Tabs.Navigator>
-  );
-}
-```
-
-:::warning
-
-This approach requires installing both `@bottom-tabs/react-navigation` and `@react-navigation/bottom-tabs`, which increases bundle size for all platforms.
-
-:::
-
-## Styling Considerations
-
-When implementing web tabs, consider these styling differences:
-
-### Native Platforms
-- Use `sfSymbol` for iOS icons
-- Platform-specific appearance attributes
-- Native gestures and animations
-
-### Web Platform
-- Use web-compatible icon libraries (e.g., `react-icons`, `@expo/vector-icons`)
-- CSS-based styling and animations
-- Standard web accessibility practices
-
-## Icon Libraries for Web
-
-For web compatibility, use icon libraries that work across all platforms:
-
-### Expo Vector Icons
+**Expo Vector Icons** (recommended):
 
 ```tsx
 import { Ionicons } from '@expo/vector-icons';
@@ -237,7 +120,7 @@ options={{
 }}
 ```
 
-### React Icons
+**React Icons:**
 
 ```tsx
 import { FiHome } from 'react-icons/fi';
@@ -246,16 +129,6 @@ options={{
   tabBarIcon: ({ color }) => <FiHome color={color} />,
 }}
 ```
-
-## Summary
-
-| Approach | Pros | Cons |
-|----------|------|------|
-| **Platform-Specific Files** | Clean separation, optimal bundle size | Requires maintaining two implementations |
-| **Custom Tab Bar** | Full control, single codebase | More code to maintain |
-| **Conditional Rendering** | Simple to understand | Both libraries in bundle |
-
-For most projects, **platform-specific files** provide the best balance of code organization, bundle size, and developer experience.
 
 ## Additional Resources
 
