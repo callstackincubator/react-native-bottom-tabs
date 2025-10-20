@@ -2,12 +2,12 @@ import SwiftUI
 
 @objc public class BottomAccessoryProvider: PlatformView {
   private weak var delegate: BottomAccessoryProviderDelegate?
-  
+
   @objc public convenience init(delegate: BottomAccessoryProviderDelegate) {
     self.init()
     self.delegate = delegate
   }
-  
+
   @available(iOS 26.0, *)
   public func emitPlacementChanged(_ placement: TabViewBottomAccessoryPlacement?) {
     var placementValue = "none"

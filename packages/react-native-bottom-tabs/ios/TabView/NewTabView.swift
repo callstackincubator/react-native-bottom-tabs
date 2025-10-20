@@ -104,9 +104,9 @@ struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
   func makeUIView(context: Context) -> PlatformView {
     let wrapper = UIView()
     wrapper.addSubview(view)
-    
+
     view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    
+
     emitPlacementChanged(for: view)
     return wrapper
   }
