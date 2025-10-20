@@ -19,6 +19,7 @@ src/
 
 ```tsx title="TabNavigator.native.tsx"
 import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation';
+import { Platform } from 'react-native';
 import { HomeScreen } from '../screens/HomeScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 
@@ -31,14 +32,20 @@ export function TabNavigator() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: () => ({ sfSymbol: 'house' }),
+          tabBarIcon: () =>
+            Platform.OS === 'ios'
+              ? { sfSymbol: 'house' }
+              : require('../assets/icons/home.png'),
         }}
       />
       <Tabs.Screen
         name="Settings"
         component={SettingsScreen}
         options={{
-          tabBarIcon: () => ({ sfSymbol: 'gear' }),
+          tabBarIcon: () =>
+            Platform.OS === 'ios'
+              ? { sfSymbol: 'gear' }
+              : require('../assets/icons/settings.png'),
         }}
       />
     </Tabs.Navigator>
@@ -48,7 +55,7 @@ export function TabNavigator() {
 
 ### Web Implementation
 
-For web, use `@react-navigation/bottom-tabs` which provides a JavaScript-based implementation:
+For web, install `@react-navigation/bottom-tabs` which provides a JavaScript-based implementation:
 
 ```bash
 npm install @react-navigation/bottom-tabs
@@ -68,18 +75,14 @@ export function TabNavigator() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home" size={size} color={color} />
-          ),
+          tabBarIcon: () => require('../assets/icons/home.png'),
         }}
       />
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="settings" size={size} color={color} />
-          ),
+          tabBarIcon: () => require('../assets/icons/settings.png'),
         }}
       />
     </Tab.Navigator>
@@ -106,27 +109,55 @@ export default function App() {
 
 ## Icon Support
 
-On web, you cannot use SF Symbols. Instead, use cross-platform icon libraries:
+Icons can be provided using different methods depending on your platform:
 
-**Expo Vector Icons** (recommended):
+### SF Symbols (iOS only)
 
 ```tsx
-import { Ionicons } from '@expo/vector-icons';
-
 options={{
-  tabBarIcon: ({ color, size }) => (
-    <Ionicons name="home" size={size} color={color} />
-  ),
+  tabBarIcon: () => ({ sfSymbol: 'house' }),
 }}
 ```
 
-**React Icons:**
+### Image Assets (PNG/SVG)
+
+Use `require()` for PNG or SVG files. This works on iOS, Android, and web:
 
 ```tsx
-import { FiHome } from 'react-icons/fi';
+options={{
+  tabBarIcon: () => require('../assets/icons/home.png'),
+}}
+```
+
+```tsx
+options={{
+  tabBarIcon: () => require('../assets/icons/home.svg'),
+}}
+```
+
+### Cross-Platform Pattern
+
+For a single codebase supporting iOS, Android, and web, use Platform-specific conditionals:
+
+```tsx
+import { Platform } from 'react-native';
 
 options={{
-  tabBarIcon: ({ color }) => <FiHome color={color} />,
+  tabBarIcon: () =>
+    Platform.OS === 'ios'
+      ? { sfSymbol: 'house' }
+      : require('../assets/icons/home.png'),
+}}
+```
+
+### Focused/Unfocused Icons
+
+```tsx
+options={{
+  tabBarIcon: ({ focused }) =>
+    focused
+      ? require('../assets/icons/home-filled.png')
+      : require('../assets/icons/home-outline.png'),
 }}
 ```
 
