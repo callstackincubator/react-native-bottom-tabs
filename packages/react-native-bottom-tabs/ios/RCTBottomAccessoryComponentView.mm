@@ -16,6 +16,10 @@
 
 using namespace facebook::react;
 
+@interface RCTBottomAccessoryComponentView () <BottomAccessoryProviderDelegate> {
+}
+@end
+
 @implementation RCTBottomAccessoryComponentView
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -27,6 +31,9 @@ using namespace facebook::react;
 {
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const BottomAccessoryViewProps>();
+    if (@available(iOS 26.0, *)) {
+      self.contentView = [[BottomAccessoryProvider alloc] initWithDelegate:self];
+    }
   }
 
   return self;
@@ -49,7 +56,10 @@ using namespace facebook::react;
   [super updateProps:props oldProps:oldProps];
 }
 
-- (void)emitOnPlacementChanged:(NSString *)placement {
+//  MARK: BottomAccessoryProviderDelegate
+
+- (void)onPlacementChangedWithPlacement:(NSString *)placement
+{
   auto eventEmitter = std::static_pointer_cast<const BottomAccessoryViewEventEmitter>(_eventEmitter);
   if (eventEmitter) {
     eventEmitter->onPlacementChanged(BottomAccessoryViewEventEmitter::OnPlacementChanged {

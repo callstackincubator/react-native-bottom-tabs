@@ -119,16 +119,8 @@ struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
   }
 
   private func emitPlacementChanged(for uiView: PlatformView) {
-    let selectorString = "emitOnPlacementChanged:"
-    let selector = NSSelectorFromString(selectorString)
-    if uiView.responds(to: selector) {
-      var placementValue = "none"
-      if tabViewBottomAccessoryPlacement == .inline {
-        placementValue = "inline"
-      } else if (tabViewBottomAccessoryPlacement == .expanded) {
-        placementValue = "expanded"
-      }
-      uiView.perform(selector, with: placementValue)
+    if let contentView = uiView.value(forKey: "contentView") as? BottomAccessoryProvider {
+      contentView.emitPlacementChanged(tabViewBottomAccessoryPlacement)
     }
   }
 }
