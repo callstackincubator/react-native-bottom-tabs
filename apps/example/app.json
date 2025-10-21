@@ -10,11 +10,8 @@
     }
   ],
   "plugins": [
-    [
-      "react-native-edge-to-edge",
-      { "android": { "parentTheme": "Material3" } },
-      "react-native-bottom-tabs"
-    ]
+    ["react-native-edge-to-edge", { "android": { "parentTheme": "Material3" } }],
+    "react-native-bottom-tabs"
   ],
   "resources": {
     "android": [
