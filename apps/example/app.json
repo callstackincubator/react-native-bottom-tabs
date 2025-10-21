@@ -10,7 +10,11 @@
     }
   ],
   "plugins": [
-    ["react-native-edge-to-edge", {"android": {"parentTheme": "Material3"}}]
+    [
+      "react-native-edge-to-edge",
+      { "android": { "parentTheme": "Material3" } },
+      "react-native-bottom-tabs"
+    ]
   ],
   "resources": {
     "android": [
@@ -23,18 +27,9 @@
       "dist/main.ios.jsbundle",
       "../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"
     ],
-    "macos": [
-      "dist/assets",
-      "dist/main.macos.jsbundle"
-    ],
-    "visionos": [
-      "dist/assets",
-      "dist/main.visionos.jsbundle"
-    ],
-    "windows": [
-      "dist/assets",
-      "dist/main.windows.bundle"
-    ]
+    "macos": ["dist/assets", "dist/main.macos.jsbundle"],
+    "visionos": ["dist/assets", "dist/main.visionos.jsbundle"],
+    "windows": ["dist/assets", "dist/main.windows.bundle"]
   },
   "android": {
     "package": "bottomtabs.example"

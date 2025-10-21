@@ -1,1 +1,2 @@
-module.exports = require('./lib/module/expo');
+module.exports = require('./plugin/build');
+

@@ -40,7 +40,7 @@
     "test": "jest",
     "typecheck": "tsc -b",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "build": "bob build"
+    "build": "bob build && expo-module build plugin"
   },
   "keywords": [
     "react-native",
@@ -67,6 +67,7 @@
     "@react-native/eslint-config": "0.81.1",
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
+    "expo-module-scripts": "^5.0.7",
     "react": "^19.1.0",
     "react-native": "0.81.1",
     "react-native-builder-bob": "^0.40.13",
