@@ -57,9 +57,8 @@ struct NewTabView: AnyTabView {
 }
 
 struct ConditionalBottomAccessoryModifier: ViewModifier {
-  let props: TabViewProps
+  @ObservedObject var props: TabViewProps
 
-  // Check if there's a bottom accessory component view
   private var hasBottomAccessory: Bool {
     props.children.contains { child in
       let className = String(describing: type(of: child.view))
@@ -67,7 +66,6 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
     }
   }
 
-  // Find the bottom accessory view
   private var bottomAccessoryView: PlatformView? {
     props.children.first { child in
       let className = String(describing: type(of: child.view))
