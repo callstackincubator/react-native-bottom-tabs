@@ -1,8 +1,7 @@
-import {
-  type ConfigPlugin,
-  createRunOncePlugin,
-  withAndroidStyles,
-} from '@expo/config-plugins';
+import ConfigPlugins from '@expo/config-plugins';
+import { type ConfigPlugin } from '@expo/config-plugins';
+
+const { createRunOncePlugin, withAndroidStyles } = ConfigPlugins;
 
 const MATERIAL3_THEME_DYANMIC =
   'Theme.Material3.DynamicColors.DayNight.NoActionBar';
