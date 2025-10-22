@@ -17,6 +17,7 @@
 using namespace facebook::react;
 
 @interface RCTBottomAccessoryComponentView () <BottomAccessoryProviderDelegate> {
+  BottomAccessoryProvider* bottomAccessoryProvider;
 }
 @end
 
@@ -32,7 +33,7 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const BottomAccessoryViewProps>();
     if (@available(iOS 26.0, *)) {
-      self.contentView = [[BottomAccessoryProvider alloc] initWithDelegate:self];
+      bottomAccessoryProvider = [[BottomAccessoryProvider alloc] initWithDelegate:self];
     }
   }
 

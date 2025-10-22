@@ -119,7 +119,7 @@ struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
   }
 
   private func emitPlacementChanged(for uiView: PlatformView) {
-    if let contentView = uiView.value(forKey: "contentView") as? BottomAccessoryProvider {
+    if let contentView = uiView.value(forKey: "bottomAccessoryProvider") as? BottomAccessoryProvider {
       contentView.emitPlacementChanged(tabViewBottomAccessoryPlacement)
     }
   }

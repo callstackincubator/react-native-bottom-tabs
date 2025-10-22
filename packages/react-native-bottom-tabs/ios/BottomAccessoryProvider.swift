@@ -1,6 +1,6 @@
 import SwiftUI
 
-@objc public class BottomAccessoryProvider: PlatformView {
+@objc public class BottomAccessoryProvider: NSObject {
   private weak var delegate: BottomAccessoryProviderDelegate?
 
   @objc public convenience init(delegate: BottomAccessoryProviderDelegate) {
