@@ -59,13 +59,6 @@ struct NewTabView: AnyTabView {
 struct ConditionalBottomAccessoryModifier: ViewModifier {
   @ObservedObject var props: TabViewProps
 
-  private var hasBottomAccessory: Bool {
-    props.children.contains { child in
-      let className = String(describing: type(of: child.view))
-      return className == "RCTBottomAccessoryComponentView"
-    }
-  }
-
   private var bottomAccessoryView: PlatformView? {
     props.children.first { child in
       let className = String(describing: type(of: child.view))
@@ -74,7 +67,7 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *), hasBottomAccessory {
+    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *) {
         content
         .tabViewBottomAccessory {
           renderBottomAccessoryView()
