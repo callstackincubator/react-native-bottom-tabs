@@ -107,59 +107,6 @@ export default function App() {
 }
 ```
 
-## Icon Support
-
-Icons can be provided using different methods depending on your platform:
-
-### SF Symbols (iOS only)
-
-```tsx
-options={{
-  tabBarIcon: () => ({ sfSymbol: 'house' }),
-}}
-```
-
-### Image Assets (PNG/SVG)
-
-Use `require()` for PNG or SVG files. This works on iOS, Android, and web:
-
-```tsx
-options={{
-  tabBarIcon: () => require('../assets/icons/home.png'),
-}}
-```
-
-```tsx
-options={{
-  tabBarIcon: () => require('../assets/icons/home.svg'),
-}}
-```
-
-### Cross-Platform Pattern
-
-For a single codebase supporting iOS, Android, and web, use Platform-specific conditionals:
-
-```tsx
-import { Platform } from 'react-native';
-
-options={{
-  tabBarIcon: () =>
-    Platform.OS === 'ios'
-      ? { sfSymbol: 'house' }
-      : require('../assets/icons/home.png'),
-}}
-```
-
-### Focused/Unfocused Icons
-
-```tsx
-options={{
-  tabBarIcon: ({ focused }) =>
-    focused
-      ? require('../assets/icons/home-filled.png')
-      : require('../assets/icons/home-outline.png'),
-}}
-```
 
 ## Additional Resources
 
