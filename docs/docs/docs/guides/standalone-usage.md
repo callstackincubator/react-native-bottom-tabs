@@ -200,7 +200,7 @@ Color of tab indicator.
 
 - Type: `ColorValue`
 
-#### `renderBottomAccessoryView` <Badge text="iOS" type="info" />
+#### `renderBottomAccessoryView` <Badge text="iOS" type="info" /> <Badge text="experimental" type="danger"/>
 
 Function that returns a React element to render as [bottom accessory](https://developer.apple.com/documentation/uikit/uitabbarcontroller/bottomaccessory).
 
