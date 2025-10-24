@@ -200,6 +200,14 @@ Color of tab indicator.
 
 - Type: `ColorValue`
 
+#### `renderBottomAccessoryView` <Badge text="iOS" type="info" /> <Badge text="experimental" type="danger"/>
+
+Function that returns a React element to render as [bottom accessory](https://developer.apple.com/documentation/uikit/uitabbarcontroller/bottomaccessory).
+
+:::note
+This feature requires iOS 26.0 or later and is only available on iOS. On older versions, this prop is ignored.
+:::
+
 ### Route Configuration
 
 Each route in the `routes` array can have the following properties:

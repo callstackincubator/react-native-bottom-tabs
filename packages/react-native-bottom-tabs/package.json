@@ -112,7 +112,8 @@
     },
     "ios": {
       "componentProvider": {
-        "RNCTabView": "RCTTabViewComponentView"
+        "RNCTabView": "RCTTabViewComponentView",
+        "BottomAccessoryView": "RCTBottomAccessoryComponentView"
       },
       "modulesConformingToProtocol": {
         "RCTImageDataDecoder": [

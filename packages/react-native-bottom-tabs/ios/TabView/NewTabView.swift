@@ -1,3 +1,4 @@
+import React
 import SwiftUI
 
 @available(iOS 18, macOS 15, visionOS 2, tvOS 18, *)
@@ -50,6 +51,67 @@ struct NewTabView: AnyTabView {
     }
     .measureView { size in
       onLayout(size)
+    }
+    .modifier(ConditionalBottomAccessoryModifier(props: props))
+  }
+}
+
+struct ConditionalBottomAccessoryModifier: ViewModifier {
+  @ObservedObject var props: TabViewProps
+
+  private var bottomAccessoryView: PlatformView? {
+    props.children.first { child in
+      let className = String(describing: type(of: child.view))
+      return className == "RCTBottomAccessoryComponentView"
+    }?.view
+  }
+
+  func body(content: Content) -> some View {
+    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *) {
+        content
+        .tabViewBottomAccessory {
+          renderBottomAccessoryView()
+        }
+    } else {
+      content
+    }
+  }
+
+  @ViewBuilder
+  private func renderBottomAccessoryView() -> some View {
+    if let bottomAccessoryView {
+      if #available(iOS 26.0, *) {
+        BottomAccessoryRepresentableView(view: bottomAccessoryView)
+      }
+    }
+  }
+}
+
+@available(iOS 26.0, *)
+struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
+  @Environment(\.tabViewBottomAccessoryPlacement) var tabViewBottomAccessoryPlacement
+  var view: PlatformView
+
+  func makeUIView(context: Context) -> PlatformView {
+    let wrapper = UIView()
+    wrapper.addSubview(view)
+
+    view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+    emitPlacementChanged(for: view)
+    return wrapper
+  }
+
+  func updateUIView(_ uiView: PlatformView, context: Context) {
+    if let subview = uiView.subviews.first {
+      subview.frame = uiView.bounds
+    }
+    emitPlacementChanged(for: view)
+  }
+
+  private func emitPlacementChanged(for uiView: PlatformView) {
+    if let contentView = uiView.value(forKey: "bottomAccessoryProvider") as? BottomAccessoryProvider {
+      contentView.emitPlacementChanged(tabViewBottomAccessoryPlacement)
     }
   }
 }
