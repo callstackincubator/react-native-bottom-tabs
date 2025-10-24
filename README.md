@@ -29,6 +29,8 @@ https://github.com/user-attachments/assets/09e96ac3-827d-4ac0-add0-e7b88ee9197c
 | **tvOS** | <img src="https://github.com/user-attachments/assets/2fe8483d-73f9-408f-9315-100eee7bf2af" width="400" /> |
 | **macOS** | <img src="https://github.com/user-attachments/assets/758decf4-6e70-4c55-8f2d-c16927f2c56d" width="400" /> |
 
+> **Note:** This library uses native platform primitives which are not available on web. For web support, see the [Web Platform Support guide](https://oss.callstack.com/react-native-bottom-tabs/docs/guides/web-platform-support) in the documentation.
+
 ## Package Versions
 
 | Name                                                                         |                                                                      Latest Version                                                                       |
