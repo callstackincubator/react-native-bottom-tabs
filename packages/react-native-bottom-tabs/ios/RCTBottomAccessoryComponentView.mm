@@ -45,7 +45,7 @@ using namespace facebook::react;
   [super setFrame:frame];
   auto eventEmitter = std::static_pointer_cast<const BottomAccessoryViewEventEmitter>(_eventEmitter);
   if (eventEmitter) {
-    TODO: Rewrite this to emit synchronous layout events using shadow nodes
+    // TODO: Rewrite this to emit synchronous layout events using shadow nodes
     eventEmitter->onNativeLayout(BottomAccessoryViewEventEmitter::OnNativeLayout {
       .height = frame.size.height,
       .width = frame.size.width
