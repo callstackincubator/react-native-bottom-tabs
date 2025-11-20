@@ -27,6 +27,8 @@ export type TabViewItems = ReadonlyArray<{
   title: string;
   sfSymbol?: string;
   badge?: string;
+  badgeBackgroundColor?: ProcessedColorValue | null;
+  badgeTextColor?: ProcessedColorValue | null;
   activeTintColor?: ProcessedColorValue | null;
   hidden?: boolean;
   testID?: string;
