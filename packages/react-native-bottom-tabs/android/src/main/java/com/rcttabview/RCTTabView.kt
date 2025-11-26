@@ -24,6 +24,9 @@ import coil3.ImageLoader
 import coil3.asDrawable
 import coil3.request.ImageRequest
 import coil3.svg.SvgDecoder
+import coil3.size.Precision
+import coil3.size.Size as CoilSize
+import coil3.size.Scale
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.assets.ReactFontManager
 import com.facebook.react.modules.core.ReactChoreographer
@@ -336,8 +339,12 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
       onDrawableReady(it)
       return
     }
+    val iconSizePx = bottomNavigation.itemIconSize
     val request = ImageRequest.Builder(context)
       .data(imageSource.getUri(context))
+      .size(CoilSize(iconSizePx, iconSizePx))
+      .scale(Scale.FILL)
+      .precision(Precision.EXACT)
       .target { drawable ->
         post {
           val stateDrawable = drawable.asDrawable(context.resources)
