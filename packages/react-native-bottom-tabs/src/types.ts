@@ -11,6 +11,8 @@ export type BaseRoute = {
   key: string;
   title?: string;
   badge?: string;
+  badgeBackgroundColor?: string;
+  badgeTextColor?: string;
   lazy?: boolean;
   focusedIcon?: ImageSourcePropType | AppleIcon;
   unfocusedIcon?: ImageSourcePropType | AppleIcon;

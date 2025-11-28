@@ -108,6 +108,14 @@ interface Props<Route extends BaseRoute> {
    */
   getBadge?: (props: { route: Route }) => string | undefined;
   /**
+   * Get badge background color for the tab, uses `route.badgeBackgroundColor` by default. (Android only)
+   */
+  getBadgeBackgroundColor?: (props: { route: Route }) => ColorValue | undefined;
+  /**
+   * Get badge text color for the tab, uses `route.badgeTextColor` by default. (Android only)
+   */
+  getBadgeTextColor?: (props: { route: Route }) => ColorValue | undefined;
+  /**
    * Get active tint color for the tab, uses `route.activeTintColor` by default.
    */
   getActiveTintColor?: (props: { route: Route }) => ColorValue | undefined;
@@ -206,6 +214,9 @@ const TabView = <Route extends BaseRoute>({
   tabBarActiveTintColor: activeTintColor,
   tabBarInactiveTintColor: inactiveTintColor,
   getBadge = ({ route }: { route: Route }) => route.badge,
+  getBadgeBackgroundColor = ({ route }: { route: Route }) =>
+    route.badgeBackgroundColor,
+  getBadgeTextColor = ({ route }: { route: Route }) => route.badgeTextColor,
   getLazy = ({ route }: { route: Route }) => route.lazy,
   getLabelText = ({ route }: { route: Route }) => route.title,
   getIcon = ({ route, focused }: { route: Route; focused: boolean }) =>
@@ -289,6 +300,10 @@ const TabView = <Route extends BaseRoute>({
           title: getLabelText({ route }) ?? route.key,
           sfSymbol: isSfSymbol ? icon.sfSymbol : undefined,
           badge: getBadge?.({ route }),
+          badgeBackgroundColor: processColor(
+            getBadgeBackgroundColor?.({ route })
+          ),
+          badgeTextColor: processColor(getBadgeTextColor?.({ route })),
           activeTintColor: processColor(getActiveTintColor({ route })),
           hidden: getHidden?.({ route }),
           testID: getTestID?.({ route }),
@@ -301,6 +316,8 @@ const TabView = <Route extends BaseRoute>({
       icons,
       getLabelText,
       getBadge,
+      getBadgeBackgroundColor,
+      getBadgeTextColor,
       getActiveTintColor,
       getHidden,
       getTestID,

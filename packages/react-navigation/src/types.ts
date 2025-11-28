@@ -78,6 +78,16 @@ export type NativeBottomTabNavigationOptions = {
   tabBarBadge?: string;
 
   /**
+   * Badge background color. (Android only)
+   */
+  tabBarBadgeBackgroundColor?: string;
+
+  /**
+   * Badge text color. (Android only)
+   */
+  tabBarBadgeTextColor?: string;
+
+  /**
    * Whether this screens should render the first time it's accessed. Defaults to true. Set it to false if you want to render the screen on initial render.
    */
   lazy?: boolean;
@@ -142,6 +152,8 @@ export type NativeBottomTabNavigationConfig = Partial<
     | 'getIcon'
     | 'getLabelText'
     | 'getBadge'
+    | 'getBadgeBackgroundColor'
+    | 'getBadgeTextColor'
     | 'onTabLongPress'
     | 'getActiveTintColor'
     | 'getTestID'
