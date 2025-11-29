@@ -67,8 +67,8 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *) {
-        content
+    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *), bottomAccessoryView != nil {
+      content
         .tabViewBottomAccessory {
           renderBottomAccessoryView()
         }
