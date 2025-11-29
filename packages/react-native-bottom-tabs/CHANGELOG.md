@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 1.0.4
+
+### Patch Changes
+
+- [#479](https://github.com/callstackincubator/react-native-bottom-tabs/pull/479) [`ccadbdd`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ccadbddfa50a54f009239ef543decc1ffe46b7e9) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: add bottom accessory view nil check for iOS 26+ compatibility
+
 ## 1.0.3
 
 ### Patch Changes
