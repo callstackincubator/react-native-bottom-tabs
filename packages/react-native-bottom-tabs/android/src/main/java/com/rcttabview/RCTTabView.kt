@@ -256,31 +256,9 @@ class ReactBottomNavigationView(context: Context) : LinearLayout(context) {
         if (item.badge != " ") {
           badge.text = item.badge
         }
-        // Apply badge colors if provided, or reset to theme defaults if null
-        if (item.badgeBackgroundColor != null) {
-          badge.backgroundColor = item.badgeBackgroundColor
-        } else {
-          // Reset to theme default color by resolving the colorError attribute
-          val typedValue = TypedValue()
-          context.theme.resolveAttribute(
-            com.google.android.material.R.attr.colorError,
-            typedValue,
-            true
-          )
-          badge.backgroundColor = typedValue.data
-        }
-        if (item.badgeTextColor != null) {
-          badge.badgeTextColor = item.badgeTextColor
-        } else {
-          // Reset to theme default text color by resolving the colorOnError attribute
-          val typedValue = TypedValue()
-          context.theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnError,
-            typedValue,
-            true
-          )
-          badge.badgeTextColor = typedValue.data
-        }
+        // Apply badge colors if provided (Material will use its default theme colors otherwise)
+        item.badgeBackgroundColor?.let { badge.backgroundColor = it }
+        item.badgeTextColor?.let { badge.badgeTextColor = it }
       } else {
         bottomNavigation.removeBadge(index)
       }
