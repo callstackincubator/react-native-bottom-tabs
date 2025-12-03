@@ -1,5 +1,11 @@
 # react-native-bottom-tabs
 
+## 1.0.5
+
+### Patch Changes
+
+- [#482](https://github.com/callstackincubator/react-native-bottom-tabs/pull/482) [`2b70882`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/2b70882f12e707761b381bb648f5c4050b780d6e) Thanks [@joshkeldam](https://github.com/joshkeldam)! - fix(android): add missing badgeBackgroundColor and badgeTextColor to TabInfo data class
+
 ## 1.0.4
 
 ### Patch Changes
