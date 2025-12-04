@@ -12,7 +12,11 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigation,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -31,6 +35,7 @@ import NativeBottomTabsUnmounting from './Examples/NativeBottomTabsUnmounting';
 import NativeBottomTabsCustomTabBar from './Examples/NativeBottomTabsCustomTabBar';
 import NativeBottomTabsFreezeOnBlur from './Examples/NativeBottomTabsFreezeOnBlur';
 import BottomAccessoryView from './Examples/BottomAccessoryView';
+import { useLogger } from '@react-navigation/devtools';
 
 const HiddenTab = () => {
   return <FourTabs hideOneTab />;
@@ -194,9 +199,13 @@ export default function Navigation() {
 
   const NavigationStack = mode === 'js' ? Stack : NativeStack;
 
+  const navigationRef = useNavigationContainerRef();
+
+  useLogger(navigationRef);
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <NavigationStack.Navigator initialRouteName="BottomTabs Example">
           <NavigationStack.Screen
             name="BottomTabs Example"

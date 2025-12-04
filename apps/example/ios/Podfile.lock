@@ -1748,7 +1748,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-bottom-tabs (1.0.3):
+  - react-native-bottom-tabs (1.0.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -1766,7 +1766,7 @@ PODS:
     - React-graphics
     - React-ImageManager
     - React-jsi
-    - react-native-bottom-tabs/common (= 1.0.3)
+    - react-native-bottom-tabs/common (= 1.0.5)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1778,7 +1778,7 @@ PODS:
     - SocketRocket
     - SwiftUIIntrospect (~> 1.0)
     - Yoga
-  - react-native-bottom-tabs/common (1.0.3):
+  - react-native-bottom-tabs/common (1.0.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -2461,7 +2461,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNScreens (4.16.0):
+  - RNScreens (4.18.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2488,10 +2488,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.16.0)
+    - RNScreens/common (= 4.18.0)
     - SocketRocket
     - Yoga
-  - RNScreens/common (4.16.0):
+  - RNScreens/common (4.18.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2842,7 +2842,7 @@ SPEC CHECKSUMS:
   React-logger: a3cb5b29c32b8e447b5a96919340e89334062b48
   React-Mapbuffer: 9d2434a42701d6144ca18f0ca1c4507808ca7696
   React-microtasksnativemodule: 75b6604b667d297292345302cc5bfb6b6aeccc1b
-  react-native-bottom-tabs: 9a6f606d07e2e46f2535f1faed915fcb2d4f0269
+  react-native-bottom-tabs: 8e918142554e3878f043b23bdf93049b34a78ca6
   react-native-safe-area-context: c6e2edd1c1da07bdce287fa9d9e60c5f7b514616
   React-NativeModulesApple: 879fbdc5dcff7136abceb7880fe8a2022a1bd7c3
   React-oscompat: 93b5535ea7f7dff46aaee4f78309a70979bdde9d
@@ -2878,7 +2878,7 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: 9b7bbba5e8fed998e763809171d9906a1375f9d3
   ReactTestApp-Resources: 4f6dff3b157f879757cd750caccd1d34a7eda647
   RNGestureHandler: 3a73f098d74712952870e948b3d9cf7b6cae9961
-  RNScreens: 0bbf16c074ae6bb1058a7bf2d1ae017f4306797c
+  RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
   RNVectorIcons: c13cc1db346e960ecd0aafcdd5d0bb458133b9c1
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftUIIntrospect: fee9aa07293ee280373a591e1824e8ddc869ba5d

@@ -89,6 +89,7 @@ export default function NativeBottomTabView({
         descriptors[route.key]?.options.preventsDefault
       }
       onIndexChange={(index) => {
+        const focused = index === state.index;
         const route = state.routes[index];
         if (!route) {
           return;
@@ -101,6 +102,7 @@ export default function NativeBottomTabView({
         });
 
         if (
+          focused ||
           event.defaultPrevented ||
           descriptors[route.key]?.options.preventsDefault
         ) {
