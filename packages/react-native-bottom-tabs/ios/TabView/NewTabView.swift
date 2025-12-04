@@ -67,7 +67,11 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, visionOS 3.0, *), bottomAccessoryView != nil {
+    #if os(macOS)
+    // tabViewBottomAccessory is not available on macOS
+    content
+    #else
+    if #available(iOS 26.0, tvOS 26.0, visionOS 3.0, *), bottomAccessoryView != nil {
       content
         .tabViewBottomAccessory {
           renderBottomAccessoryView()
@@ -75,18 +79,22 @@ struct ConditionalBottomAccessoryModifier: ViewModifier {
     } else {
       content
     }
+    #endif
   }
 
   @ViewBuilder
   private func renderBottomAccessoryView() -> some View {
+    #if !os(macOS)
     if let bottomAccessoryView {
       if #available(iOS 26.0, *) {
         BottomAccessoryRepresentableView(view: bottomAccessoryView)
       }
     }
+    #endif
   }
 }
 
+#if !os(macOS)
 @available(iOS 26.0, *)
 struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
   @Environment(\.tabViewBottomAccessoryPlacement) var tabViewBottomAccessoryPlacement
@@ -115,3 +123,4 @@ struct BottomAccessoryRepresentableView: PlatformViewRepresentable {
     }
   }
 }
+#endif
