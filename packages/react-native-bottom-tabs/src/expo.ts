@@ -1,7 +1,12 @@
-import ConfigPlugins from '@expo/config-plugins';
 import { type ConfigPlugin } from '@expo/config-plugins';
+import { createRequire } from 'node:module';
 
-const { createRunOncePlugin, withAndroidStyles } = ConfigPlugins;
+const require = createRequire(import.meta.url);
+
+const ConfigPlugins = require('@expo/config-plugins');
+
+const { createRunOncePlugin, withAndroidStyles } =
+  ConfigPlugins as typeof import('@expo/config-plugins');
 
 const MATERIAL3_THEME_DYANMIC =
   'Theme.Material3.DynamicColors.DayNight.NoActionBar';
