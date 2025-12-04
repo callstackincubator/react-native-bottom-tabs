@@ -1,5 +1,17 @@
 # react-native-bottom-tabs
 
+## 1.1.0
+
+### Minor Changes
+
+- [#485](https://github.com/callstackincubator/react-native-bottom-tabs/pull/485) [`ddfeefb`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ddfeefb43e958bcc085b2b82f560576144d46a92) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: properly pop to top to resolve freezing issues
+
+### Patch Changes
+
+- [#486](https://github.com/callstackincubator/react-native-bottom-tabs/pull/486) [`fc8b828`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/fc8b8289ac1a219714ef1f7affe3d1828947d46a) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: macos bottom accessory view compilation
+
+- [#488](https://github.com/callstackincubator/react-native-bottom-tabs/pull/488) [`b2be24d`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/b2be24d0b4b4e103dab1d92aefb4574bfe6a65e6) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix(expo): use dynamic require for config-plugins ESM/CJS interop
+
 ## 1.0.5
 
 ### Patch Changes
