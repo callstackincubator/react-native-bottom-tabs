@@ -17,6 +17,16 @@ private final class TabBarDelegate: NSObject, UITabBarControllerDelegate {
     }
 #endif
 
+    let isReselectingSameTab = tabBarController.selectedViewController == viewController
+
+    if isReselectingSameTab {
+      if let index = tabBarController.viewControllers?.firstIndex(of: viewController) {
+        _ = onClick?(index)
+      }
+
+      return false
+    }
+
     // Unfortunately, due to iOS 26 new tab switching animations, controlling state from JavaScript is causing significant delays when switching tabs.
     // See: https://github.com/callstackincubator/react-native-bottom-tabs/issues/383
     // Due to this, whether the tab prevents default has to be defined statically.
