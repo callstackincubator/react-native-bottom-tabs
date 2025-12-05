@@ -1,5 +1,11 @@
 # @bottom-tabs/react-navigation
 
+## 1.1.0
+
+### Minor Changes
+
+- [#485](https://github.com/callstackincubator/react-native-bottom-tabs/pull/485) [`ddfeefb`](https://github.com/callstackincubator/react-native-bottom-tabs/commit/ddfeefb43e958bcc085b2b82f560576144d46a92) Thanks [@okwasniewski](https://github.com/okwasniewski)! - fix: properly pop to top to resolve freezing issues
+
 ## 1.0.5
 
 ## 1.0.4
