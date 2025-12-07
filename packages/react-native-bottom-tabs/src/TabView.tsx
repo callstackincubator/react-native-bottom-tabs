@@ -73,6 +73,11 @@ interface Props<Route extends BaseRoute> {
    * Inactive tab color.
    */
   tabBarInactiveTintColor?: ColorValue;
+
+  /**
+   * native wrapper background color.
+   */
+  wrapperColor?: ColorValue;
   /**
    * State for the tab view.
    *
@@ -239,6 +244,7 @@ const TabView = <Route extends BaseRoute>({
   tabBarStyle,
   tabLabelStyle,
   renderBottomAccessoryView,
+  wrapperColor,
   ...props
 }: Props<Route>) => {
   // @ts-ignore
@@ -403,6 +409,7 @@ const TabView = <Route extends BaseRoute>({
         barTintColor={tabBarStyle?.backgroundColor}
         rippleColor={rippleColor}
         labeled={labeled}
+        wrapperColor={wrapperColor}
       >
         {trimmedRoutes.map((route) => {
           if (getLazy({ route }) !== false && !loaded.includes(route.key)) {

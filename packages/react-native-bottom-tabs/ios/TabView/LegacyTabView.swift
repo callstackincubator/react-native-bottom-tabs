@@ -30,6 +30,7 @@ struct LegacyTabView: AnyTabView {
       if !tabData.hidden || isFocused {
         let icon = props.icons[index]
         let child = props.children[safe: index]?.view ?? PlatformView()
+        let wrapperColor = props.wrapperColor ?? .systemBackground
         let context = TabAppearContext(
           index: index,
           tabData: tabData,
@@ -38,7 +39,7 @@ struct LegacyTabView: AnyTabView {
           onSelect: onSelect
         )
 
-        RepresentableView(view: child)
+        RepresentableView(view: child, wrapperColor: wrapperColor)
           .ignoresSafeArea(.container, edges: .all)
           .tabItem {
             TabItem(

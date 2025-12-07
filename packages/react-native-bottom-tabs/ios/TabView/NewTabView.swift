@@ -27,9 +27,9 @@ struct NewTabView: AnyTabView {
               updateTabBarAppearance: updateTabBarAppearance,
               onSelect: onSelect
             )
-
+            let wrapperColor = props.wrapperColor ?? .systemBackground
             Tab(value: tabData.key, role: tabData.role?.convert()) {
-              RepresentableView(view: child.view)
+              RepresentableView(view: child.view, wrapperColor: wrapperColor)
                 .ignoresSafeArea(.container, edges: .all)
                 .tabAppear(using: context)
                 .hideTabBar(props.tabBarHidden)
