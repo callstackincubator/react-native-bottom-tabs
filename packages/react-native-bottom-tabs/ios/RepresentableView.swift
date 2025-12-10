@@ -7,11 +7,13 @@ import SwiftUI
  */
 struct RepresentableView: PlatformViewRepresentable {
   var view: PlatformView
+  var wrapperColor: UIColor
 
 #if os(macOS)
 
   func makeNSView(context: Context) -> PlatformView {
     let wrapper = NSView()
+    wrapper.backgroundColor = wrapperColor
     wrapper.addSubview(view)
     return wrapper
   }
@@ -22,6 +24,7 @@ struct RepresentableView: PlatformViewRepresentable {
 
   func makeUIView(context: Context) -> PlatformView {
     let wrapper = UIView()
+    wrapper.backgroundColor = wrapperColor
     wrapper.addSubview(view)
     return wrapper
   }

@@ -124,6 +124,12 @@ public final class TabInfo: NSObject {
       props.activeTintColor = activeTintColor
     }
   }
+  
+  @objc public var wrapperColor: PlatformColor? {
+    didSet {
+      props.wrapperColor = wrapperColor
+    }
+  }
 
   @objc public var inactiveTintColor: PlatformColor? {
     didSet {

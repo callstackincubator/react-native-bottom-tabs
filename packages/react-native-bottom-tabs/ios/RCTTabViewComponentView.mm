@@ -175,7 +175,10 @@ using namespace facebook::react;
   if (oldViewProps.tabBarHidden != newViewProps.tabBarHidden) {
     _tabViewProvider.tabBarHidden = newViewProps.tabBarHidden;
   }
-
+  
+  if (oldViewProps.wrapperColor != newViewProps.wrapperColor) {
+    _tabViewProvider.wrapperColor = RCTUIColorFromSharedColor(newViewProps.wrapperColor);
+  }
 
   [super updateProps:props oldProps:oldProps];
 }
