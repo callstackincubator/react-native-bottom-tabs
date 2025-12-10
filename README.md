@@ -4,12 +4,12 @@
   </picture>
 </a>
 <p align="center">
-  <strong><a href="https://callstackincubator.github.io/react-native-bottom-tabs/">React Native Bottom Tabs</a> that use native platform primitives.</strong><br>
+  <strong><a href="https://oss.callstack.com/react-native-bottom-tabs/">React Native Bottom Tabs</a> that use native platform primitives.</strong><br>
 </p>
 
 <div align="center">
 
-[![mit licence](https://img.shields.io/dub/l/vibe-d.svg?style=for-the-badge)](https://github.com/okwasniewski/react-native-bottom-tabs/blob/main/LICENSE)
+[![mit licence](https://img.shields.io/dub/l/vibe-d.svg?style=for-the-badge)](https://github.com/callstack/react-native-bottom-tabs/blob/main/LICENSE)
 [![npm version](https://img.shields.io/npm/v/react-native-bottom-tabs?style=for-the-badge)](https://www.npmjs.org/package/react-native-bottom-tabs)
 [![npm downloads](https://img.shields.io/npm/dt/react-native-bottom-tabs.svg?style=for-the-badge)](https://www.npmjs.org/package/react-native-bottom-tabs)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-bottom-tabs.svg?style=for-the-badge)](https://www.npmjs.org/package/react-native-bottom-tabs)
@@ -40,7 +40,7 @@ https://github.com/user-attachments/assets/09e96ac3-827d-4ac0-add0-e7b88ee9197c
 
 ## Documentation
 
-The full documentation can be found on our [website](http://incubator.callstack.com/react-native-bottom-tabs/).
+The full documentation can be found on our [website](https://oss.callstack.com/react-native-bottom-tabs/).
 
 ## Contributing
 
